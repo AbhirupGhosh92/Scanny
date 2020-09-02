@@ -1,9 +1,7 @@
 package com.app.scanny.activities
 
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
+import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
@@ -12,12 +10,15 @@ import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.provider.Settings
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.databinding.ActivityMainBinding
 import com.app.scanny.service.ScreenCaptureService
+import java.util.jar.Manifest
 
 
 class MainActivity : AppCompatActivity() {
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     private  var mMediaProjectionManager: MediaProjectionManager? = null
     private var mMediaProjection : MediaProjection? = null
     private  val CAPTURE = 1277
+    private  val BIND = 127
+    private  val STORAGE = 1276
     private  var mMediaRecorder: MediaRecorder? = null
     private  var boundService : ScreenCaptureService? = null
     private  var captureIntent : Intent? = null
@@ -60,22 +63,44 @@ class MainActivity : AppCompatActivity() {
             R.layout.activity_main
         )
 
+
+        if(ContextCompat.checkSelfPermission(this,android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
+        {
+           requestSharePermission()
+        }
+        else
+        {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE),STORAGE)
+            }
+        }
+
+
+    }
+
+    private fun requestSharePermission()
+    {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             val REQUEST_CODE = 101
             val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             myIntent.data = Uri.parse("package:$packageName")
             startActivityForResult(myIntent, REQUEST_CODE)
-            }
-
-
-
-        renderViews(false)
+        }
+        else
+        {
+           startBind()
+        }
     }
 
-    private fun bindService()
+    private fun bindMyService(data : Intent,resultCode: Int)
     {
-        var intent = Intent(this,ScreenCaptureService::class.java)
-        bindService(intent, boundServiceConnection, BIND_AUTO_CREATE)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            var intent = Intent( this,ScreenCaptureService::class.java)
+            captureIntent = data
+            captureResult = resultCode
+            intent.action = Constants.START_SERVICE
+            bindService(intent,boundServiceConnection,BIND_AUTO_CREATE)
+        }
     }
 
     private fun renderViews(start : Boolean)
@@ -116,6 +141,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun startBind()
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            mMediaProjectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+
+            val intent = mMediaProjectionManager?.createScreenCaptureIntent()
+            startActivityForResult(intent, BIND)
+
+        }
+    }
+
     private fun startMyService(data : Intent,resultCode: Int)
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -151,15 +188,65 @@ class MainActivity : AppCompatActivity() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-            if(requestCode == CAPTURE)
+            when(requestCode)
             {
+                CAPTURE -> {
+                    if(resultCode == -1)
+                    {
 
-                startMyService(data!!,resultCode)
+                        startMyService(data!!,resultCode)
+                    }
+                    else
+                    {
+                        AlertDialog.Builder(this)
+                            .setMessage("You must provide screen share permissions to capture screenshot")
+                            .setNegativeButton("Ok"
+                            ) { p0, p1 ->
+                                p0.dismiss()
+                            }
+                            .show()
+                    }
+                }
+
+                BIND -> {
+                    if(resultCode == -1)
+                    {
+
+                        bindMyService(data!!,resultCode)
+                    }
+                }
             }
+
 
         }
         else
             super.onActivityResult(requestCode, resultCode, data)
 
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when(requestCode)
+        {
+            STORAGE  -> {
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                {
+                    requestSharePermission()
+                }
+                else
+                {
+                    AlertDialog.Builder(this)
+                        .setMessage("You must provide screen storage permissions to save screenshot")
+                        .setNegativeButton("Ok"
+                        ) { p0, p1 ->
+                            p0.dismiss()
+                        }
+                        .show()
+                }
+            }
+        }
     }
 }

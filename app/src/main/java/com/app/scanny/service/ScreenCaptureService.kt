@@ -232,11 +232,12 @@ class ScreenCaptureService : Service() {
                 bitmap.copyPixelsFromBuffer(buffer)
                 stopRecord()
 
-                withContext(Dispatchers.Default)
+                var processing = withContext(Dispatchers.Default)
                 {
-                    var slices = processBitmap(bitmap)
-                    var temp = 0
+                   processBitmap(bitmap)
                 }
+
+                writeBitmaps(processing)
 
                 view.visibility = View.VISIBLE
 
