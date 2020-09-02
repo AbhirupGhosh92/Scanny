@@ -60,21 +60,22 @@ class MainActivity : AppCompatActivity() {
             R.layout.activity_main
         )
 
-        var intent = Intent(this,ScreenCaptureService::class.java)
-        //bindService(intent, boundServiceConnection, BIND_AUTO_CREATE)
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
             val REQUEST_CODE = 101
             val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
             myIntent.data = Uri.parse("package:$packageName")
             startActivityForResult(myIntent, REQUEST_CODE)
-            } else {
-                TODO("VERSION.SDK_INT < M")
             }
 
 
 
         renderViews(false)
+    }
+
+    private fun bindService()
+    {
+        var intent = Intent(this,ScreenCaptureService::class.java)
+        bindService(intent, boundServiceConnection, BIND_AUTO_CREATE)
     }
 
     private fun renderViews(start : Boolean)
@@ -152,6 +153,7 @@ class MainActivity : AppCompatActivity() {
 
             if(requestCode == CAPTURE)
             {
+
                 startMyService(data!!,resultCode)
             }
 
