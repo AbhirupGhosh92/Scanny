@@ -17,6 +17,7 @@ import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.*
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -222,13 +223,9 @@ class ScreenCaptureService : Service() {
 
                 val planes: Array<Image.Plane> = image.planes
                 val buffer: ByteBuffer = planes[0].buffer
-                val pixelStride: Int = planes[0].getPixelStride()
-                val rowStride: Int = planes[0].getRowStride()
-                val rowPadding: Int = rowStride - pixelStride * screenWidth
-
                 var bitmap =
                     Bitmap.createBitmap(
-                        screenWidth + rowPadding / pixelStride,
+                        screenWidth,
                         screenHeight,
                         Bitmap.Config.ARGB_8888
                     )
@@ -251,7 +248,12 @@ class ScreenCaptureService : Service() {
         }
     }
 
-    private fun processBitmap(bitmap: Bitmap,horizontalSlices : Int = 2) : ArrayList<Bitmap>
+    private fun writeBitmaps(bitMapList : List<Bitmap>)
+    {
+        var path = Environment.getDataDirectory().absolutePath
+    }
+
+    private fun processBitmap(bitmap: Bitmap,horizontalSlices : Int = 13) : ArrayList<Bitmap>
     {
         var height  = bitmap.height
         var prevHeight = 0
@@ -259,10 +261,23 @@ class ScreenCaptureService : Service() {
 
         var heightSlice = height / horizontalSlices
 
+        Log.e("Dims","Height:${height}")
+
         try {
             for (i in 0 until horizontalSlices) {
                 if (i == horizontalSlices - 1) {
-                    bitmaps.add(Bitmap.createBitmap(bitmap, 0, prevHeight, bitmap.width, height))
+
+                    Log.e("Dims","$prevHeight,${height}")
+
+                            bitmaps.add(
+                                Bitmap.createBitmap(
+                                    bitmap,
+                                    0,
+                                    prevHeight,
+                                    bitmap.width,
+                                    height - prevHeight
+                                )
+                            )
                 } else {
                     bitmaps.add(
                         Bitmap.createBitmap(
@@ -270,10 +285,11 @@ class ScreenCaptureService : Service() {
                             0,
                             prevHeight,
                             bitmap.width,
-                            (i * heightSlice) + heightSlice
+                            heightSlice
                         )
                     )
-                    prevHeight = (i * heightSlice) + heightSlice + 1
+                    Log.e("Dims","$prevHeight,${heightSlice + prevHeight}")
+                    prevHeight += heightSlice + 1
                 }
             }
         }
