@@ -144,12 +144,22 @@ class ScreenCaptureService : Service() {
             }
         }
 
+
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
+
+        var LAYOUT_FLAG = 0
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        } else {
+            LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_PHONE;
+        }
+
 
         var layoutParams = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
-            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+           LAYOUT_FLAG,
             WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
             PixelFormat.TRANSLUCENT)
 

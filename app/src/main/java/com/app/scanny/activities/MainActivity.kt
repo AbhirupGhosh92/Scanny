@@ -7,9 +7,11 @@ import android.content.ServiceConnection
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.Settings
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.app.scanny.Constants
@@ -60,6 +62,17 @@ class MainActivity : AppCompatActivity() {
 
         var intent = Intent(this,ScreenCaptureService::class.java)
         //bindService(intent, boundServiceConnection, BIND_AUTO_CREATE)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            val REQUEST_CODE = 101
+            val myIntent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+            myIntent.data = Uri.parse("package:$packageName")
+            startActivityForResult(myIntent, REQUEST_CODE)
+            } else {
+                TODO("VERSION.SDK_INT < M")
+            }
+
+
 
         renderViews(false)
     }
