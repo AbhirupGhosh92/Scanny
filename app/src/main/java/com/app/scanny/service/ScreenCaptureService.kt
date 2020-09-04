@@ -7,7 +7,6 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.PixelFormat
 import android.hardware.display.DisplayManager
 import android.media.Image
@@ -30,9 +29,10 @@ import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.activities.MainActivity
 import kotlinx.coroutines.*
+import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
-import java.lang.Exception
 import java.nio.ByteBuffer
 
 
@@ -54,6 +54,7 @@ class ScreenCaptureService : Service() {
     var captureIntent : Intent? =null
     var result : Int = 0
     var isRunninng = false
+    var metrics : DisplayMetrics? = null
 
    inner class MyBinder : Binder(){
 
@@ -223,21 +224,20 @@ class ScreenCaptureService : Service() {
 
                 val planes: Array<Image.Plane> = image.planes
                 val buffer: ByteBuffer = planes[0].buffer
-                var bitmap =
-                    Bitmap.createBitmap(
-                        screenWidth,
-                        screenHeight,
-                        Bitmap.Config.ARGB_8888
-                    )
-                bitmap.copyPixelsFromBuffer(buffer)
+                val pixelStride = planes[0].pixelStride
+                val  rowStride = planes[0].rowStride
+                val rowPadding = rowStride - pixelStride * screenWidth
+            val bmp = Bitmap.createBitmap(
+                metrics?.widthPixels!! + (rowPadding.toFloat() / pixelStride.toFloat()).toInt(),
+                metrics?.heightPixels!!,
+                Bitmap.Config.ARGB_8888
+            )
+            bmp.copyPixelsFromBuffer(buffer)
                 stopRecord()
 
-                var processing = withContext(Dispatchers.Default)
-                {
-                   processBitmap(bitmap)
-                }
+                var bitmaps = withContext(Dispatchers.Default){processBitmap(bmp)}
 
-                writeBitmaps(processing)
+                writeBitmaps(bitMapList = bitmaps)
 
                 view.visibility = View.VISIBLE
 
@@ -249,10 +249,45 @@ class ScreenCaptureService : Service() {
         }
     }
 
-    private fun writeBitmaps(bitMapList : List<Bitmap>)
+    private fun writeBitmaps(bitmap: Bitmap? = null ,bitMapList : List<Bitmap>? = null)
     {
-        var path = Environment.getDataDirectory().absolutePath
+        try {
+
+            when{
+                bitmap != null && bitMapList.isNullOrEmpty() ->
+                {
+                    var byteStream = ByteArrayOutputStream()
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteStream)
+                    var dir = baseContext.getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE)
+                    var file = File(dir,"temp.jpeg")
+                    file.createNewFile()
+                    var fos = FileOutputStream(file)
+                    fos.write(byteStream.toByteArray())
+                    fos.close()
+
+                }
+
+                bitmap == null && bitMapList.isNullOrEmpty().not() -> {
+                    for (item in bitMapList?.indices!!)
+                    {
+                        var byteStream = ByteArrayOutputStream()
+                        bitMapList[item].compress(Bitmap.CompressFormat.JPEG, 100, byteStream)
+                        var dir = baseContext.getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE)
+                        var file = File(dir,"${item}_temp.jpeg")
+                        file.createNewFile()
+                        var fos = FileOutputStream(file)
+                        fos.write(byteStream.toByteArray())
+                        fos.close()
+                    }
+                }
+            }
+
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
     }
+
+
 
     private fun processBitmap(bitmap: Bitmap,horizontalSlices : Int = 13) : ArrayList<Bitmap>
     {
@@ -354,9 +389,9 @@ class ScreenCaptureService : Service() {
     }
 
     private fun getSize() {
-        val metrics: DisplayMetrics = resources.displayMetrics
-        screenWidth = metrics.widthPixels
-        screenHeight = metrics.heightPixels
-        screenDensity = metrics.densityDpi
+        metrics = resources.displayMetrics
+        screenWidth = metrics?.widthPixels!!
+        screenHeight = metrics?.heightPixels!!
+        screenDensity = metrics?.densityDpi!!
     }
 }
