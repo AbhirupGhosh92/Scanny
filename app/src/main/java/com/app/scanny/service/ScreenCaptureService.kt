@@ -14,6 +14,7 @@ import android.media.ImageReader
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
+import android.net.Uri
 import android.os.*
 import android.util.DisplayMetrics
 import android.util.Log
@@ -28,6 +29,7 @@ import androidx.core.app.NotificationCompat
 import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.activities.MainActivity
+import com.app.scanny.activities.TransparentActivity
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -66,6 +68,12 @@ class ScreenCaptureService : Service() {
 
     private val localBinder: IBinder = MyBinder()
 
+    private val shareCallback :  () -> Unit = {
+        var intent = Intent(this,TransparentActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
+    }
+
 
 
     override fun onBind(p0: Intent?): IBinder? {
@@ -90,8 +98,8 @@ class ScreenCaptureService : Service() {
                     createNotificationChannel()
 
                     val pendingIntent =
-                        PendingIntent.getActivity(baseContext, OPEN_ACTIVITY, Intent(
-                            baseContext,
+                        PendingIntent.getActivity(this, OPEN_ACTIVITY, Intent(
+                            this,
                             MainActivity::class.java
                         )
                             .apply {
@@ -101,7 +109,7 @@ class ScreenCaptureService : Service() {
                             , 0
                         )
 
-                    val notification = NotificationCompat.Builder(baseContext, channelId)
+                    val notification = NotificationCompat.Builder(this, channelId)
                         .setContentIntent(pendingIntent)
                         .setContentTitle("Capture screen")
                         .build()
@@ -179,7 +187,7 @@ class ScreenCaptureService : Service() {
         }
 
         val manager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            baseContext?.getSystemService(NotificationManager ::class.java)
+           getSystemService(NotificationManager ::class.java)
         } else {
             TODO("VERSION.SDK_INT < M")
         }
@@ -220,34 +228,44 @@ class ScreenCaptureService : Service() {
 
         var image = mImageReader.acquireLatestImage()
 
-        if(image !=null) {
 
-                val planes: Array<Image.Plane> = image.planes
-                val buffer: ByteBuffer = planes[0].buffer
-                val pixelStride = planes[0].pixelStride
-                val  rowStride = planes[0].rowStride
-                val rowPadding = rowStride - pixelStride * screenWidth
+        if(image !=null) {
+            withContext(Dispatchers.Default){
+            val planes: Array<Image.Plane> = image.planes
+            val buffer: ByteBuffer = planes[0].buffer
+            val pixelStride = planes[0].pixelStride
+            val rowStride = planes[0].rowStride
+            val rowPadding = rowStride - pixelStride * screenWidth
             val bmp = Bitmap.createBitmap(
                 metrics?.widthPixels!! + (rowPadding.toFloat() / pixelStride.toFloat()).toInt(),
                 metrics?.heightPixels!!,
                 Bitmap.Config.ARGB_8888
             )
             bmp.copyPixelsFromBuffer(buffer)
-                stopRecord()
+            stopRecord()
 
-                var bitmaps = withContext(Dispatchers.Default){processBitmap(bmp)}
+            // var bitmaps = withContext(Dispatchers.Default){processBitmap(bmp)}
 
-                writeBitmaps(bitMapList = bitmaps)
+             withContext(Dispatchers.IO)
+                {
+                    writeBitmaps(bitmap = bmp)
+                }
 
-                view.visibility = View.VISIBLE
-
+                withContext(Dispatchers.Main)
+                {
+                    //shareBitmap()
+                    shareCallback.invoke()
+                    //view.visibility = View.VISIBLE
+                }
+        }
         }
         else
         {
             view.visibility = View.VISIBLE
-            Toast.makeText(baseContext,"No Image Captured",Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"No Image Captured",Toast.LENGTH_SHORT).show()
         }
     }
+
 
     private fun writeBitmaps(bitmap: Bitmap? = null ,bitMapList : List<Bitmap>? = null)
     {
@@ -258,7 +276,7 @@ class ScreenCaptureService : Service() {
                 {
                     var byteStream = ByteArrayOutputStream()
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteStream)
-                    var dir = baseContext.getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE)
+                    var dir = getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE)
                     var file = File(dir,"temp.jpeg")
                     file.createNewFile()
                     var fos = FileOutputStream(file)
@@ -272,7 +290,7 @@ class ScreenCaptureService : Service() {
                     {
                         var byteStream = ByteArrayOutputStream()
                         bitMapList[item].compress(Bitmap.CompressFormat.JPEG, 100, byteStream)
-                        var dir = baseContext.getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE)
+                        var dir = getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE)
                         var file = File(dir,"${item}_temp.jpeg")
                         file.createNewFile()
                         var fos = FileOutputStream(file)
