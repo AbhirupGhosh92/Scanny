@@ -276,8 +276,8 @@ class ScreenCaptureService : Service() {
                 {
                     var byteStream = ByteArrayOutputStream()
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteStream)
-                    var dir = getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE)
-                    var file = File(dir,"temp.jpeg")
+                    var file = File(Environment.getExternalStorageDirectory()
+                        .toString() + File.separator + "temporary_file.jpg")
                     file.createNewFile()
                     var fos = FileOutputStream(file)
                     fos.write(byteStream.toByteArray())

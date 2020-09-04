@@ -10,6 +10,7 @@ import android.os.Environment
 import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.FileProvider
+import com.app.scanny.BuildConfig
 import com.app.scanny.R
 import java.io.File
 
@@ -26,19 +27,21 @@ class TransparentActivity : AppCompatActivity() {
 
     private fun shareBitmap()
     {
-        var share = Intent(Intent.ACTION_SEND)
-        var file = File(getDir(Environment.DIRECTORY_PICTURES,Context.MODE_PRIVATE),"temp.jpeg")
-        var uri : Uri
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
-        {
-
-            uri = FileProvider.getUriForFile(this,getString(R.string.file_provider_authority) , file);
-            share.setDataAndType(uri, "image/jpg")
-            share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        else
-        {
-            share.setDataAndType(Uri.fromFile(file), "image/jpg");
+        val share = Intent(Intent.ACTION_SEND)
+        share.type = "image/jpeg"
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+            share.putExtra(
+                Intent.EXTRA_STREAM,
+                Uri.parse("file:///sdcard/temporary_file.jpg"))
+        } else {
+            share.putExtra(
+                Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                    this, BuildConfig.APPLICATION_ID + ".provider", File(
+                        Environment.getExternalStorageDirectory()
+                            .toString() + File.separator + "temporary_file.jpg"
+                    )
+                )
+            )
         }
         startActivityForResult(Intent.createChooser(share, "Share Image"),SHARE_INTENT)
     }
