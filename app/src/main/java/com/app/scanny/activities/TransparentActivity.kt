@@ -11,7 +11,9 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.FileProvider
 import com.app.scanny.BuildConfig
+import com.app.scanny.Constants
 import com.app.scanny.R
+import com.app.scanny.service.ScreenCaptureService
 import java.io.File
 
 class TransparentActivity : AppCompatActivity() {
@@ -36,14 +38,16 @@ class TransparentActivity : AppCompatActivity() {
         } else {
             share.putExtra(
                 Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                    this, BuildConfig.APPLICATION_ID + ".provider", File(
+                    applicationContext, BuildConfig.APPLICATION_ID + ".provider", File(
                         Environment.getExternalStorageDirectory()
                             .toString() + File.separator + "temporary_file.jpg"
                     )
                 )
             )
         }
-        startActivityForResult(Intent.createChooser(share, "Share Image"),SHARE_INTENT)
+        var shareInt = Intent.createChooser(share, "Share Image")
+        shareInt.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        startActivityForResult(shareInt,SHARE_INTENT)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -52,6 +56,11 @@ class TransparentActivity : AppCompatActivity() {
         {
             SHARE_INTENT -> {
                 finish()
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    var intent = Intent( this, ScreenCaptureService::class.java)
+                    intent.action = Constants.START_SERVICE
+                    startForegroundService(intent)
+                }
             }
             else -> {
                 super.onActivityResult(requestCode, resultCode, data)
