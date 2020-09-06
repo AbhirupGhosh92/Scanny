@@ -1,6 +1,9 @@
 package com.app.scanny.activities
 
-import android.content.*
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
@@ -8,17 +11,22 @@ import android.media.projection.MediaProjectionManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.os.IBinder
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toUri
 import androidx.databinding.DataBindingUtil
+import com.app.scanny.BuildConfig
 import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.databinding.ActivityMainBinding
 import com.app.scanny.service.ScreenCaptureService
-import java.util.jar.Manifest
+import java.io.File
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -126,6 +134,33 @@ class MainActivity : AppCompatActivity() {
                 stopMyService()
                 dataBinding.btnService.text= "Start Capture"
             }
+        }
+
+
+        dataBinding.btnLocation.setOnClickListener {
+
+
+            var dir = File(Environment.getExternalStorageDirectory()
+                .toString() + File.separator + "Pictures/Scanny")
+            if(!dir.exists())
+            {
+                dir.mkdir()
+            }
+            val share = Intent(Intent.ACTION_SEND)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.setDataAndType(dir.toUri(), "/")
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                share.putExtra(
+                    Intent.EXTRA_STREAM,
+                    dir.toUri())
+            } else {
+                share.putExtra(
+                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
+                        applicationContext, BuildConfig.APPLICATION_ID + ".provider", dir
+                    )
+                )
+            }
+            startActivity(share)
         }
     }
 
