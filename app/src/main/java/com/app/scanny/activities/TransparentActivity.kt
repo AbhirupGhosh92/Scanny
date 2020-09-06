@@ -15,6 +15,7 @@ import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.service.ScreenCaptureService
 import java.io.File
+import java.util.*
 
 class TransparentActivity : AppCompatActivity() {
 
@@ -34,13 +35,14 @@ class TransparentActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
             share.putExtra(
                 Intent.EXTRA_STREAM,
-                Uri.parse("file:///sdcard/temporary_file.jpg"))
+                Uri.parse(Environment.getExternalStorageDirectory()
+                    .toString() + File.separator + "Pictures/${Date(System.currentTimeMillis())}.jpg"))
         } else {
             share.putExtra(
                 Intent.EXTRA_STREAM, FileProvider.getUriForFile(
                     applicationContext, BuildConfig.APPLICATION_ID + ".provider", File(
                         Environment.getExternalStorageDirectory()
-                            .toString() + File.separator + "temporary_file.jpg"
+                            .toString() + File.separator + "Pictures/${Date(System.currentTimeMillis())}.jpg"
                     )
                 )
             )

@@ -36,6 +36,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ScreenCaptureService : Service() {
@@ -57,6 +59,7 @@ class ScreenCaptureService : Service() {
     var result : Int = 0
     var isRunninng = false
     var metrics : DisplayMetrics? = null
+    private lateinit var context: Context
 
    inner class MyBinder : Binder(){
 
@@ -69,9 +72,9 @@ class ScreenCaptureService : Service() {
     private val localBinder: IBinder = MyBinder()
 
     private val shareCallback :  () -> Unit = {
-        var intent = Intent(this,TransparentActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent)
+//        var intent = Intent(this,TransparentActivity::class.java)
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        startActivity(intent)
     }
 
 
@@ -87,6 +90,7 @@ class ScreenCaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
         isRunninng = true
+        context = this
 
         when(intent?.action) {
 
@@ -254,8 +258,9 @@ class ScreenCaptureService : Service() {
                 withContext(Dispatchers.Main)
                 {
                     //shareBitmap()
-                    shareCallback.invoke()
-                    //view.visibility = View.VISIBLE
+                   // shareCallback.invoke()
+                    Toast.makeText(context,"Screenshot saved",Toast.LENGTH_SHORT).show()
+                    view.visibility = View.VISIBLE
                 }
         }
         }
@@ -276,8 +281,13 @@ class ScreenCaptureService : Service() {
                 {
                     var byteStream = ByteArrayOutputStream()
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteStream)
-                    var file = File(Environment.getExternalStorageDirectory()
-                        .toString() + File.separator + "temporary_file.jpg")
+                    var dir = File(Environment.getExternalStorageDirectory()
+                        .toString() + File.separator + "Pictures/Scanny")
+                    if(!dir.exists())
+                    {
+                        dir.mkdir()
+                    }
+                    var file = File("${dir.absolutePath}/${Date(System.currentTimeMillis())}.jpg")
                     file.createNewFile()
                     var fos = FileOutputStream(file)
                     fos.write(byteStream.toByteArray())
