@@ -82,10 +82,6 @@ class HomeFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        startBind()
-
-        renderViews(false)
-
         if(ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
         {
             requestSharePermission()
@@ -150,8 +146,6 @@ class HomeFragment : Fragment() {
 
 
         dataBinding.btnLocation.setOnClickListener {
-
-
             var dir = File(
                 Environment.getExternalStorageDirectory()
                 .toString() + File.separator + "Pictures/Scanny")
