@@ -3,15 +3,20 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/cardview_dark_background"
     android:layout_height="match_parent"
     tools:context=".fragments.ImageViewerFragment">
 
       <GridView
           android:id="@+id/gv_images"
           android:layout_width="match_parent"
-          android:numColumns="2"
+            android:stretchMode="columnWidth"
           android:scrollbars="none"
-          android:gravity="top"
+          android:background="@color/cardview_dark_background"
+          android:layout_marginStart="10dp"
+          android:layout_marginEnd="10dp"
+          android:verticalSpacing="5dp"
+          android:gravity="center"
           android:layout_height="match_parent"/>
 
 

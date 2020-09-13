@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridView
 import androidx.databinding.DataBindingUtil
 import com.app.scanny.R
 import com.app.scanny.adapters.CustomGridAdapter
@@ -53,6 +54,7 @@ class ImageViewerFragment : Fragment() {
         {
             fileList.addAll(dir.listFiles()!!)
             dataBinding.gvImages.adapter = CustomGridAdapter(requireContext(),dir.listFiles()?.asList()!!)
+            dataBinding.gvImages.numColumns = 3
         }
 
 

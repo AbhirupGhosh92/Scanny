@@ -14,14 +14,10 @@ import android.media.ImageReader
 import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
-import android.net.Uri
 import android.os.*
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -29,7 +25,6 @@ import androidx.core.app.NotificationCompat
 import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.activities.MainActivity
-import com.app.scanny.activities.TransparentActivity
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -37,11 +32,14 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 class ScreenCaptureService : Service() {
 
+    private var initialTouchY: Float = 0.0f
+    private var initialTouchX: Float = 0.0f
+    private var initialY: Float = 0.0f
+    private var initialX: Float = 0.0f
     private var screenWidth: Int = 0
     private var screenHeight: Int = 0
     private var screenDensity: Int = 0
@@ -60,6 +58,8 @@ class ScreenCaptureService : Service() {
     var isRunninng = false
     var metrics : DisplayMetrics? = null
     private lateinit var context: Context
+    private lateinit var button: Button
+    private lateinit var layoutParams : WindowManager.LayoutParams
 
    inner class MyBinder : Binder(){
 
@@ -151,13 +151,14 @@ class ScreenCaptureService : Service() {
         var inflater =  getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         view =  inflater.inflate(R.layout.customm_view,null)
 
-        view.findViewById<Button>(R.id.btn_capture).setOnClickListener {
-           view.visibility = View.GONE
+        button =  view.findViewById<Button>(R.id.btn_capture)
+
+        button.setOnClickListener {
+            view.visibility = View.GONE
             CoroutineScope(Dispatchers.Main).launch {
                 startRecord()
             }
         }
-
 
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
@@ -170,7 +171,7 @@ class ScreenCaptureService : Service() {
         }
 
 
-        var layoutParams = WindowManager.LayoutParams(
+            layoutParams = WindowManager.LayoutParams(
             WindowManager.LayoutParams.WRAP_CONTENT,
             WindowManager.LayoutParams.WRAP_CONTENT,
            LAYOUT_FLAG,
@@ -180,6 +181,40 @@ class ScreenCaptureService : Service() {
         layoutParams.gravity = Gravity.BOTTOM
 
         windowManager.addView(view, layoutParams)
+
+//        button.setOnTouchListener { p0, p1 ->
+//
+//            initialTouchX = p1.rawX
+//            initialTouchY = p1.rawY
+//
+//            when(p1?.action) {
+//                MotionEvent.ACTION_DOWN  -> {
+//                    //if(initialX == 0.0f && initialY == 0.0f ) {
+//                        initialX = button.x
+//                        initialY = button.y
+//                   // }
+//
+//                    return@setOnTouchListener true
+//                }
+//
+//
+//                MotionEvent.ACTION_MOVE -> {
+//                    layoutParams.x = (initialX -  (initialTouchX - p1.rawX)).toInt()
+//                    layoutParams.y = (initialY - (p1.rawY - initialTouchY)).toInt()
+//                    windowManager.updateViewLayout(view, layoutParams)
+//
+//                    return@setOnTouchListener true
+//                }
+//
+////                MotionEvent.ACTION_UP -> {
+////                    initialX = layoutParams.x.toFloat()
+////                    initialY = layoutParams.y.toFloat()
+////                }
+//            }
+//
+//            false
+//        }
+
     }
 
     private fun createNotificationChannel()
