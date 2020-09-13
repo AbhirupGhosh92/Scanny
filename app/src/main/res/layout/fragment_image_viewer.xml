@@ -7,16 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ImageViewerFragment">
 
-      <GridView
-          android:id="@+id/gv_images"
+      <androidx.recyclerview.widget.RecyclerView
+          xmlns:android="http://schemas.android.com/apk/res/android"
+          android:id="@+id/listView"
           android:layout_width="match_parent"
-            android:stretchMode="columnWidth"
-          android:scrollbars="none"
-          android:background="@color/cardview_dark_background"
-          android:layout_marginStart="10dp"
-          android:layout_marginEnd="10dp"
-          android:verticalSpacing="5dp"
-          android:gravity="center"
           android:layout_height="match_parent"/>
 
 

@@ -1,24 +1,27 @@
 package com.app.scanny.fragments
 
-import android.database.DatabaseUtils
 import android.os.Bundle
 import android.os.Environment
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.ListAdapter
 import com.app.scanny.R
-import com.app.scanny.adapters.CustomGridAdapter
+import com.app.scanny.adapters.CustomListAdapter
 import com.app.scanny.databinding.FragmentImageViewerBinding
+import com.felipecsl.asymmetricgridview.library.Utils
 import java.io.File
 
 
 class ImageViewerFragment : Fragment() {
 
     private lateinit var dataBinding : FragmentImageViewerBinding
-    private var fileList = arrayListOf<File>()
+    private var fileList = arrayListOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,10 @@ class ImageViewerFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        dataBinding.listView.adapter = CustomListAdapter(requireContext(),fileList)
+        dataBinding.listView.itemAnimator = DefaultItemAnimator()
+        dataBinding.listView.layoutManager = GridLayoutManager(requireContext(),4)
+        dataBinding.listView.adapter?.notifyDataSetChanged()
     }
 
     override fun onResume() {
@@ -52,11 +59,22 @@ class ImageViewerFragment : Fragment() {
 
         if(dir.listFiles().isNullOrEmpty().not())
         {
-            fileList.addAll(dir.listFiles()!!)
-            dataBinding.gvImages.adapter = CustomGridAdapter(requireContext(),dir.listFiles()?.asList()!!)
-            dataBinding.gvImages.numColumns = 3
+            fileList.clear()
+            fileList.addAll(dir.listFiles()?.getPathsList()?.sorted()?.reversed()!!)
+            dataBinding.listView.adapter?.notifyDataSetChanged()
         }
 
 
+    }
+
+    private fun Array<File>.getPathsList() : Collection<String>
+    {
+        var temp = arrayListOf<String>()
+        for(item in this)
+        {
+            temp.add(item.absolutePath)
+        }
+
+        return temp
     }
 }
