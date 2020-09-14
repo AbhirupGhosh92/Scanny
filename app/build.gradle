@@ -35,6 +35,7 @@ android {
 }
 
 def appcompat_version = "1.2.0"
+def dynamicanimation_version = '1.0.0'
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
@@ -58,5 +59,6 @@ dependencies {
     implementation 'com.felipecsl.asymmetricgridview:library:2.0.1'
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+    implementation "androidx.dynamicanimation:dynamicanimation:$dynamicanimation_version"
 
 }

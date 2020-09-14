@@ -32,6 +32,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.util.*
+import kotlin.math.abs
 
 
 class ScreenCaptureService : Service() {
@@ -182,38 +183,48 @@ class ScreenCaptureService : Service() {
 
         windowManager.addView(view, layoutParams)
 
-//        button.setOnTouchListener { p0, p1 ->
-//
-//            initialTouchX = p1.rawX
-//            initialTouchY = p1.rawY
-//
-//            when(p1?.action) {
-//                MotionEvent.ACTION_DOWN  -> {
-//                    //if(initialX == 0.0f && initialY == 0.0f ) {
-//                        initialX = button.x
-//                        initialY = button.y
-//                   // }
-//
-//                    return@setOnTouchListener true
-//                }
-//
-//
-//                MotionEvent.ACTION_MOVE -> {
-//                    layoutParams.x = (initialX -  (initialTouchX - p1.rawX)).toInt()
-//                    layoutParams.y = (initialY - (p1.rawY - initialTouchY)).toInt()
-//                    windowManager.updateViewLayout(view, layoutParams)
-//
-//                    return@setOnTouchListener true
-//                }
-//
-////                MotionEvent.ACTION_UP -> {
-////                    initialX = layoutParams.x.toFloat()
-////                    initialY = layoutParams.y.toFloat()
-////                }
-//            }
-//
-//            false
-//        }
+        button.setOnTouchListener { p0, p1 ->
+
+
+            when(p1?.action) {
+                MotionEvent.ACTION_DOWN  -> {
+
+                    initialX = layoutParams.x.toFloat()
+                    initialY = layoutParams.y.toFloat()
+
+                    //get the touch location
+                    initialTouchX = p1.rawX
+                    initialTouchY = p1.rawY
+
+                    return@setOnTouchListener true
+
+                }
+
+
+                MotionEvent.ACTION_MOVE -> {
+
+                    layoutParams.x = (initialX +  (p1.rawX - initialTouchX )).toInt()
+                    layoutParams.y = (initialY + (initialTouchY - p1.rawY )).toInt()
+                    windowManager.updateViewLayout(view, layoutParams)
+
+                    return@setOnTouchListener true
+
+                }
+
+                MotionEvent.ACTION_UP -> {
+
+                    if((abs(initialTouchX - p1.rawX) < 5) && (abs(initialTouchY - p1.rawY) < 5))
+                    {
+                        button.performClick()
+                    }
+
+
+
+                }
+            }
+
+            false
+        }
 
     }
 
@@ -243,67 +254,72 @@ class ScreenCaptureService : Service() {
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-     suspend  fun startRecord() {
-        mMediaProjectionManager =
-            getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+    fun startRecord() {
 
-         mMediaProjection = mMediaProjectionManager?.getMediaProjection(result, captureIntent!!)
+         CoroutineScope(Dispatchers.Main).launch {
 
-        getSize()
+            mMediaProjectionManager =
+                getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
 
-        var mImageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2)
-        mMediaProjection?.createVirtualDisplay(
-            "Recording capture",
-            screenWidth,
-            screenHeight,
-            screenDensity,
-            DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-            mImageReader.surface,
-            null,
-            null
-        )
+            mMediaProjection = mMediaProjectionManager?.getMediaProjection(result, captureIntent!!)
 
-        delay(1000)
+            getSize()
 
-        var image = mImageReader.acquireLatestImage()
-
-
-        if(image !=null) {
-            withContext(Dispatchers.Default){
-            val planes: Array<Image.Plane> = image.planes
-            val buffer: ByteBuffer = planes[0].buffer
-            val pixelStride = planes[0].pixelStride
-            val rowStride = planes[0].rowStride
-            val rowPadding = rowStride - pixelStride * screenWidth
-            val bmp = Bitmap.createBitmap(
-                metrics?.widthPixels!! + (rowPadding.toFloat() / pixelStride.toFloat()).toInt(),
-                metrics?.heightPixels!!,
-                Bitmap.Config.ARGB_8888
+            var mImageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2)
+            mMediaProjection?.createVirtualDisplay(
+                "Recording capture",
+                screenWidth,
+                screenHeight,
+                screenDensity,
+                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
+                mImageReader.surface,
+                null,
+                null
             )
-            bmp.copyPixelsFromBuffer(buffer)
-            stopRecord()
 
-            // var bitmaps = withContext(Dispatchers.Default){processBitmap(bmp)}
+            delay(1000)
 
-             withContext(Dispatchers.IO)
-                {
-                    writeBitmaps(bitmap = bmp)
+            var image = mImageReader.acquireLatestImage()
+
+
+            if(image !=null) {
+                withContext(Dispatchers.Default){
+                    val planes: Array<Image.Plane> = image.planes
+                    val buffer: ByteBuffer = planes[0].buffer
+                    val pixelStride = planes[0].pixelStride
+                    val rowStride = planes[0].rowStride
+                    val rowPadding = rowStride - pixelStride * screenWidth
+                    val bmp = Bitmap.createBitmap(
+                        metrics?.widthPixels!! + (rowPadding.toFloat() / pixelStride.toFloat()).toInt(),
+                        metrics?.heightPixels!!,
+                        Bitmap.Config.ARGB_8888
+                    )
+                    bmp.copyPixelsFromBuffer(buffer)
+                    stopRecord()
+
+                    // var bitmaps = withContext(Dispatchers.Default){processBitmap(bmp)}
+
+                    withContext(Dispatchers.IO)
+                    {
+                        writeBitmaps(bitmap = bmp)
+                    }
+
+                    withContext(Dispatchers.Main)
+                    {
+                        //shareBitmap()
+                        // shareCallback.invoke()
+                        view.visibility = View.VISIBLE
+                    }
                 }
+            }
+            else
+            {
+                view.visibility = View.VISIBLE
+                Toast.makeText(context,"No Image Captured",Toast.LENGTH_SHORT).show()
+            }
+        }
 
-                withContext(Dispatchers.Main)
-                {
-                    //shareBitmap()
-                   // shareCallback.invoke()
-                    Toast.makeText(context,"Screenshot saved",Toast.LENGTH_SHORT).show()
-                    view.visibility = View.VISIBLE
-                }
-        }
-        }
-        else
-        {
-            view.visibility = View.VISIBLE
-            Toast.makeText(this,"No Image Captured",Toast.LENGTH_SHORT).show()
-        }
+
     }
 
 
