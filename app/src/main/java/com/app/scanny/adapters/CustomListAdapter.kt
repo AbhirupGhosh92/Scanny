@@ -2,6 +2,7 @@ package com.app.scanny.adapters
 
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -9,13 +10,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.app.scanny.R
 import com.app.scanny.databinding.GridItemBinding
+import com.app.scanny.fragments.PreviewDialogFragment
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class CustomListAdapter(var context : Context,var pathList: ArrayList<String>) : RecyclerView.Adapter<CustomListAdapter.ViewHolder>() {
+class CustomListAdapter(var context : Context,var pathList: ArrayList<String>,var snippet : (position : Int) -> Unit) : RecyclerView.Adapter<CustomListAdapter.ViewHolder>() {
 
    data class ViewHolder(var dataBindig : GridItemBinding) : RecyclerView.ViewHolder(dataBindig.root)
 
@@ -33,7 +35,9 @@ class CustomListAdapter(var context : Context,var pathList: ArrayList<String>) :
                     .load(pathList[position])
                     .into(holder.dataBindig.ivItem)
 
-
+                holder.dataBindig.ivItem.setOnClickListener {
+                   snippet.invoke(position)
+                }
 
 
     }

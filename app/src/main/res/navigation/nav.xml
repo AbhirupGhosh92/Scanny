@@ -10,9 +10,4 @@
         android:name="com.app.scanny.fragments.ViewPagerFragment"
         tools:layout="@layout/fragment_view_pager"
         android:label="ViewPagerFragment" />
-    <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.app.scanny.fragments.HomeFragment"
-        tools:layout="@layout/activity_main"
-        android:label="HomeFragment" />
 </navigation>

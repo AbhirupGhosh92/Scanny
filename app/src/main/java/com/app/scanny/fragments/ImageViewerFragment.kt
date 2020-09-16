@@ -41,6 +41,14 @@ class ImageViewerFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         dataBinding.listView.adapter = CustomListAdapter(requireContext(),fileList)
+        {
+            var bundle = Bundle()
+            bundle.putString("image",fileList[it])
+
+            var frag = PreviewDialogFragment()
+            frag.arguments = bundle
+            frag.show(requireFragmentManager(),"")
+        }
         dataBinding.listView.itemAnimator = DefaultItemAnimator()
         dataBinding.listView.layoutManager = GridLayoutManager(requireContext(),4)
         dataBinding.listView.adapter?.notifyDataSetChanged()
