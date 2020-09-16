@@ -258,6 +258,10 @@ class HomeFragment : Fragment() {
                         bindMyService(data!!,resultCode)
                     }
                 }
+
+                101 -> {
+                    renderViews(false)
+                }
             }
 
 

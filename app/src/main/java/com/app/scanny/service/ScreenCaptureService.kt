@@ -22,9 +22,11 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import androidx.databinding.DataBindingUtil
 import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.activities.MainActivity
+import com.app.scanny.databinding.CustommViewBinding
 import kotlinx.coroutines.*
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -61,6 +63,7 @@ class ScreenCaptureService : Service() {
     private lateinit var context: Context
     private lateinit var button: Button
     private lateinit var layoutParams : WindowManager.LayoutParams
+    private lateinit var dataBinding : CustommViewBinding
 
    inner class MyBinder : Binder(){
 
@@ -150,11 +153,11 @@ class ScreenCaptureService : Service() {
     private fun renderView()
     {
         var inflater =  getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        view =  inflater.inflate(R.layout.customm_view,null)
+        dataBinding = DataBindingUtil.inflate(inflater,R.layout.customm_view,null,false)
 
-        button =  view.findViewById<Button>(R.id.btn_capture)
+        view = dataBinding.root
 
-        button.setOnClickListener {
+        dataBinding.btnCapture.setOnClickListener {
             view.visibility = View.GONE
             CoroutineScope(Dispatchers.Main).launch {
                 startRecord()
@@ -183,7 +186,7 @@ class ScreenCaptureService : Service() {
 
         windowManager.addView(view, layoutParams)
 
-        button.setOnTouchListener { p0, p1 ->
+        dataBinding.btnCapture.setOnTouchListener { p0, p1 ->
 
 
             when(p1?.action) {
@@ -215,7 +218,7 @@ class ScreenCaptureService : Service() {
 
                     if((abs(initialTouchX - p1.rawX) < 5) && (abs(initialTouchY - p1.rawY) < 5))
                     {
-                        button.performClick()
+                        dataBinding.btnCapture.performClick()
                     }
 
 
