@@ -2,6 +2,7 @@ package com.app.scanny.fragments
 
 import android.os.Bundle
 import android.os.Environment
+import android.view.Display
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,7 @@ import com.app.scanny.R
 import com.app.scanny.adapters.CustomListAdapter
 import com.app.scanny.databinding.FragmentImageViewerBinding
 import com.felipecsl.asymmetricgridview.library.Utils
+import kotlinx.coroutines.*
 import java.io.File
 
 
@@ -52,11 +54,15 @@ class ImageViewerFragment : Fragment() {
         dataBinding.listView.itemAnimator = DefaultItemAnimator()
         dataBinding.listView.layoutManager = GridLayoutManager(requireContext(),4)
         dataBinding.listView.adapter?.notifyDataSetChanged()
+
+        CoroutineScope(Dispatchers.Default).launch {
+            getImages()
+        }
+
     }
 
     override fun onResume() {
         super.onResume()
-        getImages()
     }
 
     private fun getImages()
@@ -69,7 +75,10 @@ class ImageViewerFragment : Fragment() {
         {
             fileList.clear()
             fileList.addAll(dir.listFiles()?.getPathsList()?.sorted()?.reversed()!!)
-            dataBinding.listView.adapter?.notifyDataSetChanged()
+            CoroutineScope(Dispatchers.Main).launch{
+                delay(400)
+                dataBinding.listView.adapter?.notifyDataSetChanged()
+            }
         }
 
 

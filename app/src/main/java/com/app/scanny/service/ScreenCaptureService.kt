@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Bitmap
 import android.graphics.PixelFormat
 import android.hardware.display.DisplayManager
@@ -64,6 +65,8 @@ class ScreenCaptureService : Service() {
     private lateinit var button: Button
     private lateinit var layoutParams : WindowManager.LayoutParams
     private lateinit var dataBinding : CustommViewBinding
+    private var downtime : Long = 0
+    private var uptime : Long = 0
 
    inner class MyBinder : Binder(){
 
@@ -189,9 +192,12 @@ class ScreenCaptureService : Service() {
         dataBinding.btnCapture.setOnTouchListener { p0, p1 ->
 
 
+
+
             when(p1?.action) {
                 MotionEvent.ACTION_DOWN  -> {
 
+                    downtime = System.currentTimeMillis()
                     initialX = layoutParams.x.toFloat()
                     initialY = layoutParams.y.toFloat()
 
@@ -216,9 +222,22 @@ class ScreenCaptureService : Service() {
 
                 MotionEvent.ACTION_UP -> {
 
+                    uptime = System.currentTimeMillis()
+
                     if((abs(initialTouchX - p1.rawX) < 5) && (abs(initialTouchY - p1.rawY) < 5))
                     {
-                        dataBinding.btnCapture.performClick()
+                        if((uptime - downtime) > 2000)
+                        {
+                            startActivity(Intent(context,MainActivity::class.java).apply {
+                                flags = FLAG_ACTIVITY_NEW_TASK
+                            })
+                        }
+                        else
+                        {
+                            dataBinding.btnCapture.performClick()
+                        }
+
+
                     }
 
 
