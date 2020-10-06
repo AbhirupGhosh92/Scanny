@@ -52,7 +52,6 @@ class HomeFragment : Fragment() {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             val binderBridge: ScreenCaptureService.MyBinder = service as ScreenCaptureService.MyBinder
             boundService = binderBridge.getService()
-
             renderViews(boundService?.isRunninng!!)
 
             boundService?.captureIntent = captureIntent

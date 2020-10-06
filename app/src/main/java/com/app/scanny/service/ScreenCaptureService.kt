@@ -40,6 +40,7 @@ import kotlin.math.abs
 
 class ScreenCaptureService : Service() {
 
+    private var bound = false
     private var initialTouchY: Float = 0.0f
     private var initialTouchX: Float = 0.0f
     private var initialY: Float = 0.0f
@@ -61,12 +62,14 @@ class ScreenCaptureService : Service() {
     var result : Int = 0
     var isRunninng = false
     var metrics : DisplayMetrics? = null
-    private lateinit var context: Context
+    private  var context: Context = this
     private lateinit var button: Button
     private lateinit var layoutParams : WindowManager.LayoutParams
     private lateinit var dataBinding : CustommViewBinding
     private var downtime : Long = 0
     private var uptime : Long = 0
+    private lateinit var job : Job
+
 
    inner class MyBinder : Binder(){
 
@@ -87,10 +90,13 @@ class ScreenCaptureService : Service() {
 
 
     override fun onBind(p0: Intent?): IBinder? {
+        bound = true
+        cancel()
         return localBinder
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
+        bound = false
         return super.onUnbind(intent)
     }
 
@@ -193,6 +199,19 @@ class ScreenCaptureService : Service() {
 
         windowManager.addView(view, layoutParams)
 
+
+        dataBinding.ivCancel.setOnClickListener {
+            cancel()
+        }
+
+        dataBinding.ivGoHome.setOnClickListener {
+            openHome()
+        }
+
+        dataBinding.ivCloseService.setOnClickListener {
+            stopSelf()
+        }
+
         dataBinding.btnCapture.setOnTouchListener { p0, p1 ->
 
 
@@ -200,6 +219,14 @@ class ScreenCaptureService : Service() {
 
             when(p1?.action) {
                 MotionEvent.ACTION_DOWN  -> {
+
+                   job =  CoroutineScope(Dispatchers.Main).launch {
+                        delay(2100)
+                            openMoreOptions()
+                    }
+
+                    job.start()
+
 
                     downtime = System.currentTimeMillis()
                     initialX = layoutParams.x.toFloat()
@@ -227,14 +254,13 @@ class ScreenCaptureService : Service() {
                 MotionEvent.ACTION_UP -> {
 
                     uptime = System.currentTimeMillis()
+                    job.cancel()
 
                     if((abs(initialTouchX - p1.rawX) < 5) && (abs(initialTouchY - p1.rawY) < 5))
                     {
                         if((uptime - downtime) > 2000)
                         {
-                            startActivity(Intent(context,MainActivity::class.java).apply {
-                                flags = FLAG_ACTIVITY_NEW_TASK
-                            })
+                            openMoreOptions()
                         }
                         else
                         {
@@ -252,6 +278,32 @@ class ScreenCaptureService : Service() {
             false
         }
 
+    }
+
+    private fun openMoreOptions()
+    {
+        if(bound.not()) {
+            dataBinding.ivGoHome.visibility = View.VISIBLE
+            dataBinding.ivCloseService.visibility = View.VISIBLE
+            dataBinding.ivCancel.visibility = View.VISIBLE
+        }
+    }
+
+    fun cancel()
+    {
+        if(::dataBinding.isInitialized) {
+            dataBinding.ivGoHome.visibility = View.GONE
+            dataBinding.ivCloseService.visibility = View.GONE
+            dataBinding.ivCancel.visibility = View.GONE
+        }
+    }
+
+    private fun openHome()
+    {
+        cancel()
+        startActivity(Intent(context,MainActivity::class.java).apply {
+            flags = FLAG_ACTIVITY_NEW_TASK
+        })
     }
 
     private fun createNotificationChannel()
