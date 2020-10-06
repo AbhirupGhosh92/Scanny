@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.graphics.Bitmap
+import android.graphics.ImageFormat
 import android.graphics.PixelFormat
 import android.hardware.display.DisplayManager
 import android.media.Image
@@ -343,7 +344,7 @@ class ScreenCaptureService : Service() {
 
             getSize()
 
-            var mImageReader = ImageReader.newInstance(screenWidth, screenHeight, PixelFormat.RGBA_8888, 2)
+            var mImageReader = ImageReader.newInstance(screenWidth, screenHeight, ImageFormat.FLEX_RGBA_8888, 2)
             mMediaProjection?.createVirtualDisplay(
                 "Recording capture",
                 screenWidth,
