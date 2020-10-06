@@ -16,4 +16,14 @@
             <item name="android:backgroundDimEnabled">false</item>
         </style>
 
+    <style name="RoundedButton" parent="Widget.AppCompat.Button.Borderless">
+       <item name="android:background">@drawable/round_button_drawable</item>
+        <item name="paddingStart">20dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="elevation">2dp</item>
+        <item name="paddingEnd">20dp</item>
+        <item name="android:textColor">@color/colourWhite</item>
+        <item name="android:minWidth">150dp</item>
+    </style>
+
 </resources>

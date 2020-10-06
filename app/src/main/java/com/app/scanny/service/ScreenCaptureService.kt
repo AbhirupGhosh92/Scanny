@@ -160,6 +160,10 @@ class ScreenCaptureService : Service() {
 
         view = dataBinding.root
 
+        dataBinding.ivCancel.visibility = View.GONE
+        dataBinding.ivCloseService.visibility = View.GONE
+        dataBinding.ivGoHome.visibility = View.GONE
+
         dataBinding.btnCapture.setOnClickListener {
             view.visibility = View.GONE
             CoroutineScope(Dispatchers.Main).launch {

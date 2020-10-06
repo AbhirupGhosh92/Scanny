@@ -65,7 +65,7 @@ class ImageViewerFragment : Fragment() {
         super.onResume()
     }
 
-    private fun getImages()
+    private suspend fun getImages()
     {
         var dir =  File(
             Environment.getExternalStorageDirectory()
@@ -75,8 +75,8 @@ class ImageViewerFragment : Fragment() {
         {
             fileList.clear()
             fileList.addAll(dir.listFiles()?.getPathsList()?.sorted()?.reversed()!!)
+            delay(400)
             CoroutineScope(Dispatchers.Main).launch{
-                delay(400)
                 dataBinding.listView.adapter?.notifyDataSetChanged()
             }
         }

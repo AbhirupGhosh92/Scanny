@@ -5,6 +5,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background_gradient"
     tools:context=".activities.MainActivity">
 
     <Button
@@ -14,30 +15,42 @@
         android:text="@string/start_capture"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        style="@style/RoundedButton"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.90999997" />
 
-    <TextView
+    <Button
+        android:id="@+id/tv_folder_name"
+        style="@style/RoundedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Your screeshots are stored in SDCard/Pictures/Scanny"
+        android:text="@string/folder_path"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-        android:id="@+id/btn_location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/image_location"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.77" />
+
+    <TextView
+        android:id="@+id/tv_resp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:background="@drawable/text_area_drawable"
+        android:layout_marginEnd="32dp"
+        android:minHeight="200dp"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:autoSizeMaxTextSize="42sp"
+        android:autoSizeMinTextSize="12sp"
+        android:textColor="@color/colourWhite"
+        android:text="Output"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.16000003" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

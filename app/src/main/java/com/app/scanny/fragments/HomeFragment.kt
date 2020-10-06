@@ -93,6 +93,26 @@ class HomeFragment : Fragment() {
                     ,android.Manifest.permission.READ_EXTERNAL_STORAGE),STORAGE)
             }
         }
+
+        dataBinding.tvFolderName.setOnClickListener {
+
+            var uri = File("").toUri()
+
+            var file = File("/storage/emulated/0/Pictures/Scanny/")
+            var intent = Intent(Intent.ACTION_OPEN_DOCUMENT) //
+                .setDataAndType(
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) FileProvider.getUriForFile(
+                        requireContext(),
+                        context?.packageName.toString() + ".provider",
+                        file) else Uri.fromFile(file),
+                    "image/jpeg"
+                ).addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.addCategory(Intent.CATEGORY_OPENABLE)
+
+            context?.startActivity(intent)
+
+
+        }
     }
 
     private fun requestSharePermission()
@@ -142,32 +162,6 @@ class HomeFragment : Fragment() {
                 stopMyService()
                 dataBinding.btnService.text= "Start Capture"
             }
-        }
-
-
-        dataBinding.btnLocation.setOnClickListener {
-            var dir = File(
-                Environment.getExternalStorageDirectory()
-                .toString() + File.separator + "Pictures/Scanny")
-            if(!dir.exists())
-            {
-                dir.mkdir()
-            }
-            val share = Intent(Intent.ACTION_SEND)
-            share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            share.setDataAndType(dir.toUri(), "/")
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-                share.putExtra(
-                    Intent.EXTRA_STREAM,
-                    dir.toUri())
-            } else {
-                share.putExtra(
-                    Intent.EXTRA_STREAM, FileProvider.getUriForFile(
-                        requireActivity().applicationContext, BuildConfig.APPLICATION_ID + ".provider", dir
-                    )
-                )
-            }
-            startActivity(share)
         }
     }
 

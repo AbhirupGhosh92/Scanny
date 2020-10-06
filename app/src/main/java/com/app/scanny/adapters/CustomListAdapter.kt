@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.app.scanny.R
 import com.app.scanny.databinding.GridItemBinding
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import java.io.File
 
 
@@ -22,12 +24,14 @@ class CustomListAdapter(var context : Context,var pathList: ArrayList<String>,va
 
     private  var staeArray =  ArrayList<Boolean>()
 
+    private var cacheOption = RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)
+
    data class ViewHolder(var dataBindig : GridItemBinding) : RecyclerView.ViewHolder(dataBindig.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         if(staeArray.size != pathList.size)
             staeArray = pathList.toBoolenFalse()
-       return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.grid_item,parent,false))
+       return ViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.grid_item,null,false))
     }
 
     override fun getItemCount(): Int {
@@ -38,6 +42,7 @@ class CustomListAdapter(var context : Context,var pathList: ArrayList<String>,va
 
                 Glide.with(context)
                     .load(pathList[position])
+                    .apply(cacheOption)
                     .into(holder.dataBindig.ivItem)
 
 
