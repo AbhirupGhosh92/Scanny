@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "703500186253",
+    "firebase_url": "https://scanny-67c7c.firebaseio.com",
+    "project_id": "scanny-67c7c",
+    "storage_bucket": "scanny-67c7c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703500186253:android:aa2bea4c0a052bfac2e8c4",
+        "android_client_info": {
+          "package_name": "com.app.scanny"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "703500186253-81q9rbdbfsoj50d2sf05l2ni5bjllf9f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.scanny",
+            "certificate_hash": "16e53951c53bc5ddbbd2c4d33cd6ccb8147ac6e0"
+          }
+        },
+        {
+          "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIpdbFGNT26PI7N8a3ycW9BrTAiRxPsu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
