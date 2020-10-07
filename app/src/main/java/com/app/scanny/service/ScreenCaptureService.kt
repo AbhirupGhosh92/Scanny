@@ -344,8 +344,14 @@ class ScreenCaptureService : Service() {
 
             getSize()
 
-            var mImageReader = ImageReader.newInstance(screenWidth, screenHeight, ImageFormat.FLEX_RGBA_8888, 2)
-            mMediaProjection?.createVirtualDisplay(
+            var mImageReader = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ImageReader.newInstance(screenWidth, screenHeight, ImageFormat.JPEG, 2)
+            } else {
+
+                ImageReader.newInstance(screenWidth, screenHeight, ImageFormat.JPEG, 2)
+
+            }
+             mMediaProjection?.createVirtualDisplay(
                 "Recording capture",
                 screenWidth,
                 screenHeight,
