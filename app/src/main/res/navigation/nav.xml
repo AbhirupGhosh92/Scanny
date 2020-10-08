@@ -9,5 +9,6 @@
         android:id="@+id/viewPagerFragment"
         android:name="com.app.scanny.fragments.ViewPagerFragment"
         tools:layout="@layout/fragment_view_pager"
-        android:label="ViewPagerFragment" />
+        app:defaultNavHost="true"
+        android:label="Scanny" />
 </navigation>
