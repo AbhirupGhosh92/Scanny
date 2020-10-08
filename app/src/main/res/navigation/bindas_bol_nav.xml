@@ -15,7 +15,7 @@
             android:id="@+id/action_authFragment_to_chatHomeFragment"
             app:destination="@id/chatHomeFragment"
             app:launchSingleTop="true"
-            app:popUpTo="@id/chatHomeFragment"
+            app:popUpTo="@id/authFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment

@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 
 
 class AuthFragment : Fragment() {
@@ -53,7 +53,8 @@ class AuthFragment : Fragment() {
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .build(),
-                RC_SIGN_IN)
+                RC_SIGN_IN
+            )
         }
         else
         {
@@ -64,7 +65,6 @@ class AuthFragment : Fragment() {
 
     private fun goToNext()
     {
-
         findNavController().navigate(R.id.action_authFragment_to_chatHomeFragment)
         findNavController().popBackStack()
     }
@@ -86,7 +86,11 @@ class AuthFragment : Fragment() {
 
                     // ...
                 } else {
-                   Toast.makeText(requireContext(),"${response?.error?.localizedMessage}",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "${response?.error?.localizedMessage}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
