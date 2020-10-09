@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
 import com.app.scanny.databinding.FragmentChatHomeBinding
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
@@ -69,7 +70,7 @@ class ChatHomeFragment : Fragment() {
                 }
                 else
                 {
-                    Toast.makeText(requireContext(),"No Account",Toast.LENGTH_SHORT).show()
+                   findNavController().navigate(R.id.action_chatHomeFragment_to_enterUserDialogFragment)
                 }
             },
             {

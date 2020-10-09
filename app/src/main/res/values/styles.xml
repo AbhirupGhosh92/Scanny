@@ -31,4 +31,9 @@
         <item name="android:textColor">@color/colourWhite</item>
     </style>
 
+    <style name="GenericHeaderTextTheme">
+        <item name="android:textSize">@dimen/error_text_size</item>
+        <item name="android:textColor">@color/colourWhite</item>
+    </style>
+
 </resources>
