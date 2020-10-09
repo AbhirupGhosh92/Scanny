@@ -4,23 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bindas_bol_nav"
     android:label="Home"
-    app:startDestination="@id/authFragment">
+    app:startDestination="@id/chatHomeFragment">
 
     <fragment
-        android:id="@+id/authFragment"
-        android:name="com.app.scanny.fragments.AuthFragment"
-        android:label="Bindas Bol"
-        tools:layout="@layout/auth_fragment" >
-        <action
-            android:id="@+id/action_authFragment_to_chatHomeFragment"
-            app:destination="@id/chatHomeFragment"
-            app:launchSingleTop="true"
-            app:popUpTo="@id/authFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-    <fragment
         android:id="@+id/chatHomeFragment"
-        android:name="com.app.scanny.bindasbol.ChatHomeFragment"
+        android:name="com.app.scanny.bindasbol.fragments.ChatHomeFragment"
         android:label="Chats"
         tools:layout="@layout/fragment_chat_home" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.app.scanny.fragments
+package com.app.scanny.bindasbol.fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -7,31 +7,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavOptions
-import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
+import com.app.scanny.databinding.FragmentChatHomeBinding
+import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
+import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 
-class AuthFragment : Fragment() {
+class ChatHomeFragment : Fragment() {
 
-    private lateinit var viewModel: AuthViewModel
+    var db = FirebaseFirestore.getInstance()
+    private lateinit var viewModel: BBSharedViewModel
     private lateinit var mAuth: FirebaseAuth
     private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     private  val RC_SIGN_IN = 556
+
+    private lateinit var dataBinding: FragmentChatHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
     }
 
+
     override fun onStart() {
         super.onStart()
-         viewModel.authUser = mAuth.currentUser
 
     }
 
@@ -39,12 +47,42 @@ class AuthFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.auth_fragment, container, false)
+        // Inflate the layout for this fragment
+        dataBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_chat_home,
+            container,
+            false
+        )
+        return dataBinding.root
+    }
+
+    private fun checkName()
+    {
+        Repository.checkAcces()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                if(it)
+                {
+
+                }
+                else
+                {
+                    Toast.makeText(requireContext(),"No Account",Toast.LENGTH_SHORT).show()
+                }
+            },
+            {
+
+                it.printStackTrace()
+
+            })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(requireActivity()).get(AuthViewModel::class.java)
+
+        viewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
 
         if(viewModel.authUser == null)
         {
@@ -58,15 +96,9 @@ class AuthFragment : Fragment() {
         }
         else
         {
-            goToNext()
+            checkName()
         }
 
-    }
-
-    private fun goToNext()
-    {
-        findNavController().navigate(R.id.action_authFragment_to_chatHomeFragment)
-        findNavController().popBackStack()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -82,18 +114,13 @@ class AuthFragment : Fragment() {
                     // Successfully signed in
                     viewModel.authUser = FirebaseAuth.getInstance().currentUser
 
-                    goToNext()
+                    checkName()
 
                     // ...
                 } else {
-                    Toast.makeText(
-                        requireContext(),
-                        "${response?.error?.localizedMessage}",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    dataBinding.txtError.visibility = View.VISIBLE
                 }
             }
         }
     }
-
 }

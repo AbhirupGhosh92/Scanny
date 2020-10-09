@@ -25,5 +25,10 @@
         <item name="android:textColor">@color/colourWhite</item>
         <item name="android:minWidth">150dp</item>
     </style>
+    
+    <style name="ErrorTextTheme">
+        <item name="android:textSize">@dimen/error_text_size</item>
+        <item name="android:textColor">@color/colourWhite</item>
+    </style>
 
 </resources>
