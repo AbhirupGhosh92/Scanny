@@ -3,6 +3,7 @@ package com.app.scanny.activities
 import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -42,6 +43,16 @@ class MainActivity : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         FirebaseApp.initializeApp(this)
+
+        this.onBackPressedDispatcher?.addCallback( object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if(!navController.navigateUp())
+                {
+                    finish()
+                }
+            }
+
+        })
 
     }
 

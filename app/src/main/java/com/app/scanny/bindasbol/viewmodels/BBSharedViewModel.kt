@@ -7,7 +7,7 @@ import com.app.scanny.repository.Repository
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.rxjava3.core.BackpressureStrategy
 
-class BBSharedViewModel : ViewModel() {
+class BBSharedViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 
      var authUser : FirebaseUser? = null

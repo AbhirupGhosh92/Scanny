@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.SignUpViewModel
@@ -42,6 +43,16 @@ class EnterUserDialogFragment : BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dialog?.setCancelable(false)
+
+        dataBinding.signUpViewModel?.errorText?.observe(viewLifecycleOwner, Observer {
+            if(it.isNullOrEmpty())
+            {
+
+            }
+            else {
+                dataBinding.tilNickName.error = it
+            }
+        })
 
     }
 }

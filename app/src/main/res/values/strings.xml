@@ -4,6 +4,7 @@
     <string name="image_location">Images</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="error_text">Ooops .... Something is not right</string>
+    <string name="nickname">Nickname</string>
     <string name="folder_path">Go To Folder</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

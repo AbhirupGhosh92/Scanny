@@ -31,33 +31,42 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginEnd="32dp"
+        android:indeterminateTint="@color/colourWhite"
         android:visibility="@{signUpViewModel.showLoader ? View.VISIBLE : View.GONE}"
-       android:indeterminateTint="@color/colourWhite"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintBottom_toBottomOf="@+id/til_nick_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/editText" />
+        app:layout_constraintTop_toTopOf="@id/til_nick_name" />
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="0dp"
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_nick_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:maxLines="1"
-        android:inputType="textPersonName"
-        android:textColor="@color/colourWhite"
-        android:textSize="14sp"
-        android:backgroundTint="@color/colourWhite"
-        android:visibility="visible"
-        app:layout_constraintEnd_toStartOf="@+id/iv_ok"
+        style="@style/TextInputLayoutTheme"
+        android:layout_marginEnd="85dp"
+        app:layout_constraintEnd_toStartOf="@+id/progressBar"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nickname"
+            style="@style/TextInputEditTextTheme"
+            android:inputType="textPersonName"
+            android:maxLines="1"
+            android:text="@={signUpViewModel.nickname}"
+            android:visibility="visible" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_ok"
@@ -67,11 +76,11 @@
         android:layout_marginEnd="32dp"
         android:visibility="@{signUpViewModel.showLoader ? View.GONE : View.VISIBLE}"
         android:onClick="@{ signUpViewModel::onClickButton}"
-        app:layout_constraintBottom_toBottomOf="@+id/editText"
+        app:layout_constraintBottom_toBottomOf="@+id/til_nick_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/editText"
+        app:layout_constraintTop_toTopOf="@+id/til_nick_name"
         app:srcCompat="@drawable/ok_arrow" />
 
     <View
@@ -79,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editText" />
+        app:layout_constraintTop_toBottomOf="@+id/til_nick_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
