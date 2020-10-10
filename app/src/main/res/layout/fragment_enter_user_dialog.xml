@@ -52,6 +52,7 @@
         android:layout_marginTop="32dp"
         style="@style/TextInputLayoutTheme"
         android:layout_marginEnd="85dp"
+        app:boxStrokeWidth="2dp"
         app:layout_constraintEnd_toStartOf="@+id/progressBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -62,11 +63,21 @@
             android:layout_height="wrap_content"
             android:hint="@string/nickname"
             style="@style/TextInputEditTextTheme"
+            android:background="@null"
             android:inputType="textPersonName"
             android:maxLines="1"
             android:text="@={signUpViewModel.nickname}"
             android:visibility="visible" />
     </com.google.android.material.textfield.TextInputLayout>
+    <View
+        android:background="@color/colourWhite"
+        app:layout_constraintEnd_toStartOf="@+id/til_nick_name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/til_nick_name"
+        android:layout_width="match_parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="85dp"
+        android:layout_height="2dp"/>
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_ok"
