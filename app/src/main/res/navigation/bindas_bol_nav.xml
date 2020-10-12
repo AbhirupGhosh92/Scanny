@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_chatHomeFragment_to_enterUserDialogFragment"
             app:destination="@id/enterUserDialogFragment" />
+        <action
+            android:id="@+id/action_chatHomeFragment_to_addBolBottomSheet"
+            app:destination="@id/addBolBottomSheet" />
     </fragment>
     <dialog
         android:id="@+id/enterUserDialogFragment"
@@ -35,4 +38,9 @@
         android:name="com.app.scanny.bindasbol.fragments.MessagesFragment"
         android:label="Messages"
         tools:layout="@layout/fragment_messages" />
+    <dialog
+        android:id="@+id/addBolBottomSheet"
+        android:name="com.app.scanny.bindasbol.fragments.AddBolBottomSheet"
+        android:label="fragment_add_bol_bottom_sheet"
+        tools:layout="@layout/fragment_add_bol_bottom_sheet" />
 </navigation>

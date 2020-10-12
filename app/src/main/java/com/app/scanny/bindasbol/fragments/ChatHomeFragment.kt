@@ -16,6 +16,7 @@ import com.app.scanny.R
 import com.app.scanny.databinding.FragmentChatHomeBinding
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
 import com.app.scanny.bindasbol.viewmodels.ChatHomeViewModel
+import com.app.scanny.enums.NavEnums
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -86,6 +87,15 @@ class ChatHomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
         dataBinding.charHomeViewModel = ViewModelProvider(this).get(ChatHomeViewModel::class.java)
+
+        dataBinding.charHomeViewModel?.snippet = {
+            when(it)
+            {
+                NavEnums.NAV_ADD_BOLS -> {
+                    findNavController().navigate(R.id.action_chatHomeFragment_to_addBolBottomSheet)
+                }
+            }
+        }
 
         if(viewModel.signedIn.not())
          startActivityForResult(
