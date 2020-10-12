@@ -5,6 +5,10 @@ import androidx.databinding.Observable
 import androidx.databinding.PropertyChangeRegistry
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.app.scanny.repository.Repository
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.core.Scheduler
+import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.*
 
 class SignUpViewModel : BaseViewModel() {
@@ -22,12 +26,26 @@ class SignUpViewModel : BaseViewModel() {
             {
                 errorText.value = ""
                 showLoader = true
+                signUp()
                 notifyChange()
             }
 
         }
 
-        fun signUp() {
+        private fun signUp() {
+            Repository.createUser(nickname)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    errorText.value = it
+                    showLoader = false
+                    notifyChange()
+                },{
+                    it.printStackTrace()
+                    showLoader = false
+                    notifyChange()
+                    errorText.value = it.message
+                })
 
         }
 

@@ -47,10 +47,20 @@ class EnterUserDialogFragment : BottomSheetDialogFragment() {
         dataBinding.signUpViewModel?.errorText?.observe(viewLifecycleOwner, Observer {
             if(it.isNullOrEmpty())
             {
-
             }
             else {
-                dataBinding.tilNickName.error = it
+
+                when(it)
+                {
+                    "OK" -> {
+                        dismiss()
+                    }
+                    else -> {
+                        dataBinding.tilNickName.error = it
+                    }
+                }
+
+
             }
         })
 

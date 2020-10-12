@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
@@ -27,7 +28,7 @@ class ChatHomeFragment : Fragment() {
 
     var db = FirebaseFirestore.getInstance()
     private lateinit var viewModel: BBSharedViewModel
-    private lateinit var mAuth: FirebaseAuth
+    private var mAuth: FirebaseAuth? = null
     private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     private  val RC_SIGN_IN = 556
 
@@ -60,24 +61,12 @@ class ChatHomeFragment : Fragment() {
 
     private fun checkName()
     {
-        Repository.checkAcces()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                if(it)
-                {
-
-                }
-                else
-                {
-                   findNavController().navigate(R.id.action_chatHomeFragment_to_enterUserDialogFragment)
-                }
-            },
-            {
-
-                it.printStackTrace()
-
-            })
+        viewModel.checkAccess().observe(viewLifecycleOwner, Observer {
+            viewModel.userModel = it
+            if(it == null) {
+                findNavController().navigate(R.id.action_chatHomeFragment_to_enterUserDialogFragment)
+            }
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -85,20 +74,13 @@ class ChatHomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
 
-        if(viewModel.authUser == null)
-        {
-            startActivityForResult(
+         startActivityForResult(
                 AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .build(),
                 RC_SIGN_IN
             )
-        }
-        else
-        {
-            checkName()
-        }
 
     }
 
@@ -113,7 +95,6 @@ class ChatHomeFragment : Fragment() {
 
                 if (resultCode == Activity.RESULT_OK) {
                     // Successfully signed in
-                    viewModel.authUser = FirebaseAuth.getInstance().currentUser
 
                     checkName()
 
