@@ -9,7 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.app.scanny.R
+import com.app.scanny.bindasbol.viewmodels.AddBolViewModel
 import com.app.scanny.databinding.FragmentAddBolBottomSheetBinding
 import com.app.scanny.utils.ApplicationUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -32,6 +35,24 @@ class AddBolBottomSheet : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         dataBinding =  DataBindingUtil.inflate(inflater,R.layout.fragment_add_bol_bottom_sheet,container,false)
         return  dataBinding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dataBinding.addBolViewModel = ViewModelProvider(this).get(AddBolViewModel::class.java)
+        dataBinding.addBolViewModel?.bolResponse?.observe(viewLifecycleOwner, Observer {
+            when(it)
+            {
+                "OK" -> {
+                    dismiss()
+                }
+                else -> {
+
+                }
+            }
+
+
+        })
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {

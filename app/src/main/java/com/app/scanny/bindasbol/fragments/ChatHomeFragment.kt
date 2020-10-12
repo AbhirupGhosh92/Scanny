@@ -79,7 +79,9 @@ class ChatHomeFragment : Fragment() {
 
     private fun renderChats()
     {
-
+        dataBinding.charHomeViewModel?.getMyBols()?.observe(viewLifecycleOwner, Observer {
+            var temp = it
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
