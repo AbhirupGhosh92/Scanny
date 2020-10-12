@@ -21,6 +21,7 @@ class BBSharedViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 
      var userModel : UserModel?= null
+    var signedIn = false
 
      fun checkAccess() : LiveData<UserModel>
      {

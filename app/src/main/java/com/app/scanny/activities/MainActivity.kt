@@ -57,6 +57,21 @@ class MainActivity : AppCompatActivity() {
 
         NavigationUI.setupWithNavController(dataBinding.bottomNav,
            navController)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home
+            -> {
+                if(!navController.navigateUp())
+                {
+                    finish()
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
 }

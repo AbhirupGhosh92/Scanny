@@ -86,6 +86,8 @@ class ChatHomeFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
         dataBinding.charHomeViewModel = ViewModelProvider(this).get(ChatHomeViewModel::class.java)
+
+        if(viewModel.signedIn.not())
          startActivityForResult(
                 AuthUI.getInstance()
                     .createSignInIntentBuilder()
@@ -108,6 +110,7 @@ class ChatHomeFragment : Fragment() {
                 if (resultCode == Activity.RESULT_OK) {
                     // Successfully signed in
 
+                    viewModel.signedIn = true
                     checkName()
 
                     // ...
