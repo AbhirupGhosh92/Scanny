@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
 import com.app.scanny.databinding.FragmentChatHomeBinding
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
+import com.app.scanny.bindasbol.viewmodels.ChatHomeViewModel
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -28,6 +29,7 @@ class ChatHomeFragment : Fragment() {
 
     var db = FirebaseFirestore.getInstance()
     private lateinit var viewModel: BBSharedViewModel
+    private lateinit var chatViewModel : ChatHomeViewModel
     private var mAuth: FirebaseAuth? = null
     private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     private  val RC_SIGN_IN = 556
@@ -66,14 +68,24 @@ class ChatHomeFragment : Fragment() {
             if(it == null) {
                 findNavController().navigate(R.id.action_chatHomeFragment_to_enterUserDialogFragment)
             }
+            else
+            {
+                viewModel.userModel  = it
+                renderChats()
+            }
         })
+    }
+
+    private fun renderChats()
+    {
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
         viewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
-
+        dataBinding.charHomeViewModel = ViewModelProvider(this).get(ChatHomeViewModel::class.java)
          startActivityForResult(
                 AuthUI.getInstance()
                     .createSignInIntentBuilder()

@@ -5,13 +5,16 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.scanny.BuildConfig
 
 import com.app.scanny.R
+import com.app.scanny.databinding.ActivityHomeLayoutBinding
 import com.google.firebase.FirebaseApp
 
 
@@ -19,10 +22,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var appBarConfiguration : AppBarConfiguration
+    private lateinit var dataBinding : ActivityHomeLayoutBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home_layout)
+        dataBinding = DataBindingUtil.setContentView(this,R.layout.activity_home_layout)
         navController = findNavController(R.id.nav_controller)
 
 
@@ -37,36 +41,22 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        setUpUi()
+
+    }
+
+    private fun setUpUi()
+    {
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        setupActionBarWithNavController(navController,appBarConfiguration)
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+        NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration)
 
         FirebaseApp.initializeApp(this)
 
-        this.onBackPressedDispatcher?.addCallback( object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                if(!navController.navigateUp())
-                {
-                    finish()
-                }
-            }
 
-        })
 
+        NavigationUI.setupWithNavController(dataBinding.bottomNav,
+           navController)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            android.R.id.home
-            -> {
-                if(!navController.navigateUp())
-                {
-                    finish()
-                }
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
 }

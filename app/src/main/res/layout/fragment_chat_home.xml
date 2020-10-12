@@ -2,11 +2,30 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="charHomeViewModel"
+            type="com.app.scanny.bindasbol.viewmodels.ChatHomeViewModel" />
+        <import type="android.view.View"/>
+    </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:background="@drawable/background_gradient"
     android:layout_height="match_parent"
     >
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/iv_default"
+        android:visibility="@{charHomeViewModel.chatsAvailable  ? View.VISIBLE : View.GONE}"
+        app:srcCompat="@drawable/ic_baseline_textsms"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

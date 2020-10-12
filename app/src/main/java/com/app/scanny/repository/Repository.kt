@@ -3,7 +3,6 @@ package com.app.scanny.repository
 import android.util.Log
 import android.widget.Toast
 import com.app.scanny.bindasbol.models.UserModel
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
