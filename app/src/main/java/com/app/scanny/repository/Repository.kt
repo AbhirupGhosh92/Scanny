@@ -1,42 +1,39 @@
 package com.app.scanny.repository
 
 import android.util.Log
-import android.widget.Toast
 import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
+import com.app.scanny.bindasbol.serializers.Serializer
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Single
-import java.util.*
 
 object Repository {
 
     val db = FirebaseFirestore.getInstance()
     val mAuth = FirebaseAuth.getInstance()
-    val gson = Gson()
+    val objectMapper = ObjectMapper()
 
     fun checkAcces() : Observable<UserModel> {
         return  Observable.create {result  ->
                     db.collection("user_data")
                     .whereEqualTo("uid",mAuth.currentUser?.uid.toString())
-                        .get().addOnCompleteListener {
+                        .get().addOnCompleteListener {task  ->
 
-                            if (it.isSuccessful)
+                            if (task.isSuccessful)
                             {
-                                it.result?.forEach {
+                                task.result?.forEach {
                                     result.onNext(
-                                      gson.fromJson(gson.toJsonTree(it.data,Map::class.java),UserModel::class.java)
+                                        objectMapper.convertValue(it.data,UserModel::class.java)
                                     )
                                 }
                             }
                             else
                             {
-                                Log.e("Error",it.exception.toString())
+                                Log.e("Error",task.exception.toString())
                                 result.onNext(null)
                             }
                         }
@@ -83,7 +80,7 @@ object Repository {
             return Observable.create {result ->
                 db.collection("bols_data")
                     .add(BolModel(
-                        bol, mAuth.currentUser?.uid.toString(),Date(System.currentTimeMillis())
+                        bol, mAuth.currentUser?.uid.toString(), Timestamp.now()
                     ))
                     .addOnCompleteListener {
                         if(it.isSuccessful)
@@ -106,16 +103,16 @@ object Repository {
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(50)
                 .get()
-                .addOnCompleteListener {
-                    if(it.isSuccessful)
+                .addOnCompleteListener {task ->
+                    if(task.isSuccessful)
                     {
-                       it.result?.forEach {
-                           result.onNext(gson.fromJson(gson.toJsonTree(it.data,Map::class.java),BolModel::class.java))
+                       task.result?.forEach {
+                           result.onNext(Serializer.bolMapToModel(it.data as HashMap<String, Any?>))
                        }
                     }
                     else
                     {
-                        it.exception?.printStackTrace()
+                        task.exception?.printStackTrace()
                     }
                 }
         }
