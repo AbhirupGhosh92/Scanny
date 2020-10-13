@@ -32,7 +32,6 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 
 class ChatHomeFragment : Fragment() {
 
-    var db = FirebaseFirestore.getInstance()
     private lateinit var viewModel: BBSharedViewModel
     private lateinit var chatViewModel : ChatHomeViewModel
     private var mAuth: FirebaseAuth? = null
@@ -115,14 +114,19 @@ class ChatHomeFragment : Fragment() {
         }
 
 
-        if(viewModel.signedIn.not())
-         startActivityForResult(
+        if(viewModel.signedIn.not()) {
+            startActivityForResult(
                 AuthUI.getInstance()
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .build(),
                 RC_SIGN_IN
             )
+        }
+        else
+        {
+            renderChats()
+        }
 
     }
 

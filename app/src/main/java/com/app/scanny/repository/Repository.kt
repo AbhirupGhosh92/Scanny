@@ -8,12 +8,20 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.Query
 import io.reactivex.rxjava3.core.Observable
 
 object Repository {
 
-    val db = FirebaseFirestore.getInstance()
+
+    val settings =  FirebaseFirestoreSettings.Builder()
+        .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+        .build()
+    val db = FirebaseFirestore.getInstance().apply {
+        firestoreSettings = settings
+    }
+
     val mAuth = FirebaseAuth.getInstance()
     val objectMapper = ObjectMapper()
 
