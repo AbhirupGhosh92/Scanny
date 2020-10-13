@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/bindas_bol_nav"
+    android:label="Home"
+    app:startDestination="@id/chatHomeFragment">
+
+    <fragment
+        android:id="@+id/chatHomeFragment"
+        android:name="com.app.scanny.bindasbol.fragments.ChatHomeFragment"
+        android:label="Chats"
+        tools:layout="@layout/fragment_chat_home" >
+        <action
+            android:id="@+id/action_chatHomeFragment_to_enterUserDialogFragment"
+            app:destination="@id/enterUserDialogFragment" />
+        <action
+            android:id="@+id/action_chatHomeFragment_to_addBolBottomSheet"
+            app:destination="@id/addBolBottomSheet" />
+    </fragment>
+    <dialog
+        android:id="@+id/enterUserDialogFragment"
+        android:name="com.app.scanny.bindasbol.fragments.EnterUserDialogFragment"
+        android:label="fragment_enter_user_dialog"
+        tools:layout="@layout/fragment_enter_user_dialog" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.app.scanny.bindasbol.fragments.NotificationFragment"
+        android:label="Notifications"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.app.scanny.bindasbol.fragments.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/messagesFragment"
+        android:name="com.app.scanny.bindasbol.fragments.MessagesFragment"
+        android:label="Messages"
+        tools:layout="@layout/fragment_messages" />
+    <dialog
+        android:id="@+id/addBolBottomSheet"
+        android:name="com.app.scanny.bindasbol.fragments.AddBolBottomSheet"
+        android:label="fragment_add_bol_bottom_sheet"
+        tools:layout="@layout/fragment_add_bol_bottom_sheet" />
+</navigation>

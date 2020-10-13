@@ -42,6 +42,35 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703500186253:android:cb00cf5be1302675c2e8c4",
+        "android_client_info": {
+          "package_name": "com.app.scanny.bindasbol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIpdbFGNT26PI7N8a3ycW9BrTAiRxPsu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

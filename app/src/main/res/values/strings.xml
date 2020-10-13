@@ -1,9 +1,18 @@
 <resources>
-    <string name="app_name">Scanny</string>
     <string name="file_provider_authority" translatable="false">com.app.scanny.fileprovider</string>
     <string name="start_capture">Start Capture</string>
     <string name="image_location">Images</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="error_text">Ooops .... Something is not right</string>
+    <string name="nickname">Nickname</string>
     <string name="folder_path">Go To Folder</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bb_signup_text">Please create a nickname</string>
+    <string name="home">Home</string>
+    <string name="search">Search</string>
+    <string name="notification">Notificatio</string>
+    <string name="message">Messages</string>
+    <string name="write_your_bols">Write your bols here</string>
+    <string name="submit">Submit</string>
 </resources>

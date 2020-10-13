@@ -4,7 +4,10 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colourWhite</item>
+        <item name="colorControlActivated">@color/colourWhite</item>
+        <item name="android:textColorHint">@color/colourWhite</item>
+        <item name="colorControlHighlight">@color/colourWhite</item>
     </style>
 
         <style name="TransparentTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -24,6 +27,45 @@
         <item name="paddingEnd">20dp</item>
         <item name="android:textColor">@color/colourWhite</item>
         <item name="android:minWidth">150dp</item>
+    </style>
+    
+    <style name="ErrorTextTheme">
+        <item name="android:textSize">@dimen/error_text_size</item>
+        <item name="android:textColor">@color/colourWhite</item>
+    </style>
+
+    <style name="GenericHeaderTextTheme">
+        <item name="android:textSize">@dimen/error_text_size</item>
+        <item name="android:textColor">@color/colourWhite</item>
+    </style>
+
+    <style name="ErrorText" parent="TextAppearance.Design.Error">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colourRed</item>
+    </style>
+    <style name="HintText" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colourWhite</item>
+    </style>
+
+    <style name="TextInputLayoutTheme" parent="Widget.Design.TextInputLayout">
+        <item name="hintTextAppearance">@style/HintText</item>
+        <item name="errorTextAppearance">@style/ErrorText</item>
+        <item name="android:textColor">@color/colourWhite</item>
+        <item name="android:textColorHint">@color/colourWhite</item>
+        <item name="android:backgroundTint">@color/colourWhite</item>
+        <item name="colorControlNormal">@color/colourWhite</item>
+        <item name="colorControlActivated">@color/colourWhite</item>
+        <item name="colorControlHighlight">@color/colourWhite</item>
+    </style>
+
+    <style name="TextInputEditTextTheme">
+        <item name="backgroundTint">@color/colourWhite</item>
+        <item name="android:textColor">@color/colourWhite</item>
+        <item name="android:textColorHint">@color/colourWhite</item>
+        <item name="hintTextAppearance">@style/HintText</item>
+        <item name="colorControlNormal">@color/colourWhite</item>
+        <item name="colorControlActivated">@color/colourWhite</item>
     </style>
 
 </resources>
