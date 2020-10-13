@@ -40,6 +40,11 @@
         app:layout_constraintVertical_bias="0.87"
         app:srcCompat="@drawable/ic_baseline_add_comment" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_chats"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:id="@+id/txt_error"

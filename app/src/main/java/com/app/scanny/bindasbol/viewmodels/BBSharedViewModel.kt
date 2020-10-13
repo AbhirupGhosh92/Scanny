@@ -1,11 +1,9 @@
 package com.app.scanny.bindasbol.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.LiveDataReactiveStreams
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.toLiveData
+import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
+import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.data.model.User
@@ -29,4 +27,21 @@ class BBSharedViewModel : BaseViewModel() {
               Repository.checkAcces().toFlowable(BackpressureStrategy.BUFFER)
          )
      }
+
+    fun getBols() :  LiveData<BolModel>
+    {
+        var bolList  = MutableLiveData<BolModel>()
+
+        Repository.getMyBols()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                bolList.value = it
+            },{
+                it.printStackTrace()
+            })
+
+        return bolList
+
+    }
 }

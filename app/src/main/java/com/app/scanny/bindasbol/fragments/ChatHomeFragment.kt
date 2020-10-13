@@ -12,7 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.scanny.R
+import com.app.scanny.bindasbol.adapter.ChatsAdapter
+import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.databinding.FragmentChatHomeBinding
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
 import com.app.scanny.bindasbol.viewmodels.ChatHomeViewModel
@@ -34,6 +38,7 @@ class ChatHomeFragment : Fragment() {
     private var mAuth: FirebaseAuth? = null
     private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     private  val RC_SIGN_IN = 556
+    private var chatItems = arrayListOf<BolModel>()
 
     private lateinit var dataBinding: FragmentChatHomeBinding
 
@@ -82,6 +87,16 @@ class ChatHomeFragment : Fragment() {
         dataBinding.charHomeViewModel?.getMyBols()?.observe(viewLifecycleOwner, Observer {
             var temp = it
         })
+
+
+        dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems)
+        dataBinding.rvChats.itemAnimator = DefaultItemAnimator()
+        dataBinding.rvChats.layoutManager = LinearLayoutManager(requireContext())
+
+        viewModel.getBols().observe(viewLifecycleOwner, {
+            chatItems.add(it)
+            dataBinding.rvChats.adapter?.notifyDataSetChanged()
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -98,6 +113,7 @@ class ChatHomeFragment : Fragment() {
                 }
             }
         }
+
 
         if(viewModel.signedIn.not())
          startActivityForResult(
