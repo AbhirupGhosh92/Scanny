@@ -29,16 +29,16 @@ class ChatsAdapter(var context: Context, var chatItems  : List<BolModel>)  : Rec
         holder.dataBinding.tvDate.text = dateFormat.format(chatItems[position].dateCreated?.toDate()!!)
         holder.dataBinding.tvLikes.text =  chatItems[position].likes.toString()
         holder.dataBinding.tvComments.text = chatItems[position].comments.toString()
-        if(position%5 == 0)
-        {
+//        if(position%5 == 0)
+//        {
             var  adRequest =  AdRequest.Builder().build()
             holder.dataBinding.adView.loadAd(adRequest)
             holder.dataBinding.adView.visibility =  View.VISIBLE
-        }
-        else
-        {
-            holder.dataBinding.adView.visibility =  View.GONE
-        }
+       // }
+//        else
+//        {
+//            holder.dataBinding.adView.visibility =  View.GONE
+//        }
     }
 
     override fun getItemCount(): Int {
