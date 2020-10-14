@@ -13,6 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.AddBolViewModel
+import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
 import com.app.scanny.databinding.FragmentAddBolBottomSheetBinding
 import com.app.scanny.utils.ApplicationUtils
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -23,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 class AddBolBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var dataBinding : FragmentAddBolBottomSheetBinding
+    private lateinit var sharedViewModel : BBSharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,8 @@ class AddBolBottomSheet : BottomSheetDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dataBinding.addBolViewModel = ViewModelProvider(this).get(AddBolViewModel::class.java)
+        sharedViewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
+        dataBinding.addBolViewModel?.nickname =  sharedViewModel.userModel?.nickName.toString()
         dataBinding.addBolViewModel?.bolResponse?.observe(viewLifecycleOwner, Observer {
             when(it)
             {

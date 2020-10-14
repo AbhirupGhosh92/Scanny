@@ -7,12 +7,13 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 data class BolModel(
-    var bol : String = "",
-    var uid : String = "",
+    var bol : String? = "",
+    var uid : String? = "",
+    var nickName : String? = "",
     var dateCreated : Timestamp? = null,
     var dateModified : Timestamp? = null,
-    var likes : Long = 0,
+    var likes : Long? = 0,
     var likeList : List<String>?  =  ArrayList(),
-    var comments : Long = 0,
-    var commentList : List<String> = ArrayList()
+    var comments : Long? = 0,
+    var commentList : List<String>? = ArrayList()
 )

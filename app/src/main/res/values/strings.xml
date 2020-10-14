@@ -15,4 +15,8 @@
     <string name="message">Messages</string>
     <string name="write_your_bols">Write your bols here</string>
     <string name="submit">Submit</string>
+    <string name="native_ad_unit_id_view">ca-app-pub-6848333716076512/4253602482</string>
+    <string name="banner_ad_unit_id_view">ca-app-pub-6848333716076512/7422583503</string>
+    <string name="native_ad_unit_id_view_man">ca-app-pub-6848333716076512~9505929162</string>
+    <string name="banner_ad_unit_id_view_man">ca-app-pub-6848333716076512~9505929162</string>
 </resources>

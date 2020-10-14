@@ -1,20 +1,18 @@
 package com.app.scanny.activities
 
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
-import androidx.navigation.ui.setupActionBarWithNavController
 import com.app.scanny.BuildConfig
-
 import com.app.scanny.R
 import com.app.scanny.databinding.ActivityHomeLayoutBinding
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 
 
@@ -26,7 +24,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        dataBinding = DataBindingUtil.setContentView(this,R.layout.activity_home_layout)
+        MobileAds.initialize(
+            this
+        ) {
+            Log.d("AdModbStatus",it?.adapterStatusMap.toString())
+        }
+        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_home_layout)
         navController = findNavController(R.id.nav_controller)
 
 
@@ -49,14 +52,16 @@ class MainActivity : AppCompatActivity() {
     {
         appBarConfiguration = AppBarConfiguration(navController.graph)
 
-        NavigationUI.setupActionBarWithNavController(this,navController,appBarConfiguration)
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
         FirebaseApp.initializeApp(this)
 
 
 
-        NavigationUI.setupWithNavController(dataBinding.bottomNav,
-           navController)
+        NavigationUI.setupWithNavController(
+            dataBinding.bottomNav,
+            navController
+        )
 
     }
 
@@ -64,8 +69,7 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             android.R.id.home
             -> {
-                if(!navController.navigateUp())
-                {
+                if (!navController.navigateUp()) {
                     finish()
                 }
                 true

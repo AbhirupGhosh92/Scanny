@@ -15,10 +15,11 @@ class AddBolViewModel : BaseViewModel() {
 
     var bolString = ""
     var bolResponse : MutableLiveData<String> =  MutableLiveData()
+    var nickname  = ""
 
     fun addBol(view : View)
     {
-       Repository.addBol(bolString)
+       Repository.addBol(bolString,nickname)
            .subscribeOn(Schedulers.io())
            .observeOn(AndroidSchedulers.mainThread())
            .subscribe({

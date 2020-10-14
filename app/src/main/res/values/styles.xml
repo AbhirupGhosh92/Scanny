@@ -68,4 +68,9 @@
         <item name="colorControlActivated">@color/colourWhite</item>
     </style>
 
+    <style name="BolTextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colourWhite</item>
+    </style>
+
 </resources>
