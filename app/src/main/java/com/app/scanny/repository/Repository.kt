@@ -83,12 +83,12 @@ object Repository {
 
         }
 
-        fun addBol(bol : String) : Observable<String>
+        fun addBol(bol : String,nickName: String) : Observable<String>
         {
             return Observable.create {result ->
                 db.collection("bols_data")
                     .add(BolModel(
-                        bol, mAuth.currentUser?.uid.toString(), Timestamp.now()
+                        bol, mAuth.currentUser?.uid.toString(), nickName,Timestamp.now()
                     ))
                     .addOnCompleteListener {
                         if(it.isSuccessful)

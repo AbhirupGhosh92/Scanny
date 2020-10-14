@@ -15,6 +15,7 @@ import com.app.scanny.BuildConfig
 
 import com.app.scanny.R
 import com.app.scanny.databinding.ActivityHomeLayoutBinding
+import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
 
 
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MobileAds.initialize(this)
         dataBinding = DataBindingUtil.setContentView(this,R.layout.activity_home_layout)
         navController = findNavController(R.id.nav_controller)
 
