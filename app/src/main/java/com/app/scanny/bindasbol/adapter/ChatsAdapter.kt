@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ChatsAdapter(var context: Context, var chatItems  : List<BolModel>)  : RecyclerView.Adapter<ChatsAdapter.ViewHolder>(){
+class ChatsAdapter(var context: Context, var chatItems  : List<Pair<String,BolModel>>,var action : (doc : Pair<String,BolModel>,likeState: Boolean) -> Unit)  : RecyclerView.Adapter<ChatsAdapter.ViewHolder>(){
 
     data class ViewHolder(var dataBinding : ChatsItemViewHolderBinding,var selected : Boolean = false) : RecyclerView.ViewHolder(dataBinding.root)
     private var dateFormat = SimpleDateFormat("dd/MM/yy")
@@ -26,14 +26,11 @@ class ChatsAdapter(var context: Context, var chatItems  : List<BolModel>)  : Rec
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-
-
-        holder.dataBinding.tvBols.text = chatItems[position].bol
-        holder.dataBinding.tvNickName.text  = chatItems[position].nickName
-        holder.dataBinding.tvDate.text = dateFormat.format(chatItems[position].dateCreated?.toDate()!!)
-        holder.dataBinding.tvLikes.text =  chatItems[position].likes.toString()
-        holder.dataBinding.tvComments.text = chatItems[position].comments.toString()
+        holder.dataBinding.tvBols.text = chatItems[position].second.bol
+        holder.dataBinding.tvNickName.text  = chatItems[position].second.nickName
+        holder.dataBinding.tvDate.text = dateFormat.format(chatItems[position].second.dateCreated?.toDate()!!)
+        holder.dataBinding.tvLikes.text =  chatItems[position].second.likes.toString()
+        holder.dataBinding.tvComments.text = chatItems[position].second.comments.toString()
         if(position%5 == 0 && position != 0)
         {
             var  adRequest =  AdRequest.Builder().build()
@@ -45,7 +42,7 @@ class ChatsAdapter(var context: Context, var chatItems  : List<BolModel>)  : Rec
             holder.dataBinding.adView.visibility =  View.GONE
         }
 
-        if(chatItems[position].likeList?.contains(Repository.mAuth.currentUser?.uid.toString())!!)
+        if(chatItems[position].second.likeList?.contains(Repository.mAuth.currentUser?.uid.toString())!!)
         {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 holder.dataBinding.imgLikeImage.setImageDrawable(ResourcesCompat.getDrawable(context.resources,R.drawable.ic_baseline_thumb_up_alt,null))
@@ -59,9 +56,13 @@ class ChatsAdapter(var context: Context, var chatItems  : List<BolModel>)  : Rec
         }
 
         holder.dataBinding.imgLikeImage.setOnClickListener {
-            holder.selected = !holder.selected
-            notifyDataSetChanged()
+            action.invoke(chatItems[position],likeState(position))
         }
+    }
+
+    private fun likeState(position: Int) : Boolean
+    {
+        return chatItems[position].second.likeList?.contains(Repository.mAuth.currentUser?.uid.toString())!!
     }
 
     override fun getItemCount(): Int {

@@ -4,6 +4,7 @@ import android.util.Log
 import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
 import com.app.scanny.bindasbol.serializers.Serializer
+import com.app.scanny.utils.ApplicationUtils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -103,7 +104,7 @@ object Repository {
             }
         }
 
-    fun getMyBols() : Observable<BolModel>
+    fun getMyBols() : Observable<ArrayList<Pair<String,BolModel>>>
     {
         return Observable.create {result ->
             db.collection("bols_data")
@@ -114,9 +115,71 @@ object Repository {
                 .addOnCompleteListener {task ->
                     if(task.isSuccessful)
                     {
-                       task.result?.forEach {
-                           result.onNext(Serializer.bolMapToModel(it.data as HashMap<String, Any?>))
-                       }
+                        var temp = ArrayList<Pair<String,BolModel>>()
+
+                        for(item in task.result)
+                        {
+                            temp.add(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
+                        }
+
+                        result.onNext(temp)
+                    }
+                    else
+                    {
+                        task.exception?.printStackTrace()
+                    }
+                }
+        }
+    }
+
+    fun getAllBols(limit : Long = 50) : Observable<Pair<String,BolModel>>
+    {
+        return Observable.create {result ->
+            db.collection("bols_data")
+                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .limit(limit)
+                .get()
+                .addOnCompleteListener {task ->
+                    if(task.isSuccessful)
+                    {
+                        for(item in task.result)
+                        {
+                            result.onNext(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
+                        }
+                    }
+                    else
+                    {
+                        task.exception?.printStackTrace()
+                    }
+                }
+        }
+    }
+
+    fun addLike(bolId : String,likeState : Boolean,bolModel : BolModel) : Observable<Boolean>
+    {
+        return Observable.create {
+            db.collection("bols_data")
+                .document(bolId)
+                .get()
+                .addOnCompleteListener {task ->
+                    if(task.isSuccessful)
+                    {
+                        var bolMap = Serializer.bolMapToModel(task.result.data as HashMap<String, Any?>)
+
+                        if(likeState)
+                        {
+                            bolMap.likes = bolMap.likes?.plus(1)
+                            bolMap.likeList?.add(mAuth.currentUser?.uid.toString())
+                        }
+                        else if(likeState && bolMap.likes!! > 0)
+                        {
+                            bolMap.likes = bolMap.likes?.minus(1)
+                            bolMap.likeList?.remove(mAuth.currentUser?.uid.toString())
+                        }
+
+                        db.collection("bols_data")
+                            .document(bolId)
+                            .update(Serializer.bolModelToMap(bolMap))
                     }
                     else
                     {

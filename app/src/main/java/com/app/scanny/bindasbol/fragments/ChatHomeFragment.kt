@@ -39,7 +39,7 @@ class ChatHomeFragment : Fragment() {
     private var mAuth: FirebaseAuth? = null
     private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     private  val RC_SIGN_IN = 556
-    private var chatItems = arrayListOf<BolModel>()
+    private var chatItems = arrayListOf<Pair<String,BolModel>>()
 
     private lateinit var dataBinding: FragmentChatHomeBinding
 
@@ -70,7 +70,7 @@ class ChatHomeFragment : Fragment() {
 
     private fun checkName()
     {
-        viewModel.checkAccess().observe(viewLifecycleOwner, Observer {
+        viewModel.checkAccess().observe(viewLifecycleOwner, {
             viewModel.userModel = it
             if(it == null) {
                 findNavController().navigate(R.id.action_chatHomeFragment_to_enterUserDialogFragment)
@@ -85,17 +85,15 @@ class ChatHomeFragment : Fragment() {
 
     private fun renderChats()
     {
-        dataBinding.charHomeViewModel?.getMyBols()?.observe(viewLifecycleOwner, Observer {
-            var temp = it
-        })
-
-
-        dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems)
+        dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems){it,likeState ->
+            dataBinding.charHomeViewModel?.addLike(it.first,likeState,it.second)
+        }
         dataBinding.rvChats.itemAnimator = DefaultItemAnimator()
         dataBinding.rvChats.layoutManager = LinearLayoutManager(requireContext())
 
-        viewModel.getBols().observe(viewLifecycleOwner, {
-            chatItems.add(it)
+        dataBinding.charHomeViewModel?.getBols()?.observe(viewLifecycleOwner, {
+            chatItems.clear()
+            chatItems.addAll(it)
             dataBinding.rvChats.adapter?.notifyDataSetChanged()
         })
     }

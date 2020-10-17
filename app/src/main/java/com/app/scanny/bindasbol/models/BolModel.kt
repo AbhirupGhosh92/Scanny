@@ -13,7 +13,7 @@ data class BolModel(
     var dateCreated : Timestamp? = null,
     var dateModified : Timestamp? = null,
     var likes : Long? = 0,
-    var likeList : List<String>?  =  ArrayList(),
+    var likeList : ArrayList<String>?  =  ArrayList(),
     var comments : Long? = 0,
-    var commentList : List<String>? = ArrayList()
+    var commentList : ArrayList<String>? = ArrayList()
 )
