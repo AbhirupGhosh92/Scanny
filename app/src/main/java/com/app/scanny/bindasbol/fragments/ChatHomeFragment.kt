@@ -99,7 +99,7 @@ class ChatHomeFragment : Fragment() {
         dataBinding.rvChats.itemAnimator = DefaultItemAnimator()
         dataBinding.rvChats.layoutManager = LinearLayoutManager(requireContext())
 
-        dataBinding.charHomeViewModel?.getBols()?.observe(viewLifecycleOwner, {
+        dataBinding.charHomeViewModel?.getAllBols()?.observe(viewLifecycleOwner, {
             chatItems.clear()
             chatItems.addAll(it)
             dataBinding.rvChats.adapter?.notifyDataSetChanged()

@@ -129,25 +129,24 @@ object Repository {
         }
     }
 
-    fun getAllBols(limit : Long = 50) : Observable<Pair<String,BolModel>>
+    fun getAllBols(limit : Long = 50) : Observable<ArrayList<Pair<String,BolModel>>>
     {
         return Observable.create {result ->
             db.collection("bols_data")
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(limit)
-                .get()
-                .addOnCompleteListener {task ->
-                    if(task.isSuccessful)
+                .addSnapshotListener {value, error ->
+                    if(error == null)
                     {
-                        for(item in task.result)
+                        var temp = ArrayList<Pair<String,BolModel>>()
+                        for(item in value?.documents!!)
                         {
-                            result.onNext(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
+                            temp.add(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
                         }
+
+                        result.onNext(temp)
                     }
-                    else
-                    {
-                        task.exception?.printStackTrace()
-                    }
+
                 }
         }
     }
