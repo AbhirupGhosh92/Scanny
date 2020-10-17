@@ -152,8 +152,9 @@ object Repository {
         }
     }
 
-    fun addLike(bolId : String,likeState : Boolean,bolModel : BolModel) : Observable<String>
+    fun likeDislike(bolId : String, likeState : Boolean, bolModel : BolModel) : Observable<String>
     {
+
         return Observable.create {result ->
             db.collection("bols_data")
                 .document(bolId)
@@ -168,7 +169,7 @@ object Repository {
                             bolMap.likes = bolMap.likes?.plus(1)
                             bolMap.likeList?.add(mAuth.currentUser?.uid.toString())
                         }
-                        else if(likeState && bolMap.likes!! > 0)
+                        else if(likeState.not() && bolMap.likes!! > 0)
                         {
                             bolMap.likes = bolMap.likes?.minus(1)
                             bolMap.likeList?.remove(mAuth.currentUser?.uid.toString())
@@ -188,6 +189,53 @@ object Repository {
                     else
                     {
                         task.exception?.printStackTrace()
+                    }
+                }
+        }
+    }
+
+    fun addComment(bol: String,nickName: String,bolId: String) : Observable<String>
+    {
+        return Observable.create {result ->
+            db.collection("bols_data")
+                .add(BolModel(
+                    bol, mAuth.currentUser?.uid.toString(), nickName,Timestamp.now()
+                ))
+                .addOnCompleteListener {newBol ->
+                    if(newBol.isSuccessful)
+                    {
+                        db.collection("bols_data")
+                            .document(bolId)
+                            .get()
+                            .addOnCompleteListener {task ->
+                                if(task.isSuccessful)
+                                {
+                                    var bolMap = Serializer.bolMapToModel(task.result.data as HashMap<String, Any?>)
+
+                                    bolMap.comments = bolMap.comments?.plus(1)
+                                    bolMap.commentList?.add(newBol.result.id)
+
+
+                                    db.collection("bols_data")
+                                        .document(bolId)
+                                        .update(Serializer.bolModelToMap(bolMap))
+                                        .addOnSuccessListener {
+                                            result.onNext("OK")
+                                        }
+                                        .addOnFailureListener {
+                                            result.onNext(it.message)
+                                            it.printStackTrace()
+                                        }
+                                }
+                                else
+                                {
+                                    task.exception?.printStackTrace()
+                                }
+                            }
+                    }
+                    else
+                    {
+                        result.onNext(newBol.exception?.message)
                     }
                 }
         }

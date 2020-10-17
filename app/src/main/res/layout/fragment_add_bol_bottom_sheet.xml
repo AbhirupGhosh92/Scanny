@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -15,30 +16,67 @@
     android:layout_height="match_parent"
     tools:context=".AddBolBottomSheet">
 
-    <!-- TODO: Update blank fragment layout -->
-    <EditText
-        android:id="@+id/edt_bol"
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/ad_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:text="@={addBolViewModel.bolString}"
-        android:backgroundTint="@color/colourWhite"
-        android:hint="@string/write_your_bols"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="@string/banner_ad_temp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
+    <!-- TODO: Update blank fragment layout -->
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_nick_name"
+        style="@style/TextInputLayoutTheme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        app:boxStrokeWidth="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ad_view"
+        app:layout_constraintVertical_bias="0.0">
+
+        <View
+            android:background="@color/colourWhite"
+            app:layout_constraintEnd_toStartOf="@+id/til_nick_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_nick_name"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"/>
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edt_bol"
+            style="@style/TextInputEditTextTheme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/write_your_bols"
+            android:text="@={addBolViewModel.bolString}"
+            android:visibility="visible" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+
     <Button
+        android:id="@+id/button"
         style="@style/RoundedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/submit"
         android:onClick="@{addBolViewModel.addBol}"
+        android:text="@string/submit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

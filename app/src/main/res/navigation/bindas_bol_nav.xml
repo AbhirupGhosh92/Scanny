@@ -9,7 +9,7 @@
     <fragment
         android:id="@+id/chatHomeFragment"
         android:name="com.app.scanny.bindasbol.fragments.ChatHomeFragment"
-        android:label="Chats"
+        android:label="Bols"
         tools:layout="@layout/fragment_chat_home" >
         <action
             android:id="@+id/action_chatHomeFragment_to_enterUserDialogFragment"
@@ -29,7 +29,7 @@
     <fragment
         android:id="@+id/notificationFragment"
         android:name="com.app.scanny.bindasbol.fragments.NotificationFragment"
-        android:label="Notifications"
+        android:label="My Bols"
         tools:layout="@layout/fragment_notification" />
     <fragment
         android:id="@+id/searchFragment"
@@ -39,7 +39,7 @@
     <fragment
         android:id="@+id/messagesFragment"
         android:name="com.app.scanny.bindasbol.fragments.MessagesFragment"
-        android:label="Messages"
+        android:label="My Posts"
         tools:layout="@layout/fragment_messages" />
     <dialog
         android:id="@+id/addBolBottomSheet"

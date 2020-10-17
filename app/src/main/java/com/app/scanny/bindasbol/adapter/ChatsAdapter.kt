@@ -16,7 +16,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ChatsAdapter(var context: Context, var chatItems  : List<Pair<String,BolModel>>,var action : (doc : Pair<String,BolModel>,likeState: Boolean) -> Unit)  : RecyclerView.Adapter<ChatsAdapter.ViewHolder>(){
+class ChatsAdapter(var context: Context, var chatItems  : List<Pair<String,BolModel>>,
+                   var likeAction : (doc : Pair<String,BolModel>,likeState: Boolean) -> Unit,
+                    var commentAction : () -> Unit
+                   )  : RecyclerView.Adapter<ChatsAdapter.ViewHolder>(){
 
     data class ViewHolder(var dataBinding : ChatsItemViewHolderBinding,var selected : Boolean = false) : RecyclerView.ViewHolder(dataBinding.root)
     private var dateFormat = SimpleDateFormat("dd/MM/yy")
@@ -56,7 +59,11 @@ class ChatsAdapter(var context: Context, var chatItems  : List<Pair<String,BolMo
         }
 
         holder.dataBinding.imgLikeImage.setOnClickListener {
-            action.invoke(chatItems[position],likeState(position))
+            likeAction.invoke(chatItems[position],likeState(position))
+        }
+
+        holder.dataBinding.imgCommentImage.setOnClickListener {
+            commentAction.invoke()
         }
     }
 

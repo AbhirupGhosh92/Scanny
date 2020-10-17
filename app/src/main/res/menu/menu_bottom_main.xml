@@ -4,16 +4,16 @@
         android:id="@+id/chatHomeFragment"
         android:icon="@drawable/ic_baseline_home"
         android:title="" />
-    <item
-        android:id="@+id/searchFragment"
-        android:icon="@drawable/ic_baseline_search"
-        android:title="" />
+<!--    <item-->
+<!--        android:id="@+id/searchFragment"-->
+<!--        android:icon="@drawable/ic_baseline_search"-->
+<!--        android:title="" />-->
     <item
         android:id="@+id/notificationFragment"
         android:icon="@drawable/ic_baseline_notifications"
         android:title="" />
-    <item
-        android:id="@+id/messagesFragment"
-        android:icon="@drawable/ic_baseline_textsms"
-        android:title="" />
+<!--    <item-->
+<!--        android:id="@+id/messagesFragment"-->
+<!--        android:icon="@drawable/ic_baseline_textsms"-->
+<!--        android:title="" />-->
 </menu>
