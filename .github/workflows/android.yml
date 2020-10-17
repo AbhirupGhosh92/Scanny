@@ -21,7 +21,7 @@ jobs:
       uses: actions/upload-artifact@v2.2.0
       with:
         name: app
-        path: app/build/outputs/apk/debug/app-debug.apk
+        path: app/build/outputs/apk/bindasbol/debug/app-bindasbol-debug.apk
    
 
       
