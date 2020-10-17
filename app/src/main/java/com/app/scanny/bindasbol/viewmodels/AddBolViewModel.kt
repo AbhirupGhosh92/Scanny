@@ -16,16 +16,30 @@ class AddBolViewModel : BaseViewModel() {
     var bolString = ""
     var bolResponse : MutableLiveData<String> =  MutableLiveData()
     var nickname  = ""
+    var bolId = ""
 
     fun addBol(view : View)
     {
-       Repository.addBol(bolString,nickname)
-           .subscribeOn(Schedulers.io())
-           .observeOn(AndroidSchedulers.mainThread())
-           .subscribe({
-               bolResponse.value = it
-           },{
-               it.printStackTrace()
-           })
+
+        if(bolId.isNullOrEmpty()) {
+            Repository.addBol(bolString, nickname)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    bolResponse.value = it
+                }, {
+                    it.printStackTrace()
+                })
+        }
+        else {
+            Repository.addComment(bolString, nickname, bolId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    bolResponse.value = it
+                }, {
+                    it.printStackTrace()
+                })
+        }
     }
 }
