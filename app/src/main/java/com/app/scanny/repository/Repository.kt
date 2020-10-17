@@ -18,6 +18,7 @@ object Repository {
 
     val settings =  FirebaseFirestoreSettings.Builder()
         .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+        .setPersistenceEnabled(true)
         .build()
     val db = FirebaseFirestore.getInstance().apply {
         firestoreSettings = settings
@@ -129,6 +130,32 @@ object Repository {
         }
     }
 
+//    fun getCommentsList(commentList : List<String>) : Observable<ArrayList<Pair<String,BolModel>>>
+//    {
+//        var respModel = ArrayList<Pair<String,BolModel>>()
+//
+//        return Observable.create {result ->
+//
+//            db.collection("bols_data")
+//                .get(So)d
+//                .orderBy("dateCreated", Query.Direction.DESCENDING)
+//                .limit(limit)
+//                .addSnapshotListener {value, error ->
+//                    if(error == null)
+//                    {
+//                        var temp = ArrayList<Pair<String,BolModel>>()
+//                        for(item in value?.documents!!)
+//                        {
+//                            temp.add(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
+//                        }
+//
+//                        result.onNext(temp)
+//                    }
+//
+//                }
+//        }
+//    }
+
     fun getAllBols(limit : Long = 50) : Observable<ArrayList<Pair<String,BolModel>>>
     {
         return Observable.create {result ->
@@ -161,29 +188,31 @@ object Repository {
                 .addOnCompleteListener {task ->
                     if(task.isSuccessful)
                     {
-                        var bolMap = Serializer.bolMapToModel(task.result.data as HashMap<String, Any?>)
 
-                        if(likeState)
-                        {
-                            bolMap.likes = bolMap.likes?.plus(1)
-                            bolMap.likeList?.add(mAuth.currentUser?.uid.toString())
-                        }
-                        else if(likeState.not() && bolMap.likes!! > 0)
-                        {
-                            bolMap.likes = bolMap.likes?.minus(1)
-                            bolMap.likeList?.remove(mAuth.currentUser?.uid.toString())
-                        }
+                        var data = task.result.data
+                        if(data != null) {
+                            var bolMap =
+                                Serializer.bolMapToModel(data as HashMap<String, Any?>)
 
-                        db.collection("bols_data")
-                            .document(bolId)
-                            .update(Serializer.bolModelToMap(bolMap))
-                            .addOnSuccessListener {
-                                result.onNext("OK")
+                            if (likeState) {
+                                bolMap.likes = bolMap.likes?.plus(1)
+                                bolMap.likeList?.add(mAuth.currentUser?.uid.toString())
+                            } else if (likeState.not() && bolMap.likes!! > 0) {
+                                bolMap.likes = bolMap.likes?.minus(1)
+                                bolMap.likeList?.remove(mAuth.currentUser?.uid.toString())
                             }
-                            .addOnFailureListener {
-                                result.onNext(it.message)
-                                it.printStackTrace()
-                            }
+
+                            db.collection("bols_data")
+                                .document(bolId)
+                                .update(Serializer.bolModelToMap(bolMap))
+                                .addOnSuccessListener {
+                                    result.onNext("OK")
+                                }
+                                .addOnFailureListener {
+                                    result.onNext(it.message)
+                                    it.printStackTrace()
+                                }
+                        }
                     }
                     else
                     {
@@ -209,22 +238,26 @@ object Repository {
                             .addOnCompleteListener {task ->
                                 if(task.isSuccessful)
                                 {
-                                    var bolMap = Serializer.bolMapToModel(task.result.data as HashMap<String, Any?>)
+                                    var data = task.result.data
+                                    if(data != null) {
+                                        var bolMap =
+                                            Serializer.bolMapToModel(data as HashMap<String, Any?>)
 
-                                    bolMap.comments = bolMap.comments?.plus(1)
-                                    bolMap.commentList?.add(newBol.result.id)
+                                        bolMap.comments = bolMap.comments?.plus(1)
+                                        bolMap.commentList?.add(newBol.result.id)
 
 
-                                    db.collection("bols_data")
-                                        .document(bolId)
-                                        .update(Serializer.bolModelToMap(bolMap))
-                                        .addOnSuccessListener {
-                                            result.onNext("OK")
-                                        }
-                                        .addOnFailureListener {
-                                            result.onNext(it.message)
-                                            it.printStackTrace()
-                                        }
+                                        db.collection("bols_data")
+                                            .document(bolId)
+                                            .update(Serializer.bolModelToMap(bolMap))
+                                            .addOnSuccessListener {
+                                                result.onNext("OK")
+                                            }
+                                            .addOnFailureListener {
+                                                result.onNext(it.message)
+                                                it.printStackTrace()
+                                            }
+                                    }
                                 }
                                 else
                                 {

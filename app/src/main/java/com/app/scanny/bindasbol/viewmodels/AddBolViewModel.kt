@@ -20,8 +20,10 @@ class AddBolViewModel : BaseViewModel() {
 
     fun addBol(view : View)
     {
+        var temp = ""+bolId
+        bolId = ""
 
-        if(bolId.isNullOrEmpty()) {
+        if(temp.isNullOrEmpty()) {
             Repository.addBol(bolString, nickname)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -32,7 +34,7 @@ class AddBolViewModel : BaseViewModel() {
                 })
         }
         else {
-            Repository.addComment(bolString, nickname, bolId)
+            Repository.addComment(bolString, nickname, temp)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
@@ -40,6 +42,8 @@ class AddBolViewModel : BaseViewModel() {
                 }, {
                     it.printStackTrace()
                 })
+
+
         }
     }
 }

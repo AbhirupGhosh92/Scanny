@@ -78,9 +78,21 @@ class NotificationFragment : Fragment() {
         dataBinding.rvChats.layoutManager = LinearLayoutManager(requireContext())
 
         dataBinding.charHomeViewModel?.getMyBols()?.observe(viewLifecycleOwner, {
-            chatItems.clear()
-            chatItems.addAll(it)
-            dataBinding.rvChats.adapter?.notifyDataSetChanged()
+
+            dataBinding.ivDefault.visibility = View.GONE
+
+            if(it.isNullOrEmpty())
+            {
+                dataBinding.txtError.text = resources.getString(R.string.no_bols)
+                dataBinding.txtError.visibility = View.VISIBLE
+            }
+            else
+            {
+                dataBinding.txtError.visibility = View.GONE
+                chatItems.clear()
+                chatItems.addAll(it)
+                dataBinding.rvChats.adapter?.notifyDataSetChanged()
+            }
         })
     }
 
@@ -89,7 +101,6 @@ class NotificationFragment : Fragment() {
 
         viewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
         dataBinding.charHomeViewModel = ViewModelProvider(this).get(ChatHomeViewModel::class.java)
-
         dataBinding.charHomeViewModel?.snippet = {
             when(it)
             {

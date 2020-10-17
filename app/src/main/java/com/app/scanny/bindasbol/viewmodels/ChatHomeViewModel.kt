@@ -38,6 +38,22 @@ class ChatHomeViewModel : BaseViewModel() {
 
     }
 
+    fun showBolsFromList() : LiveData<ArrayList<Pair<String,BolModel>>>
+    {
+        var bolList  = MutableLiveData<ArrayList<Pair<String,BolModel>>>()
+
+        Repository.getAllBols()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                bolList.value = it
+            },{
+                it.printStackTrace()
+            })
+
+        return bolList
+    }
+
     fun getAllBols() :   LiveData<ArrayList<Pair<String,BolModel>>>
     {
         var bolList  = MutableLiveData<ArrayList<Pair<String,BolModel>>>()

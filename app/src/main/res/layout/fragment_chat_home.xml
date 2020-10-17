@@ -18,7 +18,7 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_default"
-        android:visibility="@{charHomeViewModel.chatsAvailable  ? View.VISIBLE : View.GONE}"
+        android:visibility="visible"
         app:srcCompat="@drawable/ic_baseline_textsms"
         android:layout_width="100dp"
         android:layout_height="100dp"
