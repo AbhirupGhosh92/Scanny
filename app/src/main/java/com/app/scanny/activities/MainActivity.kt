@@ -24,11 +24,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MobileAds.initialize(
-            this
-        ) {
-            Log.d("AdModbStatus",it?.adapterStatusMap.toString())
-        }
         dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_home_layout)
         navController = findNavController(R.id.nav_controller)
 
@@ -55,8 +50,6 @@ class MainActivity : AppCompatActivity() {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)
 
         FirebaseApp.initializeApp(this)
-
-
 
         NavigationUI.setupWithNavController(
             dataBinding.bottomNav,

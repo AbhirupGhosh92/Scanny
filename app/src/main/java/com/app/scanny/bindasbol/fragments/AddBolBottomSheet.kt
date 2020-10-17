@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.AddBolViewModel
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
@@ -43,8 +44,11 @@ class AddBolBottomSheet : BottomSheetDialogFragment() {
         super.onActivityCreated(savedInstanceState)
         dataBinding.addBolViewModel = ViewModelProvider(this).get(AddBolViewModel::class.java)
         sharedViewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
+
+        dataBinding.addBolViewModel?.bolId = arguments?.getString(Constants.BOL_ID,"").toString()
+
         dataBinding.addBolViewModel?.nickname =  sharedViewModel.userModel?.nickName.toString()
-        dataBinding.addBolViewModel?.bolResponse?.observe(viewLifecycleOwner, Observer {
+        dataBinding.addBolViewModel?.bolResponse?.observe(viewLifecycleOwner,  {
             when(it)
             {
                 "OK" -> {

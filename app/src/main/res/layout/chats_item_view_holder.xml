@@ -64,11 +64,13 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/img_like_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
             android:layout_marginStart="16dp"
-            app:srcCompat="@drawable/ic_baseline_thumb_up_alt"
+            app:srcCompat="@drawable/ic_baseline_thumb_up_alt_not_selected"
             android:layout_marginTop="24dp"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.18"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,8 +87,9 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/img_comment_image"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="10dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -108,13 +111,14 @@
             android:id="@+id/v_sep_bottom"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginBottom="5dp"
             android:background="@color/colourWhite"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/img_like_image" />
+            app:layout_constraintTop_toBottomOf="@id/img_like_image"
+            app:layout_constraintVertical_bias="0.0" />
 
         <com.google.android.gms.ads.AdView
             android:id="@+id/ad_view"
@@ -123,7 +127,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             ads:adSize="BANNER"
-            ads:adUnitId="@string/banner_ad_unit_id_view"
+            ads:adUnitId="@string/banner_ad_temp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,33 +1,51 @@
 package com.app.scanny.bindasbol.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.scanny.Constants
 import com.app.scanny.R
+import com.app.scanny.bindasbol.adapter.ChatsAdapter
+import com.app.scanny.bindasbol.models.BolModel
+import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
+import com.app.scanny.bindasbol.viewmodels.ChatHomeViewModel
+import com.app.scanny.databinding.FragmentChatHomeBinding
+import com.app.scanny.enums.NavEnums
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.ads.MobileAds
+import com.google.firebase.auth.FirebaseAuth
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [NotificationFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NotificationFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var viewModel: BBSharedViewModel
+    private lateinit var chatViewModel : ChatHomeViewModel
+    private var mAuth: FirebaseAuth? = null
+    private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+    private  val RC_SIGN_IN = 556
+    private var chatItems = arrayListOf<Pair<String, BolModel>>()
+
+    private lateinit var dataBinding: FragmentChatHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+        mAuth = FirebaseAuth.getInstance()
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+
     }
 
     override fun onCreateView(
@@ -35,26 +53,62 @@ class NotificationFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_notification, container, false)
+        dataBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_chat_home,
+            container,
+            false
+        )
+        return dataBinding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NotificationFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NotificationFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun renderChats()
+    {
+        dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems,{it,likeState ->
+            dataBinding.charHomeViewModel?.addLike(it.first,likeState,it.second)?.observe(viewLifecycleOwner,
+                {
+                    Log.d("LikeAdded",it)
+                })
+        },{
+            var bundle = Bundle()
+            bundle.putString(Constants.BOL_ID,it.first)
+            findNavController().navigate(R.id.action_chatHomeFragment_to_addBolBottomSheet,bundle)
+        })
+        dataBinding.rvChats.itemAnimator = DefaultItemAnimator()
+        dataBinding.rvChats.layoutManager = LinearLayoutManager(requireContext())
+
+        dataBinding.charHomeViewModel?.getMyBols()?.observe(viewLifecycleOwner, {
+
+            dataBinding.ivDefault.visibility = View.GONE
+
+            if(it.isNullOrEmpty())
+            {
+                dataBinding.txtError.text = resources.getString(R.string.no_bols)
+                dataBinding.txtError.visibility = View.VISIBLE
+            }
+            else
+            {
+                dataBinding.txtError.visibility = View.GONE
+                chatItems.clear()
+                chatItems.addAll(it)
+                dataBinding.rvChats.adapter?.notifyDataSetChanged()
+            }
+        })
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        viewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
+        dataBinding.charHomeViewModel = ViewModelProvider(this).get(ChatHomeViewModel::class.java)
+        dataBinding.charHomeViewModel?.snippet = {
+            when(it)
+            {
+                NavEnums.NAV_ADD_BOLS -> {
+                    findNavController().navigate(R.id.action_chatHomeFragment_to_addBolBottomSheet)
                 }
             }
+        }
+        renderChats()
     }
 }

@@ -15,8 +15,10 @@
     <string name="message">Messages</string>
     <string name="write_your_bols">Write your bols here</string>
     <string name="submit">Submit</string>
+    <string name="no_bols">Nothing to show</string>
     <string name="native_ad_unit_id_view">ca-app-pub-6848333716076512/4253602482</string>
     <string name="banner_ad_unit_id_view">ca-app-pub-6848333716076512/7422583503</string>
     <string name="native_ad_unit_id_view_man">ca-app-pub-6848333716076512~9505929162</string>
     <string name="banner_ad_unit_id_view_man">ca-app-pub-6848333716076512~9505929162</string>
+    <string name="banner_ad_temp">ca-app-pub-3940256099942544/6300978111</string>
 </resources>

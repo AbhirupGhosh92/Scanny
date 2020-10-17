@@ -14,9 +14,30 @@ object Serializer {
             dateModified = map["dateModified"] as  Timestamp?,
             nickName = map["nickName"] as String?,
             likes = map["likes"] as Long?,
-            likeList = map["likeList"] as  List<String>?,
+            likeList = map["likeList"] as  ArrayList<String>,
             comments = map["comments"] as Long?,
-            commentList =  map["commentList"] as  List<String>?
+            commentList =  map["commentList"] as  ArrayList<String>?
         )
     }
+
+    fun bolModelToMap(model: BolModel)  : HashMap<String,Any?>
+    {
+        var map = HashMap<String,Any?>()
+
+        model.apply {
+            map["bol"] = bol
+             map["uid"] = uid
+             map["dateCreated"] =  dateCreated
+            map["dateModified"] = dateModified
+            map["nickName"] = nickName
+             map["likes"] = likes
+            map["likeList"] = likeList
+            map["comments"] = comments
+            map["commentList"] = commentList
+        }
+
+        return map
+    }
+
+
 }

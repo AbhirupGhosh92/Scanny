@@ -27,21 +27,4 @@ class BBSharedViewModel : BaseViewModel() {
               Repository.checkAcces().toFlowable(BackpressureStrategy.BUFFER)
          )
      }
-
-    fun getBols() :  LiveData<BolModel>
-    {
-        var bolList  = MutableLiveData<BolModel>()
-
-        Repository.getMyBols()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({
-                bolList.value = it
-            },{
-                it.printStackTrace()
-            })
-
-        return bolList
-
-    }
 }
