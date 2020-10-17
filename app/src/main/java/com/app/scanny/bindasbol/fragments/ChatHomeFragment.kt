@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.app.scanny.Constants
 import com.app.scanny.R
 import com.app.scanny.bindasbol.adapter.ChatsAdapter
 import com.app.scanny.bindasbol.models.BolModel
@@ -91,7 +92,9 @@ class ChatHomeFragment : Fragment() {
                     Log.d("LikeAdded",it)
                 })
         },{
-
+            var bundle = Bundle()
+            bundle.putString(Constants.BOL_ID,it.first)
+            findNavController().navigate(R.id.action_chatHomeFragment_to_addBolBottomSheet,bundle)
         })
         dataBinding.rvChats.itemAnimator = DefaultItemAnimator()
         dataBinding.rvChats.layoutManager = LinearLayoutManager(requireContext())

@@ -18,7 +18,7 @@ import kotlin.collections.ArrayList
 
 class ChatsAdapter(var context: Context, var chatItems  : List<Pair<String,BolModel>>,
                    var likeAction : (doc : Pair<String,BolModel>,likeState: Boolean) -> Unit,
-                    var commentAction : () -> Unit
+                    var commentAction : (doc : Pair<String,BolModel>) -> Unit
                    )  : RecyclerView.Adapter<ChatsAdapter.ViewHolder>(){
 
     data class ViewHolder(var dataBinding : ChatsItemViewHolderBinding,var selected : Boolean = false) : RecyclerView.ViewHolder(dataBinding.root)
@@ -63,7 +63,7 @@ class ChatsAdapter(var context: Context, var chatItems  : List<Pair<String,BolMo
         }
 
         holder.dataBinding.imgCommentImage.setOnClickListener {
-            commentAction.invoke()
+            commentAction.invoke(chatItems[position])
         }
     }
 
