@@ -62,7 +62,7 @@ class ChatsAdapter(var context: Context, var chatItems  : List<Pair<String,BolMo
 
     private fun likeState(position: Int) : Boolean
     {
-        return chatItems[position].second.likeList?.contains(Repository.mAuth.currentUser?.uid.toString())!!
+        return chatItems[position].second.likeList?.contains(Repository.mAuth.currentUser?.uid.toString())?.not()!!
     }
 
     override fun getItemCount(): Int {

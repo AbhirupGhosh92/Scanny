@@ -39,8 +39,8 @@ class ChatHomeViewModel : BaseViewModel() {
     }
 
 
-    fun addLike(bolId : String,likeState : Boolean,bolModel: BolModel)
+    fun addLike(bolId : String,likeState : Boolean,bolModel: BolModel) : LiveData<String>
     {
-        Repository.addLike(bolId,likeState,bolModel)
+        return LiveDataReactiveStreams.fromPublisher(Repository.addLike(bolId,likeState,bolModel).toFlowable(BackpressureStrategy.BUFFER))
     }
 }

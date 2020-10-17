@@ -111,24 +111,21 @@ object Repository {
                 .whereEqualTo("uid", mAuth.currentUser?.uid)
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .limit(50)
-                .get()
-                .addOnCompleteListener {task ->
-                    if(task.isSuccessful)
+                .addSnapshotListener { value, error ->
+                    if(error == null)
                     {
                         var temp = ArrayList<Pair<String,BolModel>>()
 
-                        for(item in task.result)
+                        for(item in value?.documents!!)
                         {
                             temp.add(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
                         }
 
                         result.onNext(temp)
                     }
-                    else
-                    {
-                        task.exception?.printStackTrace()
-                    }
+
                 }
+
         }
     }
 
@@ -155,9 +152,9 @@ object Repository {
         }
     }
 
-    fun addLike(bolId : String,likeState : Boolean,bolModel : BolModel) : Observable<Boolean>
+    fun addLike(bolId : String,likeState : Boolean,bolModel : BolModel) : Observable<String>
     {
-        return Observable.create {
+        return Observable.create {result ->
             db.collection("bols_data")
                 .document(bolId)
                 .get()
@@ -180,6 +177,13 @@ object Repository {
                         db.collection("bols_data")
                             .document(bolId)
                             .update(Serializer.bolModelToMap(bolMap))
+                            .addOnSuccessListener {
+                                result.onNext("OK")
+                            }
+                            .addOnFailureListener {
+                                result.onNext(it.message)
+                                it.printStackTrace()
+                            }
                     }
                     else
                     {

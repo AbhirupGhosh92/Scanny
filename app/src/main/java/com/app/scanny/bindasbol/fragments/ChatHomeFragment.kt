@@ -86,7 +86,10 @@ class ChatHomeFragment : Fragment() {
     private fun renderChats()
     {
         dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems){it,likeState ->
-            dataBinding.charHomeViewModel?.addLike(it.first,likeState,it.second)
+            dataBinding.charHomeViewModel?.addLike(it.first,likeState,it.second)?.observe(viewLifecycleOwner,
+                 {
+                    Log.d("LikeAdded",it)
+                })
         }
         dataBinding.rvChats.itemAnimator = DefaultItemAnimator()
         dataBinding.rvChats.layoutManager = LinearLayoutManager(requireContext())
