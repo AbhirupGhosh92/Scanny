@@ -19,6 +19,7 @@ import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
 import com.app.scanny.bindasbol.viewmodels.ChatHomeViewModel
 import com.app.scanny.databinding.FragmentChatHomeBinding
 import com.app.scanny.enums.NavEnums
+import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
 
@@ -61,6 +62,13 @@ class ShowCommentsFragment : Fragment() {
 
     private fun renderChats()
     {
+        if(Repository.mAuth.currentUser!=null)
+        {
+            dataBinding.ivDefault.visibility = View.GONE
+        }
+
+        dataBinding.fab.visibility = View.GONE
+
         chatList = arguments?.getStringArrayList("comments") as ArrayList<String>
 
         dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems,R.id.action_showCommentsFragment_self,{it,likeState ->
