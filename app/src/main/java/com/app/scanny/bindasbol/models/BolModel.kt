@@ -5,8 +5,8 @@ import com.google.firebase.Timestamp
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.collections.ArrayList
-
 data class BolModel(
+    var bolId : String? = "",
     var bol : String? = "",
     var uid : String? = "",
     var nickName : String? = "",

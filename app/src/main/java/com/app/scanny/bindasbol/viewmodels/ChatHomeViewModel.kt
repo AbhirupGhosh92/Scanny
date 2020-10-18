@@ -21,9 +21,9 @@ class ChatHomeViewModel : BaseViewModel() {
         snippet?.invoke(NavEnums.NAV_ADD_BOLS)
     }
 
-    fun getMyBols() :  LiveData<ArrayList<Pair<String,BolModel>>>
+    fun getMyBols() :  LiveData<ArrayList<BolModel>>
     {
-        var bolList  = MutableLiveData<ArrayList<Pair<String,BolModel>>>()
+        var bolList  = MutableLiveData<ArrayList<BolModel>>()
 
         Repository.getMyBols()
             .subscribeOn(Schedulers.io())
@@ -38,9 +38,9 @@ class ChatHomeViewModel : BaseViewModel() {
 
     }
 
-    fun showBolsFromList() : LiveData<ArrayList<Pair<String,BolModel>>>
+    fun showBolsFromList() : LiveData<ArrayList<BolModel>>
     {
-        var bolList  = MutableLiveData<ArrayList<Pair<String,BolModel>>>()
+        var bolList  = MutableLiveData<ArrayList<BolModel>>()
 
         Repository.getAllBols()
             .subscribeOn(Schedulers.io())
@@ -54,9 +54,9 @@ class ChatHomeViewModel : BaseViewModel() {
         return bolList
     }
 
-    fun getAllBols() :   LiveData<ArrayList<Pair<String,BolModel>>>
+    fun getAllBols() :   LiveData<ArrayList<BolModel>>
     {
-        var bolList  = MutableLiveData<ArrayList<Pair<String,BolModel>>>()
+        var bolList  = MutableLiveData<ArrayList<BolModel>>()
 
         Repository.getAllBols()
             .subscribeOn(Schedulers.io())

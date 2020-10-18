@@ -8,6 +8,7 @@ object Serializer {
     fun bolMapToModel(map : HashMap<String,Any?>)  : BolModel
     {
         return BolModel(
+            bolId =map["bolId"] as String?,
             bol = map["bol"] as String?,
             uid =  map["uid"] as String?,
             dateCreated = map["dateCreated"] as Timestamp?,
@@ -25,6 +26,7 @@ object Serializer {
         var map = HashMap<String,Any?>()
 
         model.apply {
+            map["bolId"] = bolId
             map["bol"] = bol
              map["uid"] = uid
              map["dateCreated"] =  dateCreated

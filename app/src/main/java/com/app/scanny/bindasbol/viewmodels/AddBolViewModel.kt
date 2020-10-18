@@ -16,7 +16,7 @@ class AddBolViewModel : BaseViewModel() {
     var bolString = ""
     var bolResponse : MutableLiveData<String> =  MutableLiveData()
     var nickname  = ""
-    var bolId = ""
+    var bolId : String? = ""
 
     fun addBol(view : View)
     {

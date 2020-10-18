@@ -87,11 +87,16 @@ object Repository {
 
         fun addBol(bol : String,nickName: String) : Observable<String>
         {
+            val timestamp = Timestamp.now()
+            val hash = ApplicationUtils.md5("${mAuth.currentUser?.uid}${timestamp.toDate().time}")
+            val bolModel = BolModel(hash,
+                bol, mAuth.currentUser?.uid.toString(), nickName,timestamp
+            )
+
             return Observable.create {result ->
                 db.collection("bols_data")
-                    .add(BolModel(
-                        bol, mAuth.currentUser?.uid.toString(), nickName,Timestamp.now()
-                    ))
+                    .document(hash!!)
+                    .set(bolModel)
                     .addOnCompleteListener {
                         if(it.isSuccessful)
                         {
@@ -99,13 +104,14 @@ object Repository {
                         }
                         else
                         {
-                            result.onNext(it.exception?.message)
+                            it.exception?.printStackTrace()
                         }
+
                     }
             }
         }
 
-    fun getMyBols() : Observable<ArrayList<Pair<String,BolModel>>>
+    fun getMyBols() : Observable<ArrayList<BolModel>>
     {
         return Observable.create {result ->
             db.collection("bols_data")
@@ -115,11 +121,11 @@ object Repository {
                 .addSnapshotListener { value, error ->
                     if(error == null)
                     {
-                        var temp = ArrayList<Pair<String,BolModel>>()
+                        var temp = ArrayList<BolModel>()
 
                         for(item in value?.documents!!)
                         {
-                            temp.add(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
+                            temp.add(Serializer.bolMapToModel(item.data as HashMap<String, Any?>))
                         }
 
                         result.onNext(temp)
@@ -156,7 +162,7 @@ object Repository {
 //        }
 //    }
 
-    fun getAllBols(limit : Long = 50) : Observable<ArrayList<Pair<String,BolModel>>>
+    fun getAllBols(limit : Long = 50) : Observable<ArrayList<BolModel>>
     {
         return Observable.create {result ->
             db.collection("bols_data")
@@ -165,10 +171,10 @@ object Repository {
                 .addSnapshotListener {value, error ->
                     if(error == null)
                     {
-                        var temp = ArrayList<Pair<String,BolModel>>()
+                        var temp = ArrayList<BolModel>()
                         for(item in value?.documents!!)
                         {
-                            temp.add(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
+                            temp.add(Serializer.bolMapToModel(item.data as HashMap<String, Any?>))
                         }
 
                         result.onNext(temp)
@@ -224,11 +230,16 @@ object Repository {
 
     fun addComment(bol: String,nickName: String,bolId: String) : Observable<String>
     {
+        val timestamp = Timestamp.now()
+        val hash = ApplicationUtils.md5("${mAuth.currentUser?.uid}${timestamp.toDate().time}")
+        val bolModel = BolModel(hash,
+            bol, mAuth.currentUser?.uid.toString(), nickName,timestamp
+        )
+
         return Observable.create {result ->
             db.collection("bols_data")
-                .add(BolModel(
-                    bol, mAuth.currentUser?.uid.toString(), nickName,Timestamp.now()
-                ))
+                .document(hash!!)
+                .set(bolModel)
                 .addOnCompleteListener {newBol ->
                     if(newBol.isSuccessful)
                     {
@@ -244,7 +255,7 @@ object Repository {
                                             Serializer.bolMapToModel(data as HashMap<String, Any?>)
 
                                         bolMap.comments = bolMap.comments?.plus(1)
-                                        bolMap.commentList?.add(newBol.result.id)
+                                        bolMap.commentList?.add(bolModel.bolId!!)
 
 
                                         db.collection("bols_data")

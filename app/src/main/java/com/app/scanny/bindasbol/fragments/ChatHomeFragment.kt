@@ -40,7 +40,7 @@ class ChatHomeFragment : Fragment() {
     private var mAuth: FirebaseAuth? = null
     private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     private  val RC_SIGN_IN = 556
-    private var chatItems = arrayListOf<Pair<String,BolModel>>()
+    private var chatItems = arrayListOf<BolModel>()
 
     private lateinit var dataBinding: FragmentChatHomeBinding
 
@@ -86,14 +86,18 @@ class ChatHomeFragment : Fragment() {
 
     private fun renderChats()
     {
+        if(Repository.mAuth.currentUser!=null)
+        {
+            dataBinding.ivDefault.visibility = View.GONE
+        }
         dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems,{it,likeState ->
-            dataBinding.charHomeViewModel?.addLike(it.first,likeState,it.second)?.observe(viewLifecycleOwner,
+            dataBinding.charHomeViewModel?.addLike(it.bolId!!,likeState,it)?.observe(viewLifecycleOwner,
                  {
                     Log.d("LikeAdded",it)
                 })
         },{
             var bundle = Bundle()
-            bundle.putString(Constants.BOL_ID,it.first)
+            bundle.putString(Constants.BOL_ID,it.bolId!!)
             findNavController().navigate(R.id.action_chatHomeFragment_to_addBolBottomSheet,bundle)
         })
         dataBinding.rvChats.itemAnimator = DefaultItemAnimator()
@@ -107,6 +111,7 @@ class ChatHomeFragment : Fragment() {
             {
                 dataBinding.txtError.text = resources.getString(R.string.no_bols)
                 dataBinding.txtError.visibility = View.VISIBLE
+                dataBinding.rvChats.adapter?.notifyDataSetChanged()
             }
             else
             {

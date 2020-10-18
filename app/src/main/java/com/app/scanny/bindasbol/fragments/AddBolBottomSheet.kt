@@ -45,8 +45,14 @@ class AddBolBottomSheet : BottomSheetDialogFragment() {
         dataBinding.addBolViewModel = ViewModelProvider(this).get(AddBolViewModel::class.java)
         sharedViewModel = ViewModelProvider(requireActivity()).get(BBSharedViewModel::class.java)
 
-        dataBinding.addBolViewModel?.bolId = arguments?.getString(Constants.BOL_ID,"").toString()
-
+        if(arguments?.getString(Constants.BOL_ID,"").isNullOrEmpty())
+        {
+            dataBinding.addBolViewModel?.bolId = ""
+        }
+        else
+        {
+            dataBinding.addBolViewModel?.bolId = arguments?.getString(Constants.BOL_ID,"")
+        }
         dataBinding.addBolViewModel?.nickname =  sharedViewModel.userModel?.nickName.toString()
         dataBinding.addBolViewModel?.bolResponse?.observe(viewLifecycleOwner,  {
             when(it)
