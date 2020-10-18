@@ -21,7 +21,7 @@ class BBSharedViewModel : BaseViewModel() {
      var userModel : UserModel?= null
     var signedIn = false
 
-     fun checkAccess() : LiveData<UserModel>
+     fun checkAccess() : LiveData<UserModel?>
      {
          return LiveDataReactiveStreams.fromPublisher(
               Repository.checkAcces().toFlowable(BackpressureStrategy.BUFFER)

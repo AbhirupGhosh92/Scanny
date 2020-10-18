@@ -27,7 +27,7 @@ object Repository {
     val mAuth = FirebaseAuth.getInstance()
     val objectMapper = ObjectMapper()
 
-    fun checkAcces() : Observable<UserModel> {
+    fun checkAcces() : Observable<UserModel?> {
         return  Observable.create {result  ->
                     db.collection("user_data")
                     .whereEqualTo("uid",mAuth.currentUser?.uid.toString())
@@ -35,10 +35,19 @@ object Repository {
 
                             if (task.isSuccessful)
                             {
-                                task.result?.forEach {
-                                    result.onNext(
-                                        objectMapper.convertValue(it.data,UserModel::class.java)
-                                    )
+                                if(task.result != null && task.result.isEmpty.not()) {
+                                    task.result?.forEach {
+                                        result.onNext(
+                                            objectMapper.convertValue(
+                                                it.data,
+                                                UserModel::class.java
+                                            )
+                                        )
+                                    }
+                                }
+                                else
+                                {
+                                    result.onNext(UserModel())
                                 }
                             }
                             else

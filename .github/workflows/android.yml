@@ -16,7 +16,7 @@ jobs:
       with:
         java-version: 1.8
     - name: Build with Gradle
-      run: ./gradlew assembleBindasbolDebug
+      run: ./gradlew assembleBindasbolRelease
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.0
       with:

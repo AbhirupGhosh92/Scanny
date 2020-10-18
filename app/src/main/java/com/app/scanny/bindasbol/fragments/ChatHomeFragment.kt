@@ -73,7 +73,7 @@ class ChatHomeFragment : Fragment() {
     {
         viewModel.checkAccess().observe(viewLifecycleOwner, {
             viewModel.userModel = it
-            if(it == null) {
+            if(it?.nickName.isNullOrEmpty()) {
                 findNavController().navigate(R.id.action_chatHomeFragment_to_enterUserDialogFragment)
             }
             else
