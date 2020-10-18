@@ -136,31 +136,31 @@ object Repository {
         }
     }
 
-//    fun getCommentsList(commentList : List<String>) : Observable<ArrayList<Pair<String,BolModel>>>
-//    {
-//        var respModel = ArrayList<Pair<String,BolModel>>()
-//
-//        return Observable.create {result ->
-//
-//            db.collection("bols_data")
-//                .get(So)d
-//                .orderBy("dateCreated", Query.Direction.DESCENDING)
-//                .limit(limit)
-//                .addSnapshotListener {value, error ->
-//                    if(error == null)
-//                    {
-//                        var temp = ArrayList<Pair<String,BolModel>>()
-//                        for(item in value?.documents!!)
-//                        {
-//                            temp.add(Pair(item.id,Serializer.bolMapToModel(item.data as HashMap<String, Any?>)))
-//                        }
-//
-//                        result.onNext(temp)
-//                    }
-//
-//                }
-//        }
-//    }
+    fun getCommentsList(commentList : List<String>,limit: Long  = 50) : Observable<ArrayList<BolModel>>
+    {
+        var respModel = ArrayList<BolModel>()
+
+        return Observable.create {result ->
+
+            db.collection("bols_data")
+                .whereIn("bolId",commentList)
+                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .limit(limit)
+                .addSnapshotListener {value, error ->
+                    if(error == null)
+                    {
+                        var temp = ArrayList<BolModel>()
+                        for(item in value?.documents!!)
+                        {
+                            temp.add(Serializer.bolMapToModel(item.data as HashMap<String, Any?>))
+                        }
+
+                        result.onNext(temp)
+                    }
+
+                }
+        }
+    }
 
     fun getAllBols(limit : Long = 50) : Observable<ArrayList<BolModel>>
     {

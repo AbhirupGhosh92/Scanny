@@ -30,6 +30,7 @@ class ShowCommentsFragment : Fragment() {
     private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
     private  val RC_SIGN_IN = 556
     private var chatItems = arrayListOf<BolModel>()
+    private var chatList =  ArrayList<String>()
 
     private lateinit var dataBinding: FragmentChatHomeBinding
 
@@ -60,7 +61,9 @@ class ShowCommentsFragment : Fragment() {
 
     private fun renderChats()
     {
-        dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems,{it,likeState ->
+        chatList = arguments?.getStringArrayList("comments") as ArrayList<String>
+
+        dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems,R.id.action_showCommentsFragment_self,{it,likeState ->
             dataBinding.charHomeViewModel?.addLike(it.bolId!!,likeState,it)?.observe(viewLifecycleOwner,
                 {
                     Log.d("LikeAdded",it)
@@ -68,12 +71,12 @@ class ShowCommentsFragment : Fragment() {
         },{
             var bundle = Bundle()
             bundle.putString(Constants.BOL_ID,it.bolId)
-            findNavController().navigate(R.id.action_chatHomeFragment_to_addBolBottomSheet,bundle)
+            findNavController().navigate(R.id.action_showCommentsFragment_to_addBolBottomSheet,bundle)
         })
         dataBinding.rvChats.itemAnimator = DefaultItemAnimator()
         dataBinding.rvChats.layoutManager = LinearLayoutManager(requireContext())
 
-        dataBinding.charHomeViewModel?.getMyBols()?.observe(viewLifecycleOwner, {
+        dataBinding.charHomeViewModel?.showBolsFromList(chatList)?.observe(viewLifecycleOwner, {
 
             dataBinding.ivDefault.visibility = View.GONE
 

@@ -90,7 +90,7 @@ class ChatHomeFragment : Fragment() {
         {
             dataBinding.ivDefault.visibility = View.GONE
         }
-        dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems,{it,likeState ->
+        dataBinding.rvChats.adapter = ChatsAdapter(requireContext(),chatItems,R.id.action_chatHomeFragment_to_showCommentsFragment,{it,likeState ->
             dataBinding.charHomeViewModel?.addLike(it.bolId!!,likeState,it)?.observe(viewLifecycleOwner,
                  {
                     Log.d("LikeAdded",it)

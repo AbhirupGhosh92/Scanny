@@ -18,8 +18,12 @@
             android:id="@+id/action_chatHomeFragment_to_addBolBottomSheet"
             app:destination="@id/addBolBottomSheet" />
         <action
-            android:id="@+id/action_chatHomeFragment_to_splashScreenDialogFragment"
-            app:destination="@id/splashScreenDialogFragment" />
+            android:id="@+id/action_chatHomeFragment_to_showCommentsFragment"
+            app:destination="@id/showCommentsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
     <dialog
         android:id="@+id/enterUserDialogFragment"
@@ -30,12 +34,11 @@
         android:id="@+id/notificationFragment"
         android:name="com.app.scanny.bindasbol.fragments.NotificationFragment"
         android:label="My Bols"
-        tools:layout="@layout/fragment_notification" />
-    <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.app.scanny.bindasbol.fragments.SearchFragment"
-        android:label="Search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_notification" >
+        <action
+            android:id="@+id/action_notificationFragment_to_showCommentsFragment"
+            app:destination="@id/showCommentsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/messagesFragment"
         android:name="com.app.scanny.bindasbol.fragments.MessagesFragment"
@@ -47,7 +50,22 @@
         android:label="fragment_add_bol_bottom_sheet"
         tools:layout="@layout/fragment_add_bol_bottom_sheet" />
     <fragment
-        android:id="@+id/splashScreenDialogFragment"
-        android:name="com.app.scanny.bindasbol.fragments.SplashScreenDialogFragment"
-        android:label="SplashScreenDialogFragment" />
+        android:id="@+id/showCommentsFragment"
+        android:name="com.app.scanny.bindasbol.fragments.ShowCommentsFragment"
+        android:label="Comments">
+        <deepLink
+            android:id="@+id/deepLink"
+            android:autoVerify="true"
+            app:uri="bol://show_comments" />
+        <action
+            android:id="@+id/action_showCommentsFragment_self"
+            app:destination="@id/showCommentsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/action_showCommentsFragment_to_addBolBottomSheet"
+            app:destination="@id/addBolBottomSheet" />
+    </fragment>
 </navigation>

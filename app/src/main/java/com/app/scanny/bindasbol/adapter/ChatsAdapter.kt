@@ -1,11 +1,15 @@
 package com.app.scanny.bindasbol.adapter
 
+import android.app.Activity
 import android.content.Context
+import android.net.Uri
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.app.scanny.R
 import com.app.scanny.bindasbol.models.BolModel
@@ -16,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-class ChatsAdapter(var context: Context, var chatItems  : List<BolModel>,
+class ChatsAdapter(var context: Context, var chatItems  : List<BolModel>,var actioId : Int= R.id.action_showCommentsFragment_self,
                    var likeAction : (doc : BolModel,likeState: Boolean) -> Unit,
                     var commentAction : (doc : BolModel) -> Unit
                    )  : RecyclerView.Adapter<ChatsAdapter.ViewHolder>(){
@@ -64,6 +68,16 @@ class ChatsAdapter(var context: Context, var chatItems  : List<BolModel>,
 
         holder.dataBinding.imgCommentImage.setOnClickListener {
             commentAction.invoke(chatItems[position])
+        }
+
+        holder.dataBinding.root.setOnClickListener {
+            if(chatItems[position].commentList.isNullOrEmpty().not()) {
+                var bundle = Bundle()
+                bundle.putStringArrayList("comments", chatItems[position].commentList)
+                        (context as Activity).findNavController(R.id.nav_controller)
+                            .navigate(actioId, bundle)
+
+            }
         }
     }
 
