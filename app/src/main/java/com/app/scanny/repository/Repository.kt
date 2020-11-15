@@ -4,6 +4,7 @@ import android.util.Log
 import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
 import com.app.scanny.bindasbol.serializers.Serializer
+import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.utils.ApplicationUtils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.firebase.Timestamp
@@ -26,6 +27,39 @@ object Repository {
 
     val mAuth = FirebaseAuth.getInstance()
     val objectMapper = ObjectMapper()
+
+    fun checkAccessCc() : Observable<CcUserModel>
+    {
+        return Observable.create {result ->
+            db.collection("cc_user_data")
+                .whereEqualTo("uid",mAuth.currentUser?.uid.toString())
+                .get().addOnCompleteListener {task  ->
+
+                    if (task.isSuccessful)
+                    {
+                        if(task.result != null && task.result.isEmpty.not()) {
+                            task.result?.forEach {
+                                result.onNext(
+                                    objectMapper.convertValue(
+                                        it.data,
+                                        CcUserModel::class.java
+                                    )
+                                )
+                            }
+                        }
+                        else
+                        {
+                            result.onNext(CcUserModel())
+                        }
+                    }
+                    else
+                    {
+                        Log.e("Error",task.exception.toString())
+                        result.onNext(null)
+                    }
+                }
+        }
+    }
 
     fun checkAcces() : Observable<UserModel?> {
         return  Observable.create {result  ->

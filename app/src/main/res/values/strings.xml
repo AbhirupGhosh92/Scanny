@@ -21,4 +21,9 @@
     <string name="native_ad_unit_id_view_man">ca-app-pub-6848333716076512~9505929162</string>
     <string name="banner_ad_unit_id_view_man">ca-app-pub-6848333716076512~9505929162</string>
     <string name="banner_ad_temp">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="cities">Cities</string>
+    <string name="skills">Skills</string>
 </resources>
