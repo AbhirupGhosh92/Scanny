@@ -14,6 +14,7 @@ class CcHomeViewModel : BaseViewModel()
     var email = ""
     var phone = ""
     var showForm = false
+    var isRecruiter = true
 
     fun checkCcAccess() : LiveData<CcUserModel>
     {

@@ -26,4 +26,12 @@
     <string name="email">Email</string>
     <string name="cities">Cities</string>
     <string name="skills">Skills</string>
+    <string name="users">User Type</string>
+    <string name="projects">Projects</string>
+    <string name="testionials">Testimonials</string>
+
+    <array name="user_type">
+        <item>Recruiter</item>
+        <item>Candidate</item>
+    </array>
 </resources>

@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +31,7 @@ class CareerCoopHome : Fragment() {
     private lateinit var dataBinding : FragmentCareerCoopHomeBinding
     private lateinit var viewModel : BBSharedViewModel
     private lateinit var ccHomeViewModel: CcHomeViewModel
+    private lateinit var userType : Array<String>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +53,9 @@ class CareerCoopHome : Fragment() {
         viewModel = ViewModelProvider(requireActivity())[BBSharedViewModel::class.java]
         ccHomeViewModel = ViewModelProvider(this)[CcHomeViewModel::class.java]
         dataBinding.ccHomeViewodel = ccHomeViewModel
+
+        userType = resources.getStringArray(R.array.user_type)
+
         if(viewModel.signedIn.not()) {
 
             MobileAds.initialize(requireContext())
@@ -71,6 +77,21 @@ class CareerCoopHome : Fragment() {
 
     private fun renderUi()
     {
+
+        dataBinding.spUser.adapter = ArrayAdapter<String>(requireContext(),R.layout.spinner_text,userType)
+
+        dataBinding.spUser.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                ccHomeViewModel.isRecruiter = p2 == 0
+                ccHomeViewModel.notifyChange()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+
+            }
+
+        }
+
         ccHomeViewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
             ccHomeViewModel.showForm = it.uid.isNullOrEmpty()
             ccHomeViewModel.notifyChange()
