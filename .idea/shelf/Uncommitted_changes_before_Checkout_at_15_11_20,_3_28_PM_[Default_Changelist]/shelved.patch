@@ -1,0 +1,293 @@
+Index: app/build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>apply plugin: 'com.android.application'\napply plugin: 'kotlin-android'\napply plugin: 'kotlin-android-extensions'\napply plugin: 'com.google.firebase.crashlytics'\napply plugin: 'com.google.gms.google-services'\n\nandroid {\n    compileSdkVersion 29\n    lintOptions {\n        abortOnError false\n    }\n    defaultConfig {\n        applicationId \"com.app.scanny\"\n        minSdkVersion 19\n        targetSdkVersion 29\n        versionCode 1\n        versionName \"1.0\"\n        multiDexEnabled true\n        vectorDrawables.useSupportLibrary = true\n        testInstrumentationRunner \"androidx.test.runner.AndroidJUnitRunner\"\n    }\n\n    buildTypes {\n        release {\n            minifyEnabled false\n            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'\n        }\n    }\n\n    buildFeatures {\n        dataBinding true\n    }\n    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_1_8\n        targetCompatibility = JavaVersion.VERSION_1_8\n    }\n    kotlinOptions {\n        jvmTarget = JavaVersion.VERSION_1_8\n    }\n    flavorDimensions 'default'\n    productFlavors {\n        scanny {\n            dimension 'default'\n            resValue \"string\", \"app_name\", \"Scanny\"\n            applicationIdSuffix = '.master'\n\n        }\n        bindasbol {\n            dimension 'default'\n            resValue \"string\", \"app_name\", \"Bindas Bol\"\n            applicationIdSuffix = '.bindasbol'\n\n        }\n    }\n}\n\ndef appcompat_version = \"1.2.0\"\ndef dynamicanimation_version = '1.0.0'\ndef lifecycle_version = \"2.2.0\"\ndef arch_version = \"2.1.0\"\n\ndependencies {\n    implementation fileTree(dir: \"libs\", include: [\"*.jar\"])\n    implementation \"org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version\"\n    implementation 'androidx.core:core-ktx:1.3.1'\n    implementation 'androidx.appcompat:appcompat:1.1.0'\n    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'\n    implementation 'androidx.legacy:legacy-support-v4:1.0.0'\n    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.0'\n    implementation 'androidx.navigation:navigation-ui-ktx:2.3.0'\n    implementation 'com.google.firebase:firebase-core:17.5.1'\n    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'\n    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'\n    implementation 'com.google.firebase:firebase-auth:19.3.1'\n    implementation 'com.google.firebase:firebase-firestore:21.7.1'\n    implementation 'com.google.firebase:firebase-ads:19.4.0'\n    testImplementation 'junit:junit:4.12'\n    androidTestImplementation 'androidx.test.ext:junit:1.1.1'\n    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'\n    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'\n    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'\n    implementation \"androidx.appcompat:appcompat:$appcompat_version\"\n    // For loading and tinting drawables on older versions of the platform\n    implementation \"androidx.appcompat:appcompat-resources:$appcompat_version\"\n    implementation \"com.google.android.material:material:1.3.0-alpha03\"\n    implementation \"androidx.viewpager2:viewpager2:1.0.0\"\n    implementation 'com.felipecsl.asymmetricgridview:library:2.0.1'\n    implementation 'com.github.bumptech.glide:glide:4.11.0'\n    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'\n    implementation \"androidx.dynamicanimation:dynamicanimation:$dynamicanimation_version\"\n    // Import the BoM for the Firebase platform\n    implementation platform('com.google.firebase:firebase-bom:25.12.0')\n\n    // Declare the dependencies for the Crashlytics and Analytics libraries\n    // When using the BoM, you don't specify versions in Firebase library dependencies\n    implementation 'com.google.firebase:firebase-crashlytics-ktx'\n    implementation 'com.android.support:multidex:1.0.3'\n\n    implementation 'com.firebaseui:firebase-ui-auth:6.2.0'\n\n    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'\n    implementation 'io.reactivex.rxjava3:rxjava:3.0.0'\n\n    implementation \"androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version\"\n    implementation \"androidx.lifecycle:lifecycle-reactivestreams-ktx:$lifecycle_version\"\n\n    implementation 'com.fasterxml.jackson.core:jackson-core:2.10.1'\n    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.10.1'\n    implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1'\n\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/build.gradle	(revision e864ad5f599f3c35ea88301fd2b7a0f5e811c935)
++++ app/build.gradle	(date 1605434243000)
+@@ -50,6 +50,13 @@
+             resValue "string", "app_name", "Bindas Bol"
+             applicationIdSuffix = '.bindasbol'
+ 
++        }
++
++        careercoop {
++            dimension 'default'
++            resValue "string", "app_name", "Career Coop"
++            applicationIdSuffix = '.careercoop'
++
+         }
+     }
+ }
+Index: app/google-services.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\n  \"project_info\": {\n    \"project_number\": \"703500186253\",\n    \"firebase_url\": \"https://scanny-67c7c.firebaseio.com\",\n    \"project_id\": \"scanny-67c7c\",\n    \"storage_bucket\": \"scanny-67c7c.appspot.com\"\n  },\n  \"client\": [\n    {\n      \"client_info\": {\n        \"mobilesdk_app_id\": \"1:703500186253:android:aa2bea4c0a052bfac2e8c4\",\n        \"android_client_info\": {\n          \"package_name\": \"com.app.scanny\"\n        }\n      },\n      \"oauth_client\": [\n        {\n          \"client_id\": \"703500186253-81q9rbdbfsoj50d2sf05l2ni5bjllf9f.apps.googleusercontent.com\",\n          \"client_type\": 1,\n          \"android_info\": {\n            \"package_name\": \"com.app.scanny\",\n            \"certificate_hash\": \"16e53951c53bc5ddbbd2c4d33cd6ccb8147ac6e0\"\n          }\n        },\n        {\n          \"client_id\": \"703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com\",\n          \"client_type\": 3\n        }\n      ],\n      \"api_key\": [\n        {\n          \"current_key\": \"AIzaSyCIpdbFGNT26PI7N8a3ycW9BrTAiRxPsu0\"\n        }\n      ],\n      \"services\": {\n        \"appinvite_service\": {\n          \"other_platform_oauth_client\": [\n            {\n              \"client_id\": \"703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com\",\n              \"client_type\": 3\n            }\n          ]\n        }\n      }\n    },\n    {\n      \"client_info\": {\n        \"mobilesdk_app_id\": \"1:703500186253:android:cb00cf5be1302675c2e8c4\",\n        \"android_client_info\": {\n          \"package_name\": \"com.app.scanny.bindasbol\"\n        }\n      },\n      \"oauth_client\": [\n        {\n          \"client_id\": \"703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com\",\n          \"client_type\": 3\n        }\n      ],\n      \"api_key\": [\n        {\n          \"current_key\": \"AIzaSyCIpdbFGNT26PI7N8a3ycW9BrTAiRxPsu0\"\n        }\n      ],\n      \"services\": {\n        \"appinvite_service\": {\n          \"other_platform_oauth_client\": [\n            {\n              \"client_id\": \"703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com\",\n              \"client_type\": 3\n            }\n          ]\n        }\n      }\n    }\n  ],\n  \"configuration_version\": \"1\"\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/google-services.json	(revision e864ad5f599f3c35ea88301fd2b7a0f5e811c935)
++++ app/google-services.json	(date 1605433927000)
+@@ -15,6 +15,14 @@
+       },
+       "oauth_client": [
+         {
++          "client_id": "703500186253-4n753ii28dr5pia79r9icham163mtvs0.apps.googleusercontent.com",
++          "client_type": 1,
++          "android_info": {
++            "package_name": "com.app.scanny",
++            "certificate_hash": "d67ba45a2c8b4bd835d88e6efc8dfdbb0d1405d3"
++          }
++        },
++        {
+           "client_id": "703500186253-81q9rbdbfsoj50d2sf05l2ni5bjllf9f.apps.googleusercontent.com",
+           "client_type": 1,
+           "android_info": {
+@@ -52,6 +60,59 @@
+       },
+       "oauth_client": [
+         {
++          "client_id": "703500186253-4c7si9tt7o7k8mnkiheh14tb27pcpu1s.apps.googleusercontent.com",
++          "client_type": 1,
++          "android_info": {
++            "package_name": "com.app.scanny.bindasbol",
++            "certificate_hash": "d67ba45a2c8b4bd835d88e6efc8dfdbb0d1405d3"
++          }
++        },
++        {
++          "client_id": "703500186253-aau0evu8qlupij9hnkr0smrjrf990giv.apps.googleusercontent.com",
++          "client_type": 1,
++          "android_info": {
++            "package_name": "com.app.scanny.bindasbol",
++            "certificate_hash": "16e53951c53bc5ddbbd2c4d33cd6ccb8147ac6e0"
++          }
++        },
++        {
++          "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
++          "client_type": 3
++        }
++      ],
++      "api_key": [
++        {
++          "current_key": "AIzaSyCIpdbFGNT26PI7N8a3ycW9BrTAiRxPsu0"
++        }
++      ],
++      "services": {
++        "appinvite_service": {
++          "other_platform_oauth_client": [
++            {
++              "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
++              "client_type": 3
++            }
++          ]
++        }
++      }
++    },
++    {
++      "client_info": {
++        "mobilesdk_app_id": "1:703500186253:android:22a334f028b7a545c2e8c4",
++        "android_client_info": {
++          "package_name": "com.app.scanny.careercoop"
++        }
++      },
++      "oauth_client": [
++        {
++          "client_id": "703500186253-gh4thmljgj4mkfm40j3u6s8h4s04g45p.apps.googleusercontent.com",
++          "client_type": 1,
++          "android_info": {
++            "package_name": "com.app.scanny.careercoop",
++            "certificate_hash": "16e53951c53bc5ddbbd2c4d33cd6ccb8147ac6e0"
++          }
++        },
++        {
+           "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
+           "client_type": 3
+         }
+Index: app/src/main/java/com/app/scanny/activities/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.app.scanny.activities\n\nimport android.os.Bundle\nimport android.util.Log\nimport android.view.MenuItem\nimport androidx.appcompat.app.AppCompatActivity\nimport androidx.databinding.DataBindingUtil\nimport androidx.navigation.NavController\nimport androidx.navigation.findNavController\nimport androidx.navigation.ui.AppBarConfiguration\nimport androidx.navigation.ui.NavigationUI\nimport com.app.scanny.BuildConfig\nimport com.app.scanny.R\nimport com.app.scanny.databinding.ActivityHomeLayoutBinding\nimport com.google.android.gms.ads.MobileAds\nimport com.google.firebase.FirebaseApp\n\n\nclass MainActivity : AppCompatActivity() {\n\n    private lateinit var navController: NavController\n    private lateinit var appBarConfiguration : AppBarConfiguration\n    private lateinit var dataBinding : ActivityHomeLayoutBinding\n\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n        dataBinding = DataBindingUtil.setContentView(this, R.layout.activity_home_layout)\n        navController = findNavController(R.id.nav_controller)\n\n\n        when(BuildConfig.FLAVOR)\n        {\n            \"scanny\" -> {\n                navController.graph = navController.navInflater.inflate(R.navigation.nav)\n            }\n\n            \"bindasbol\" -> {\n                navController.graph = navController.navInflater.inflate(R.navigation.bindas_bol_nav)\n            }\n        }\n\n        setUpUi()\n\n    }\n\n    private fun setUpUi()\n    {\n        appBarConfiguration = AppBarConfiguration(navController.graph)\n\n        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration)\n\n        FirebaseApp.initializeApp(this)\n\n        NavigationUI.setupWithNavController(\n            dataBinding.bottomNav,\n            navController\n        )\n\n    }\n\n    override fun onOptionsItemSelected(item: MenuItem): Boolean {\n        return when (item.itemId) {\n            android.R.id.home\n            -> {\n                if (!navController.navigateUp()) {\n                    finish()\n                }\n                true\n            }\n            else -> super.onOptionsItemSelected(item)\n        }\n    }\n\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/app/scanny/activities/MainActivity.kt	(revision e864ad5f599f3c35ea88301fd2b7a0f5e811c935)
++++ app/src/main/java/com/app/scanny/activities/MainActivity.kt	(date 1605433364000)
+@@ -37,6 +37,10 @@
+             "bindasbol" -> {
+                 navController.graph = navController.navInflater.inflate(R.navigation.bindas_bol_nav)
+             }
++
++            "careercoop"-> {
++                navController.graph = navController.navInflater.inflate(R.navigation.career_coop_nav)
++            }
+         }
+ 
+         setUpUi()
+Index: build.gradle
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>// Top-level build file where you can add configuration options common to all sub-projects/modules.\nbuildscript {\n    ext.kotlin_version = '1.4.10'\n    repositories {\n        google()\n        jcenter()\n    }\n    dependencies {\n        classpath 'com.android.tools.build:gradle:4.0.2'\n        classpath \"org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version\"\n\n        // ...\n\n        // Check that you have the Google Services Gradle plugin v4.3.2 or later\n        // (if not, add it).\n        classpath 'com.google.gms:google-services:4.3.4'\n\n        // Add the Crashlytics Gradle plugin (be sure to add version\n        // 2.0.0 or later if you built your app with Android Studio 4.1).\n        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.3.0'\n\n        // NOTE: Do not place your application dependencies here; they belong\n        // in the individual module build.gradle files\n    }\n}\n\nallprojects {\n    repositories {\n        google()\n        jcenter()\n    }\n}\n\ntask clean(type: Delete) {\n    delete rootProject.buildDir\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- build.gradle	(revision e864ad5f599f3c35ea88301fd2b7a0f5e811c935)
++++ build.gradle	(date 1605433797000)
+@@ -6,7 +6,7 @@
+         jcenter()
+     }
+     dependencies {
+-        classpath 'com.android.tools.build:gradle:4.0.2'
++        classpath 'com.android.tools.build:gradle:4.1.0'
+         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+ 
+         // ...
+Index: app/src/main/res/navigation/career_coop_nav.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/navigation/career_coop_nav.xml	(date 1605433701000)
++++ app/src/main/res/navigation/career_coop_nav.xml	(date 1605433701000)
+@@ -0,0 +1,13 @@
++<?xml version="1.0" encoding="utf-8"?>
++<navigation xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:id="@+id/career_coop_nav"
++    app:startDestination="@id/careerCoopHome">
++
++    <fragment
++        android:id="@+id/careerCoopHome"
++        android:name="com.app.scanny.careercoop.fragments.CareerCoopHome"
++        android:label="fragment_career_coop_home"
++        tools:layout="@layout/fragment_career_coop_home" />
++</navigation>
+\ No newline at end of file
+Index: app/src/main/res/layout/fragment_career_coop_home.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment_career_coop_home.xml	(date 1605433649000)
++++ app/src/main/res/layout/fragment_career_coop_home.xml	(date 1605433649000)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="utf-8"?>
++<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    tools:context=".careercoop.fragments.CareerCoopHome">
++
++    <!-- TODO: Update blank fragment layout -->
++    <TextView
++        android:layout_width="match_parent"
++        android:layout_height="match_parent"
++        android:text="@string/hello_blank_fragment" />
++
++</FrameLayout>
+\ No newline at end of file
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"CMakeSettings\">\n    <configurations>\n      <configuration PROFILE_NAME=\"Debug\" CONFIG_NAME=\"Debug\" />\n    </configurations>\n  </component>\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_1_8\" project-jdk-name=\"1.8\" project-jdk-type=\"JavaSDK\">\n    <output url=\"file://$PROJECT_DIR$/build/classes\" />\n  </component>\n  <component name=\"ProjectType\">\n    <option name=\"id\" value=\"Android\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/misc.xml	(revision e864ad5f599f3c35ea88301fd2b7a0f5e811c935)
++++ .idea/misc.xml	(date 1605433206000)
+@@ -5,7 +5,7 @@
+       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+     </configurations>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/build/classes" />
+   </component>
+   <component name="ProjectType">
+Index: app/src/main/java/com/app/scanny/careercoop/fragments/CareerCoopHome.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/app/scanny/careercoop/fragments/CareerCoopHome.kt	(date 1605433701000)
++++ app/src/main/java/com/app/scanny/careercoop/fragments/CareerCoopHome.kt	(date 1605433701000)
+@@ -0,0 +1,26 @@
++package com.app.scanny.careercoop.fragments
++
++import android.os.Bundle
++import androidx.fragment.app.Fragment
++import android.view.LayoutInflater
++import android.view.View
++import android.view.ViewGroup
++import com.app.scanny.R
++
++class CareerCoopHome : Fragment() {
++    // TODO: Rename and change types of parameters
++    private var param1: String? = null
++    private var param2: String? = null
++
++    override fun onCreate(savedInstanceState: Bundle?) {
++        super.onCreate(savedInstanceState)
++    }
++
++    override fun onCreateView(
++        inflater: LayoutInflater, container: ViewGroup?,
++        savedInstanceState: Bundle?
++    ): View? {
++        // Inflate the layout for this fragment
++        return inflater.inflate(R.layout.fragment_career_coop_home, container, false)
++    }
++}
+\ No newline at end of file
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/compiler.xml	(date 1605433206000)
++++ .idea/compiler.xml	(date 1605433206000)
+@@ -0,0 +1,6 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<project version="4">
++  <component name="CompilerConfiguration">
++    <bytecodeTargetLevel target="1.8" />
++  </component>
++</project>
+\ No newline at end of file
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Sun Aug 30 23:42:50 IST 2020\ndistributionBase=GRADLE_USER_HOME\ndistributionPath=wrapper/dists\nzipStoreBase=GRADLE_USER_HOME\nzipStorePath=wrapper/dists\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-6.1.1-all.zip\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- gradle/wrapper/gradle-wrapper.properties	(revision e864ad5f599f3c35ea88301fd2b7a0f5e811c935)
++++ gradle/wrapper/gradle-wrapper.properties	(date 1605433846000)
+@@ -1,6 +1,6 @@
+-#Sun Aug 30 23:42:50 IST 2020
++#Sun Nov 15 15:20:46 IST 2020
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-6.1.1-all.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-6.5-all.zip
+Index: .idea/gradle.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"GradleMigrationSettings\" migrationVersion=\"1\" />\n  <component name=\"GradleSettings\">\n    <option name=\"linkedExternalProjectsSettings\">\n      <GradleProjectSettings>\n        <option name=\"testRunner\" value=\"PLATFORM\" />\n        <option name=\"distributionType\" value=\"DEFAULT_WRAPPED\" />\n        <option name=\"externalProjectPath\" value=\"$PROJECT_DIR$\" />\n        <option name=\"gradleJvm\" value=\"1.8\" />\n        <option name=\"modules\">\n          <set>\n            <option value=\"$PROJECT_DIR$\" />\n            <option value=\"$PROJECT_DIR$/app\" />\n          </set>\n        </option>\n        <option name=\"resolveModulePerSourceSet\" value=\"false\" />\n      </GradleProjectSettings>\n    </option>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/gradle.xml	(revision e864ad5f599f3c35ea88301fd2b7a0f5e811c935)
++++ .idea/gradle.xml	(date 1605433206000)
+@@ -15,6 +15,7 @@
+           </set>
+         </option>
+         <option name="resolveModulePerSourceSet" value="false" />
++        <option name="useQualifiedModuleNames" value="true" />
+       </GradleProjectSettings>
+     </option>
+   </component>

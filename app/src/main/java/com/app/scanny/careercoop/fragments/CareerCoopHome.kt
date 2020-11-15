@@ -1,19 +1,35 @@
 package com.app.scanny.careercoop.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import com.app.scanny.R
+import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
+import com.app.scanny.careercoop.viewodels.CcHomeViewModel
+import com.app.scanny.databinding.FragmentCareerCoopHomeBinding
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.ads.MobileAds
+import com.google.firebase.auth.FirebaseAuth
 
 class CareerCoopHome : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+    private lateinit var mAuth : FirebaseAuth
+    private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+    private  val RC_SIGN_IN = 555
+    private lateinit var dataBinding : FragmentCareerCoopHomeBinding
+    private lateinit var viewModel : BBSharedViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        mAuth = FirebaseAuth.getInstance()
     }
 
     override fun onCreateView(
@@ -21,6 +37,56 @@ class CareerCoopHome : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_career_coop_home, container, false)
+        dataBinding  = DataBindingUtil.inflate(inflater,R.layout.fragment_career_coop_home,container,false)
+        return dataBinding.root
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel = ViewModelProvider(requireActivity())[BBSharedViewModel::class.java]
+        if(viewModel.signedIn.not()) {
+
+            MobileAds.initialize(requireContext())
+
+            startActivityForResult(
+                AuthUI.getInstance()
+                    .createSignInIntentBuilder()
+                    .setIsSmartLockEnabled(false)
+                    .setAvailableProviders(providers)
+                    .build(),
+                RC_SIGN_IN
+            )
+        }
+        else
+        {
+            renderUi()
+        }
+    }
+
+    private fun renderUi()
+    {
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        when (requestCode) {
+
+            RC_SIGN_IN -> {
+
+                val response = IdpResponse.fromResultIntent(data)
+
+                if (resultCode == Activity.RESULT_OK) {
+                    // Successfully signed in
+
+                    viewModel.signedIn = true
+
+                    // ...
+                } else {
+
+                }
+            }
+        }
     }
 }
