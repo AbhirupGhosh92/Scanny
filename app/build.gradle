@@ -63,6 +63,13 @@ android {
             applicationIdSuffix = '.bindasbol'
 
         }
+
+        careercoop {
+            dimension 'default'
+            resValue "string", "app_name", "Career Coop"
+            applicationIdSuffix = '.careercoop'
+
+        }
     }
 }
 

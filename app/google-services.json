@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "703500186253-4n753ii28dr5pia79r9icham163mtvs0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.scanny",
+            "certificate_hash": "d67ba45a2c8b4bd835d88e6efc8dfdbb0d1405d3"
+          }
+        },
+        {
           "client_id": "703500186253-81q9rbdbfsoj50d2sf05l2ni5bjllf9f.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -51,6 +59,59 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "703500186253-4c7si9tt7o7k8mnkiheh14tb27pcpu1s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.scanny.bindasbol",
+            "certificate_hash": "d67ba45a2c8b4bd835d88e6efc8dfdbb0d1405d3"
+          }
+        },
+        {
+          "client_id": "703500186253-aau0evu8qlupij9hnkr0smrjrf990giv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.scanny.bindasbol",
+            "certificate_hash": "16e53951c53bc5ddbbd2c4d33cd6ccb8147ac6e0"
+          }
+        },
+        {
+          "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCIpdbFGNT26PI7N8a3ycW9BrTAiRxPsu0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703500186253:android:22a334f028b7a545c2e8c4",
+        "android_client_info": {
+          "package_name": "com.app.scanny.careercoop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "703500186253-gh4thmljgj4mkfm40j3u6s8h4s04g45p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.scanny.careercoop",
+            "certificate_hash": "16e53951c53bc5ddbbd2c4d33cd6ccb8147ac6e0"
+          }
+        },
         {
           "client_id": "703500186253-md59jq2862qg71vg2jf3sae990fej3s8.apps.googleusercontent.com",
           "client_type": 3

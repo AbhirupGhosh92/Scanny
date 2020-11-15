@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/career_coop_nav"
+    app:startDestination="@id/careerCoopHome">
+
+    <fragment
+        android:id="@+id/careerCoopHome"
+        android:name="com.app.scanny.careercoop.fragments.CareerCoopHome"
+        android:label="fragment_career_coop_home"
+        tools:layout="@layout/fragment_career_coop_home" />
+</navigation>

@@ -37,6 +37,10 @@ class MainActivity : AppCompatActivity() {
             "bindasbol" -> {
                 navController.graph = navController.navInflater.inflate(R.navigation.bindas_bol_nav)
             }
+
+            "careercoop"-> {
+                navController.graph = navController.navInflater.inflate(R.navigation.career_coop_nav)
+            }
         }
 
         setUpUi()
