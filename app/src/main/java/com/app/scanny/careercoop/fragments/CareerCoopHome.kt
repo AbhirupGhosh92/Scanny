@@ -21,6 +21,9 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.remoteconfig.ktx.get
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class CareerCoopHome : Fragment() {
     // TODO: Rename and change types of parameters
@@ -32,6 +35,8 @@ class CareerCoopHome : Fragment() {
     private lateinit var viewModel : BBSharedViewModel
     private lateinit var ccHomeViewModel: CcHomeViewModel
     private lateinit var userType : Array<String>
+    private lateinit var cityList : List<String>
+    private lateinit var skillsList : List<String>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,12 +95,22 @@ class CareerCoopHome : Fragment() {
 
             }
 
+
         }
 
         ccHomeViewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
             ccHomeViewModel.showForm = it.uid.isNullOrEmpty()
             ccHomeViewModel.notifyChange()
+            dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
+            dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
+
         })
+
+        if(Repository.getCityList().isNullOrEmpty().not() && Repository.getSkillsList().isNullOrEmpty().not())
+        {
+            cityList =Gson().fromJson<List<String>>(Repository.getCityList(),object : TypeToken<List<String>>(){}.type)
+            skillsList = Gson().fromJson<List<String>>(Repository.getSkillsList(),object : TypeToken<List<String>>(){}.type)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

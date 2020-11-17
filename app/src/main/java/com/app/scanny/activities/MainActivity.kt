@@ -12,8 +12,13 @@ import androidx.navigation.ui.NavigationUI
 import com.app.scanny.BuildConfig
 import com.app.scanny.R
 import com.app.scanny.databinding.ActivityHomeLayoutBinding
+import com.app.scanny.repository.Repository
+import com.app.scanny.repository.Repository.remoteConfig
 import com.google.android.gms.ads.MobileAds
 import com.google.firebase.FirebaseApp
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,6 +49,25 @@ class MainActivity : AppCompatActivity() {
         }
 
         setUpUi()
+
+        remoteConfig = Firebase.remoteConfig
+        val configSettings = remoteConfigSettings {
+            minimumFetchIntervalInSeconds = if(BuildConfig.DEBUG) 0 else 3600
+        }
+        remoteConfig?.setConfigSettingsAsync(configSettings)
+        remoteConfig?.fetch()?.addOnCompleteListener {
+
+            if (it.isSuccessful) {
+                Log.d("Remote Config","Success")
+                remoteConfig?.activate()
+            }
+            else
+            {
+                Log.d("Remote Config","Failure")
+                Log.d("Remote Config",it.exception?.message.toString())
+            }
+
+        }
 
     }
 

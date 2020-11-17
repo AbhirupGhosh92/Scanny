@@ -12,6 +12,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.Query
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import io.reactivex.rxjava3.core.Observable
 
 object Repository {
@@ -25,8 +29,21 @@ object Repository {
         firestoreSettings = settings
     }
 
+    var remoteConfig : FirebaseRemoteConfig? = null
+
+
     val mAuth = FirebaseAuth.getInstance()
     val objectMapper = ObjectMapper()
+
+     fun  getCityList() : String?
+    {
+       return remoteConfig?.getString("city_list")
+    }
+
+    fun getSkillsList() : String?
+    {
+        return remoteConfig?.getString("skills_list")
+    }
 
     fun checkAccessCc() : Observable<CcUserModel>
     {
