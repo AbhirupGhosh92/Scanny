@@ -16,6 +16,8 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import io.reactivex.rxjava3.core.Observable
 
 object Repository {
@@ -35,14 +37,14 @@ object Repository {
     val mAuth = FirebaseAuth.getInstance()
     val objectMapper = ObjectMapper()
 
-     fun  getCityList() : String?
+     fun  getCityList() : List<String>
     {
-       return remoteConfig?.getString("city_list")
+       return Gson().fromJson<List<String>>(remoteConfig?.getString("city_list"),object : TypeToken<List<String>>(){}.type)
     }
 
-    fun getSkillsList() : String?
+    fun getSkillsList() : List<String>
     {
-        return remoteConfig?.getString("skills_list")
+        return  Gson().fromJson<List<String>>(remoteConfig?.getString("skills_list"),object : TypeToken<List<String>>(){}.type)
     }
 
     fun checkAccessCc() : Observable<CcUserModel>

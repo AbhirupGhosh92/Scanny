@@ -15,15 +15,18 @@ import androidx.lifecycle.ViewModelProvider
 import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
 import com.app.scanny.careercoop.viewodels.CcHomeViewModel
+import com.app.scanny.databinding.ActivityHomeLayoutBinding.inflate
 import com.app.scanny.databinding.FragmentCareerCoopHomeBinding
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.remoteconfig.ktx.get
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.*
 
 class CareerCoopHome : Fragment() {
     // TODO: Rename and change types of parameters
@@ -37,6 +40,7 @@ class CareerCoopHome : Fragment() {
     private lateinit var userType : Array<String>
     private lateinit var cityList : List<String>
     private lateinit var skillsList : List<String>
+    private lateinit var simpleChip: Chip
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,9 +112,64 @@ class CareerCoopHome : Fragment() {
 
         if(Repository.getCityList().isNullOrEmpty().not() && Repository.getSkillsList().isNullOrEmpty().not())
         {
-            cityList =Gson().fromJson<List<String>>(Repository.getCityList(),object : TypeToken<List<String>>(){}.type)
-            skillsList = Gson().fromJson<List<String>>(Repository.getSkillsList(),object : TypeToken<List<String>>(){}.type)
+            cityList = Repository.getCityList()
+            skillsList = Repository.getSkillsList()
         }
+
+        ccHomeViewModel.skillSelectLiveData.observe(viewLifecycleOwner, Observer {
+
+            dataBinding.chipGroupSkills.removeAllViews()
+            if(viewModel.skills.size == 3 && viewModel.skills.contains(it).not())
+            {
+                viewModel.skills.removeFirst()
+            }
+            if(viewModel.skills.contains(it).not())
+                viewModel.skills.add(it)
+            for (item in viewModel.skills)
+            {
+
+                dataBinding.chipGroupSkills.addView(
+                    (requireActivity().layoutInflater.inflate(R.layout.siple_chip
+                        , dataBinding.chipGroupSkills, false) as Chip).apply {
+                        text = item
+                        isCheckable = false
+                        setOnClickListener {view ->
+                            viewModel.skills.remove((view as Chip).text)
+                            dataBinding.chipGroupSkills.removeView(view)
+                        }
+                    }
+                )
+            }
+
+
+        })
+
+        ccHomeViewModel.citySelecteLiveData.observe(viewLifecycleOwner, Observer {
+
+            dataBinding.chipGroupCities.removeAllViews()
+            if(viewModel.cities.size == 3 && viewModel.cities.contains(it).not())
+            {
+                viewModel.cities.removeFirst()
+            }
+            if( viewModel.cities.contains(it).not())
+                viewModel.cities.add(it)
+            for (item in viewModel.cities)
+            {
+
+                dataBinding.chipGroupCities.addView(
+                    (requireActivity().layoutInflater.inflate(R.layout.siple_chip
+                        , dataBinding.chipGroupCities, false) as Chip).apply {
+                        text = item
+                        isCheckable = false
+                        setOnClickListener {view ->
+                            viewModel.cities.remove((view as Chip).text)
+                            dataBinding.chipGroupCities.removeView(view)
+                        }
+                    }
+                )
+            }
+
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

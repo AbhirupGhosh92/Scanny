@@ -21,6 +21,9 @@ class BBSharedViewModel : BaseViewModel() {
      var userModel : UserModel?= null
     var signedIn = false
 
+    var cities = ArrayDeque<String>(3)
+    var skills = ArrayDeque<String>(3)
+
      fun checkAccess() : LiveData<UserModel?>
      {
          return LiveDataReactiveStreams.fromPublisher(
