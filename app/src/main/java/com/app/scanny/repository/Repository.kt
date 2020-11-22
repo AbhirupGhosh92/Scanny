@@ -4,6 +4,7 @@ import android.util.Log
 import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
 import com.app.scanny.bindasbol.serializers.Serializer
+import com.app.scanny.careercoop.models.CcUserDetailsModel
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.utils.ApplicationUtils
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -47,6 +48,28 @@ object Repository {
         return  Gson().fromJson<List<String>>(remoteConfig?.getString("skills_list"),object : TypeToken<List<String>>(){}.type)
     }
 
+    private fun parseCcUser(map : MutableMap<String,Any>)  : CcUserModel
+    {
+        var temp = CcUserModel()
+
+        temp.uid = map["uid"] as String?
+        temp.recruiter =  map["recruiter"] as Boolean?
+
+        var detail = map["detailsModel"] as MutableMap<*, *>
+
+        temp.detailsModel = CcUserDetailsModel()
+        temp.detailsModel?.email = detail["email"] as String?
+        temp.detailsModel?.location = detail["location"] as ArrayList<String>?
+        temp.detailsModel?.skills = detail["skills"] as ArrayList<String>?
+        temp.detailsModel?.name = detail["name"] as String?
+        temp.detailsModel?.phone = detail["phone"] as String?
+        temp.detailsModel?.working = detail["working"] as Boolean?
+        temp.detailsModel?.projects = detail["projects"] as  ArrayList<String>?
+        temp.detailsModel?.testionials = detail["testionials"] as  ArrayList<String>?
+
+        return temp
+    }
+
     fun addUserData(data : CcUserModel) : Observable<String>
     {
         return Observable.create { result ->
@@ -75,10 +98,7 @@ object Repository {
                         if(task.result != null && task.result.isEmpty.not()) {
                             task.result?.forEach {
                                 result.onNext(
-                                    objectMapper.convertValue(
-                                        it.data,
-                                        CcUserModel::class.java
-                                    )
+                                   parseCcUser(it.data)
                                 )
                             }
                         }
