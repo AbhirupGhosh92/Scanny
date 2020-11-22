@@ -62,24 +62,26 @@ class CcHomeViewModel : BaseViewModel()
             .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
             .create()
 
+        dialog.show()
+
         dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
             projectLiveData.value =  dialog?.findViewById<EditText>(R.id.tv_resp).text.toString()
+            dialog?.dismiss()
         }
-
-        dialog.show()
     }
 
     fun addTestionial(view : View)
     {
        var dialog =  AlertDialog.Builder(view.context)
-            .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
             .create()
+
+        dialog.show()
 
         dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
             testimonialLiveData.value =  dialog?.findViewById<EditText>(R.id.tv_resp).text.toString()
+            dialog?.dismiss()
         }
 
-        dialog.show()
     }
 
 
