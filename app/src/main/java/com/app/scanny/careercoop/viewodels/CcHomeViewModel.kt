@@ -73,6 +73,7 @@ class CcHomeViewModel : BaseViewModel()
     fun addTestionial(view : View)
     {
        var dialog =  AlertDialog.Builder(view.context)
+           .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
             .create()
 
         dialog.show()

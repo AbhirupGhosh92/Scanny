@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.TextView
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -173,12 +175,20 @@ class CareerCoopHome : Fragment() {
 
         ccHomeViewModel.testimonialLiveData.observe(viewLifecycleOwner,Observer {
             var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+            view.findViewById<TextView>(R.id.tv_resp).text = it
+            view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
+
+            }
             dataBinding.viewTestimonials.addView(view)
         })
 
         ccHomeViewModel.projectLiveData.observe(viewLifecycleOwner, Observer {
             var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
-            dataBinding.viewTestimonials.addView(view)
+            view.findViewById<TextView>(R.id.tv_resp).text = it
+            view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
+
+            }
+            dataBinding.viewProjects.addView(view)
         })
 
     }
