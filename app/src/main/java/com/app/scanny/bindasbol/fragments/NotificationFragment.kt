@@ -32,7 +32,8 @@ class NotificationFragment : Fragment() {
     private lateinit var viewModel: BBSharedViewModel
     private lateinit var chatViewModel : ChatHomeViewModel
     private var mAuth: FirebaseAuth? = null
-    private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build())
+    private val providers = arrayListOf(AuthUI.IdpConfig.GoogleBuilder().build()
+        ,AuthUI.IdpConfig.EmailBuilder().build())
     private  val RC_SIGN_IN = 556
     private var chatItems = arrayListOf<BolModel>()
 
