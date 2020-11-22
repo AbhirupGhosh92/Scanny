@@ -36,6 +36,8 @@ class CareerCoopHome : Fragment() {
     private lateinit var cityList : List<String>
     private lateinit var skillsList : List<String>
     private lateinit var simpleChip: Chip
+    private  var proList = ArrayList<String>()
+    private  var testList = ArrayList<String>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -169,22 +171,41 @@ class CareerCoopHome : Fragment() {
         })
 
         viewModel.testimonialLiveData.observe(viewLifecycleOwner,Observer {
-            var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
-            view.findViewById<TextView>(R.id.tv_resp).text = it
-            view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
 
+            testList.clear()
+            testList.addAll(it)
+            dataBinding.viewTestimonials.removeAllViews()
+            for(i  in 0 until  testList.size)
+            {
+                var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+                view.findViewById<TextView>(R.id.tv_resp).text = testList[i]
+                view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
+                    viewModel.deleteTestimonial(i)
+                }
+                dataBinding.viewTestimonials.addView(view)
             }
-            dataBinding.viewTestimonials.addView(view)
         })
 
         viewModel.projectLiveData.observe(viewLifecycleOwner, Observer {
-            var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
-            view.findViewById<TextView>(R.id.tv_resp).text = it
-            view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
+            proList.clear()
+            proList.addAll(it)
 
+            dataBinding.viewProjects.removeAllViews()
+            for(i in 0 until  proList.size)
+            {
+                var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+                view.findViewById<TextView>(R.id.tv_resp).text = proList[i]
+                view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
+                    viewModel.deleteProject(i)
+                }
+                dataBinding.viewProjects.addView(view)
             }
-            dataBinding.viewProjects.addView(view)
         })
+
+        dataBinding.swWorking.isChecked = viewModel.isWorking
+        dataBinding.swWorking.setOnCheckedChangeListener { compoundButton, b ->
+            viewModel.isWorking = b
+        }
 
     }
 

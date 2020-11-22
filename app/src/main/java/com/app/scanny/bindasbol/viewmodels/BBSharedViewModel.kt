@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
 import androidx.lifecycle.*
 import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
@@ -27,6 +28,8 @@ class BBSharedViewModel : BaseViewModel() {
 
      var userModel : UserModel?= null
     var signedIn = false
+    var testimmonials : ArrayList<String> = ArrayList()
+    var projects : ArrayList<String> = ArrayList()
 
     var cities = ArrayDeque<String>(3)
     var skills = ArrayDeque<String>(3)
@@ -37,8 +40,9 @@ class BBSharedViewModel : BaseViewModel() {
     var isRecruiter = true
     var citySelecteLiveData = MutableLiveData<String>()
     var skillSelectLiveData = MutableLiveData<String>()
-    var testimonialLiveData = MutableLiveData<String>()
-    var projectLiveData = MutableLiveData<String>()
+    var testimonialLiveData = MutableLiveData<ArrayList<String>>()
+    var projectLiveData = MutableLiveData<ArrayList<String>>()
+    var isWorking = false
 
      fun checkAccess() : LiveData<UserModel?>
      {
@@ -80,11 +84,30 @@ class BBSharedViewModel : BaseViewModel() {
             .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
             .create()
 
-        dialog.show()
+        if(projectLiveData.value.isNullOrEmpty().not() &&  projectLiveData.value?.size!! < 3) {
+            dialog.show()
+            dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
-        dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
-            projectLiveData.value =  dialog?.findViewById<EditText>(R.id.tv_resp).text.toString()
-            dialog?.dismiss()
+                    projectLiveData.value?.add(dialog?.findViewById<EditText>(R.id.tv_resp).text.toString())
+                    projectLiveData.value = projectLiveData.value
+                    dialog?.dismiss()
+            }
+        }
+        else if(projectLiveData.value.isNullOrEmpty())
+        {
+            dialog.show()
+            dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+
+                    var item= ArrayList<String>()
+                    item.add(dialog?.findViewById<EditText>(R.id.tv_resp).text.toString())
+                    projectLiveData.value = item
+                    dialog?.dismiss()
+
+            }
+
+        }else
+        {
+            Toast.makeText(view.context,view.context.resources.getString(R.string.cannot_add_pro),Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -94,12 +117,49 @@ class BBSharedViewModel : BaseViewModel() {
             .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
             .create()
 
-        dialog.show()
+        if(testimonialLiveData.value.isNullOrEmpty().not() &&  testimonialLiveData.value?.size!! < 3) {
+            dialog.show()
+            dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
-        dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
-            testimonialLiveData.value =  dialog?.findViewById<EditText>(R.id.tv_resp).text.toString()
-            dialog?.dismiss()
+                testimonialLiveData.value?.add(dialog?.findViewById<EditText>(R.id.tv_resp).text.toString())
+                testimonialLiveData.value = testimonialLiveData.value
+                dialog?.dismiss()
+            }
         }
+        else if(testimonialLiveData.value.isNullOrEmpty())
+        {
+            dialog.show()
+            dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+
+                var item= ArrayList<String>()
+                item.add(dialog?.findViewById<EditText>(R.id.tv_resp).text.toString())
+                testimonialLiveData.value = item
+                dialog?.dismiss()
+
+            }
+        }
+        else
+        {
+            Toast.makeText(view.context,view.context.resources.getString(R.string.cannot_add_test),Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+    fun deleteProject(position : Int)
+    {
+        projectLiveData.value?.removeAt(position)
+        projectLiveData.value = projectLiveData.value
+    }
+
+
+    fun deleteTestimonial(position : Int)
+    {
+        testimonialLiveData.value?.removeAt(position)
+        testimonialLiveData.value = testimonialLiveData.value
+    }
+
+    fun submitData(view : View)
+    {
 
     }
 }

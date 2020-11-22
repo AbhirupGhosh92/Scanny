@@ -31,7 +31,8 @@
     <string name="testionials">Testimonials</string>
     <string name="add">Add</string>
     <string name="working">Working</string>
-
+    <string name="cannot_add_pro">Cannot add more than three projects</string>
+    <string name="cannot_add_test">Cannot add more than three testimonials</string>
     <array name="user_type">
         <item>Recruiter</item>
         <item>Candidate</item>
