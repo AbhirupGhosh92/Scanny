@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
 import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
+import com.app.scanny.careercoop.models.CcUserDetailsModel
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.data.model.User
@@ -22,15 +23,15 @@ import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
 import org.reactivestreams.Publisher
+import java.lang.reflect.Array
 
 class BBSharedViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
 
-     var userModel : UserModel?= null
+    var userModel : UserModel?= null
     var signedIn = false
     var testimmonials : ArrayList<String> = ArrayList()
     var projects : ArrayList<String> = ArrayList()
-
     var cities = ArrayDeque<String>(3)
     var skills = ArrayDeque<String>(3)
     var name = ""
@@ -160,6 +161,71 @@ class BBSharedViewModel : BaseViewModel() {
 
     fun submitData(view : View)
     {
+        if(name.isNullOrEmpty() || email.isNullOrEmpty() || phone.isNullOrEmpty())
+        {
+            Toast.makeText(view.context,view.context.resources.getString(R.string.fill_data),Toast.LENGTH_SHORT).show()
+        }
+        else if(skills.isNullOrEmpty() || cities.isNullOrEmpty())
+        {
+            Toast.makeText(view.context,view.context.resources.getString(R.string.fill_skills),Toast.LENGTH_SHORT).show()
+        }
+        else {
 
+            if (isRecruiter) {
+                Repository.addUserData(
+                    CcUserModel(
+                        Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                            skills.toArrayList(),
+                            cities.toArrayList(),
+                            name,
+                            phone,
+                            email
+                        )
+                    )
+                ).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe ({
+                        showForm = false
+                        notifyChange()
+                    },{
+
+                    })
+            } else {
+
+                Repository.addUserData(
+                    CcUserModel(
+                        Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                            skills.toArrayList(),
+                            cities.toArrayList(),
+                            name,
+                            phone,
+                            email,
+                            projectLiveData.value!!,
+                            testimonialLiveData.value!!,
+                            isWorking
+                        )
+                    )
+                ).subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe ({
+                        showForm = false
+                        notifyChange()
+                    },{
+
+                    })
+            }
+        }
+    }
+
+    private fun ArrayDeque<String>.toArrayList() : ArrayList<String>
+    {
+        var temp = ArrayList<String>()
+
+        for(item in this)
+        {
+            temp.add(item)
+        }
+
+        return temp
     }
 }

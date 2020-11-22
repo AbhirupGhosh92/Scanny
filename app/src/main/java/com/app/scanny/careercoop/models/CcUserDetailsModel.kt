@@ -1,9 +1,11 @@
 package com.app.scanny.careercoop.models
 
-data class CcUserDetailsModel(var skills : List<String>?,
-                              var location : List<String>?,
+data class CcUserDetailsModel(var skills : ArrayList<String>?,
+                              var location : ArrayList<String>?,
+                              var name : String? = null,
                               var phone : String? = null,
                               var email : String? = null,
-                              var projects : List<String>,
-                              var testionials : List<String>
+                              var projects : ArrayList<String>? = null,
+                              var testionials : ArrayList<String>? = null,
+                              var working : Boolean? = false
                               )

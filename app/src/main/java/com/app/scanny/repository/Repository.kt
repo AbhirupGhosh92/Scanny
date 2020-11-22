@@ -47,6 +47,22 @@ object Repository {
         return  Gson().fromJson<List<String>>(remoteConfig?.getString("skills_list"),object : TypeToken<List<String>>(){}.type)
     }
 
+    fun addUserData(data : CcUserModel) : Observable<String>
+    {
+        return Observable.create { result ->
+            db.collection("cc_user_data")
+                .document(data.uid.toString())
+                .set(data)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        result.onNext("OK")
+                    } else {
+                        it.exception?.printStackTrace()
+                    }
+                }
+        }
+    }
+
     fun checkAccessCc() : Observable<CcUserModel>
     {
         return Observable.create {result ->

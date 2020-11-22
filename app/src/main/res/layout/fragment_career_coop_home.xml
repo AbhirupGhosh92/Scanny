@@ -54,6 +54,7 @@
                             android:id="@+id/edt_name_txt"
                             style="@style/TextInputEditTextTheme"
                             android:layout_width="match_parent"
+                            android:inputType="textPersonName"
                             android:layout_height="wrap_content"
                             android:hint="@string/name"
                             android:text="@={ccHomeViewodel.name}" />
@@ -77,6 +78,9 @@
                             style="@style/TextInputEditTextTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="phone"
+                            android:maxLength="10"
+                            android:digits="0123456789"
                             android:hint="@string/phone"
                             android:text="@={ccHomeViewodel.phone}" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -99,6 +103,7 @@
                             style="@style/TextInputEditTextTheme"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:inputType="textEmailAddress"
                             android:hint="@string/email"
                             android:text="@={ccHomeViewodel.email}" />
                     </com.google.android.material.textfield.TextInputLayout>
