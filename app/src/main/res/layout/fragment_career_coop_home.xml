@@ -203,6 +203,33 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/sp_user" />
 
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_add_projects"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_projects"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        android:onClick="@{ccHomeViewodel::addProject}"
+                        android:visibility="@{ccHomeViewodel.isRecruiter ? View.GONE  : View.VISIBLE}"
+                        app:layout_constraintStart_toEndOf="@+id/tv_projects"
+                        app:layout_constraintTop_toTopOf="@+id/tv_projects"
+                        app:srcCompat="@drawable/ic_baseline_add" />
+
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:id="@+id/view_projects"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_projects"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+
+
                     <TextView
                         android:id="@+id/tv_testimonials"
                         style="@style/BolTextStyle"
@@ -213,9 +240,35 @@
                         android:text="@string/testionials"
                         android:visibility="@{ccHomeViewodel.isRecruiter ? View.GONE  : View.VISIBLE}"
                         app:layout_constraintEnd_toEndOf="parent"
+                        android:onClick="@{ccHomeViewodel::addTestionial}"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/tv_projects" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_add_testimonnials"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="32dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_testimonials"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        android:visibility="@{ccHomeViewodel.isRecruiter ? View.GONE  : View.VISIBLE}"
+                        app:layout_constraintStart_toEndOf="@+id/tv_testimonials"
+                        app:layout_constraintTop_toTopOf="@+id/tv_testimonials"
+                        app:srcCompat="@drawable/ic_baseline_add" />
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:id="@+id/view_testimonials"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@id/tv_testimonials"
+                        app:layout_constraintStart_toStartOf="parent"/>
+
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

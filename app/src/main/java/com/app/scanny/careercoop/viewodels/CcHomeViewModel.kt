@@ -2,8 +2,11 @@ package com.app.scanny.careercoop.viewodels
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ListAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.LiveDataReactiveStreams
@@ -13,6 +16,7 @@ import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.BaseViewModel
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.repository.Repository
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import io.reactivex.rxjava3.core.BackpressureStrategy
 
 class CcHomeViewModel : BaseViewModel()
@@ -24,6 +28,8 @@ class CcHomeViewModel : BaseViewModel()
     var isRecruiter = true
     var citySelecteLiveData = MutableLiveData<String>()
     var skillSelectLiveData = MutableLiveData<String>()
+    var testimonialLiveData = MutableLiveData<String>()
+    var projectLiveData = MutableLiveData<String>()
 
     fun checkCcAccess() : LiveData<CcUserModel>
     {
@@ -48,6 +54,32 @@ class CcHomeViewModel : BaseViewModel()
                 skillSelectLiveData.value =  Repository.getSkillsList()[p1]
             }.create()
             .show()
+    }
+
+    fun addProject(view : View)
+    {
+       var dialog =  AlertDialog.Builder(view.context)
+            .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
+            .create()
+
+        dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+            projectLiveData.value =  dialog?.findViewById<EditText>(R.id.tv_resp).text.toString()
+        }
+
+        dialog.show()
+    }
+
+    fun addTestionial(view : View)
+    {
+       var dialog =  AlertDialog.Builder(view.context)
+            .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
+            .create()
+
+        dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+            testimonialLiveData.value =  dialog?.findViewById<EditText>(R.id.tv_resp).text.toString()
+        }
+
+        dialog.show()
     }
 
 

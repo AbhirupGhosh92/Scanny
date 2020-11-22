@@ -170,6 +170,17 @@ class CareerCoopHome : Fragment() {
             }
 
         })
+
+        ccHomeViewModel.testimonialLiveData.observe(viewLifecycleOwner,Observer {
+            var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+            dataBinding.viewTestimonials.addView(view)
+        })
+
+        ccHomeViewModel.projectLiveData.observe(viewLifecycleOwner, Observer {
+            var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+            dataBinding.viewTestimonials.addView(view)
+        })
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
