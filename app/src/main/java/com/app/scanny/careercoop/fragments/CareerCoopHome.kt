@@ -110,6 +110,7 @@ class CareerCoopHome : Fragment() {
 
         viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
             viewModel.showForm = it.uid.isNullOrEmpty()
+            viewModel.loaderVisibility = View.GONE
             viewModel.notifyChange()
             dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
             dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())

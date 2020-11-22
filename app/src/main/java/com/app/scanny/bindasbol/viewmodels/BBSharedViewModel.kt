@@ -38,6 +38,7 @@ class BBSharedViewModel : BaseViewModel() {
     var email = ""
     var phone = ""
     var showForm = false
+    var loaderVisibility = View.VISIBLE
     var isRecruiter = true
     var citySelecteLiveData = MutableLiveData<String>()
     var skillSelectLiveData = MutableLiveData<String>()
