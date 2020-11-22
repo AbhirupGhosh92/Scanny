@@ -5,7 +5,7 @@
     <data>
         <variable
             name="ccHomeViewodel"
-            type="com.app.scanny.careercoop.viewodels.CcHomeViewModel" />
+            type="com.app.scanny.bindasbol.viewmodels.BBSharedViewModel" />
         <import
             type="android.view.View" />
     </data>
@@ -283,16 +283,18 @@
                         android:text="@string/working"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
+                        android:visibility="@{ccHomeViewodel.isRecruiter ? View.GONE  : View.VISIBLE}"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/view_testimonials" />
 
-                    <Switch
+                    <androidx.appcompat.widget.SwitchCompat
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         app:layout_constraintBottom_toBottomOf="@+id/tv_working"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="1.0"
+                        android:visibility="@{ccHomeViewodel.isRecruiter ? View.GONE  : View.VISIBLE}"
                         app:layout_constraintStart_toEndOf="@+id/tv_working"
                         app:layout_constraintTop_toTopOf="@+id/tv_working" />
 

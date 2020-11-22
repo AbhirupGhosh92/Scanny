@@ -16,8 +16,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
-import com.app.scanny.careercoop.viewodels.CcHomeViewModel
-import com.app.scanny.databinding.ActivityHomeLayoutBinding.inflate
 import com.app.scanny.databinding.FragmentCareerCoopHomeBinding
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
@@ -25,10 +23,6 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.remoteconfig.ktx.get
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.util.*
 
 class CareerCoopHome : Fragment() {
     // TODO: Rename and change types of parameters
@@ -38,7 +32,6 @@ class CareerCoopHome : Fragment() {
     private  val RC_SIGN_IN = 555
     private lateinit var dataBinding : FragmentCareerCoopHomeBinding
     private lateinit var viewModel : BBSharedViewModel
-    private lateinit var ccHomeViewModel: CcHomeViewModel
     private lateinit var userType : Array<String>
     private lateinit var cityList : List<String>
     private lateinit var skillsList : List<String>
@@ -62,8 +55,7 @@ class CareerCoopHome : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(requireActivity())[BBSharedViewModel::class.java]
-        ccHomeViewModel = ViewModelProvider(this)[CcHomeViewModel::class.java]
-        dataBinding.ccHomeViewodel = ccHomeViewModel
+        dataBinding.ccHomeViewodel = viewModel
 
         userType = resources.getStringArray(R.array.user_type)
 
@@ -89,12 +81,15 @@ class CareerCoopHome : Fragment() {
     private fun renderUi()
     {
 
+        viewModel.notifyChange()
         dataBinding.spUser.adapter = ArrayAdapter<String>(requireContext(),R.layout.spinner_text,userType)
+
+        dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
 
         dataBinding.spUser.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                ccHomeViewModel.isRecruiter = p2 == 0
-                ccHomeViewModel.notifyChange()
+                viewModel.isRecruiter = p2 == 0
+                viewModel.notifyChange()
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -104,9 +99,9 @@ class CareerCoopHome : Fragment() {
 
         }
 
-        ccHomeViewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
-            ccHomeViewModel.showForm = it.uid.isNullOrEmpty()
-            ccHomeViewModel.notifyChange()
+        viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
+            viewModel.showForm = it.uid.isNullOrEmpty()
+            viewModel.notifyChange()
             dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
             dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
 
@@ -118,7 +113,7 @@ class CareerCoopHome : Fragment() {
             skillsList = Repository.getSkillsList()
         }
 
-        ccHomeViewModel.skillSelectLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.skillSelectLiveData.observe(viewLifecycleOwner, Observer {
 
             dataBinding.chipGroupSkills.removeAllViews()
             if(viewModel.skills.size == 3 && viewModel.skills.contains(it).not())
@@ -146,7 +141,7 @@ class CareerCoopHome : Fragment() {
 
         })
 
-        ccHomeViewModel.citySelecteLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.citySelecteLiveData.observe(viewLifecycleOwner, Observer {
 
             dataBinding.chipGroupCities.removeAllViews()
             if(viewModel.cities.size == 3 && viewModel.cities.contains(it).not())
@@ -173,7 +168,7 @@ class CareerCoopHome : Fragment() {
 
         })
 
-        ccHomeViewModel.testimonialLiveData.observe(viewLifecycleOwner,Observer {
+        viewModel.testimonialLiveData.observe(viewLifecycleOwner,Observer {
             var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
             view.findViewById<TextView>(R.id.tv_resp).text = it
             view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
@@ -182,7 +177,7 @@ class CareerCoopHome : Fragment() {
             dataBinding.viewTestimonials.addView(view)
         })
 
-        ccHomeViewModel.projectLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.projectLiveData.observe(viewLifecycleOwner, Observer {
             var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
             view.findViewById<TextView>(R.id.tv_resp).text = it
             view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
