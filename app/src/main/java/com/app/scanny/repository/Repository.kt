@@ -116,6 +116,36 @@ object Repository {
         }
     }
 
+    fun getMyCounts() : Observable<CcUserModel>
+    {
+        return Observable.create {result ->
+            db.collection("cc_user_data")
+                .whereEqualTo("uid",mAuth.currentUser?.uid.toString())
+                .get().addOnCompleteListener {task  ->
+
+                    if (task.isSuccessful)
+                    {
+                        if(task.result != null && task.result.isEmpty.not()) {
+                            task.result?.forEach {
+                                result.onNext(
+                                    parseCcUser(it.data)
+                                )
+                            }
+                        }
+                        else
+                        {
+                            result.onNext(CcUserModel())
+                        }
+                    }
+                    else
+                    {
+                        Log.e("Error",task.exception.toString())
+                        result.onNext(null)
+                    }
+                }
+        }
+    }
+
     fun checkAcces() : Observable<UserModel?> {
         return  Observable.create {result  ->
                     db.collection("user_data")

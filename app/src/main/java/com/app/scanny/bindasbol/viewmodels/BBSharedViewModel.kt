@@ -55,7 +55,8 @@ class BBSharedViewModel : BaseViewModel() {
 
     fun checkCcAccess() : LiveData<CcUserModel>
     {
-        return LiveDataReactiveStreams.fromPublisher(Repository.checkAccessCc().toFlowable(BackpressureStrategy.BUFFER))
+        return LiveDataReactiveStreams.fromPublisher(
+            Repository.checkAccessCc().toFlowable(BackpressureStrategy.BUFFER))
     }
 
     fun citiesClick(view  : View)

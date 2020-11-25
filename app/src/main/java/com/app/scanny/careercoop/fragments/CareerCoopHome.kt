@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.app.scanny.BuildConfig
 import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
@@ -147,9 +148,11 @@ class CareerCoopHome : Fragment() {
                     }
                 )
             }
-
-
         })
+
+        dataBinding.floatingActionButton.setOnClickListener {
+            findNavController().navigate(R.id.action_careerCoopHome_to_careerCoopAddUpdate)
+        }
 
         viewModel.citySelecteLiveData.observe(viewLifecycleOwner, Observer {
 
