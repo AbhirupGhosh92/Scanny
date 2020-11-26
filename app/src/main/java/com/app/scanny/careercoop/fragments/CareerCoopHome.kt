@@ -111,14 +111,29 @@ class CareerCoopHome : Fragment() {
 
         }
 
-        viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
-            viewModel.showForm = it.uid.isNullOrEmpty()
+        if(arguments?.getString("state").isNullOrEmpty()) {
+            activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
+            viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
+                viewModel.showForm = it.uid.isNullOrEmpty()
+                viewModel.loaderVisibility = View.GONE
+                viewModel.notifyChange()
+                dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
+                dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
+            })
+        }
+        else if(arguments?.getString("state").equals("add"))
+        {
+            activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.GONE
+            viewModel.showForm = true
             viewModel.loaderVisibility = View.GONE
             viewModel.notifyChange()
             dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
             dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
+        }
+        else
+        {
 
-        })
+        }
 
         if(Repository.getCityList().isNullOrEmpty().not() && Repository.getSkillsList().isNullOrEmpty().not())
         {
@@ -153,7 +168,9 @@ class CareerCoopHome : Fragment() {
         })
 
         dataBinding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_careerCoopHome_to_careerCoopAddUpdate)
+            findNavController().navigate(R.id.action_careerCoopHome_to_careerCoopHome2,Bundle().apply {
+                putString("state","add")
+            })
         }
 
         viewModel.citySelecteLiveData.observe(viewLifecycleOwner, Observer {

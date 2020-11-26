@@ -11,17 +11,17 @@
         android:label="Home"
         tools:layout="@layout/fragment_career_coop_home" >
         <action
-            android:id="@+id/action_careerCoopHome_to_careerCoopAddUpdate"
-            app:destination="@id/careerCoopAddUpdate" />
+            android:id="@+id/action_careerCoopHome_to_careerCoopHome2"
+            app:destination="@id/careerCoopHome2" />
     </fragment>
+    <fragment
+        android:id="@+id/careerCoopHome2"
+        android:name="com.app.scanny.careercoop.fragments.CareerCoopHome"
+        android:label="Home"
+        tools:layout="@layout/fragment_career_coop_home" />
     <fragment
         android:id="@+id/ccUpdatesFragment"
         android:name="com.app.scanny.careercoop.fragments.CCUpdatesFragment"
         android:label="Updates"
         tools:layout="@layout/fragment_c_c_updates" />
-    <fragment
-        android:id="@+id/careerCoopAddUpdate"
-        tools:layout="@layout/fragment_career_coop_add_update"
-        android:name="com.app.scanny.careercoop.fragments.CareerCoopAddUpdate"
-        android:label="CareerCoopAddUpdate" />
 </navigation>
