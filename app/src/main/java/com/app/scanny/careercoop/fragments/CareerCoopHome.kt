@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.app.scanny.BuildConfig
 import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
+import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.databinding.FragmentCareerCoopHomeBinding
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
@@ -112,23 +113,32 @@ class CareerCoopHome : Fragment() {
         }
 
         if(arguments?.getString("state").isNullOrEmpty()) {
+            viewModel.state = ""
             activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
             viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
-                viewModel.showForm = it.uid.isNullOrEmpty()
+                viewModel.showForm = it.firstOrNull()?.uid.isNullOrEmpty()
+                viewModel.isRecruiter = if(it.firstOrNull()?.recruiter == null) true else it.firstOrNull()?.recruiter!!
                 viewModel.loaderVisibility = View.GONE
                 viewModel.notifyChange()
+                viewModel.content = it.first()
                 dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
                 dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
             })
         }
         else if(arguments?.getString("state").equals("add"))
         {
+            viewModel.state = "add"
             activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.GONE
             viewModel.showForm = true
             viewModel.loaderVisibility = View.GONE
-            viewModel.notifyChange()
             dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
             dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
+            dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
+            dataBinding.spUser.isEnabled = false
+            dataBinding.spUser.isClickable = false
+            viewModel.phone = viewModel.content.detailsModel?.phone.toString()
+            viewModel.notifyChange()
+
         }
         else
         {

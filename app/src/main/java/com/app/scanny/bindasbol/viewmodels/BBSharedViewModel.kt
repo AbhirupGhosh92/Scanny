@@ -1,5 +1,6 @@
 package com.app.scanny.bindasbol.viewmodels
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.lifecycle.*
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
 import com.app.scanny.bindasbol.models.BolModel
@@ -45,18 +47,22 @@ class BBSharedViewModel : BaseViewModel() {
     var testimonialLiveData = MutableLiveData<ArrayList<String>>()
     var projectLiveData = MutableLiveData<ArrayList<String>>()
     var isWorking = false
+    lateinit var content : CcUserModel
+    var state : String = ""
 
-     fun checkAccess() : LiveData<UserModel?>
+    fun checkAccess() : LiveData<UserModel?>
      {
          return LiveDataReactiveStreams.fromPublisher(
               Repository.checkAcces().toFlowable(BackpressureStrategy.BUFFER)
          )
      }
 
-    fun checkCcAccess() : LiveData<CcUserModel>
+    fun checkCcAccess() : LiveData<List<CcUserModel>>
     {
-        return LiveDataReactiveStreams.fromPublisher(
-            Repository.checkAccessCc().toFlowable(BackpressureStrategy.BUFFER))
+
+        return Repository.checkAccessCc()
+            .toFlowable(BackpressureStrategy.BUFFER).toLiveData()
+
     }
 
     fun citiesClick(view  : View)
@@ -187,8 +193,14 @@ class BBSharedViewModel : BaseViewModel() {
                 ).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe ({
-                        showForm = false
-                        notifyChange()
+                        if(state.isNullOrEmpty()) {
+                            showForm = false
+                            notifyChange()
+                        }
+                        else if(state == "add")
+                        {
+                            (view.context as Activity).onBackPressed()
+                        }
                     },{
 
                     })
@@ -202,16 +214,23 @@ class BBSharedViewModel : BaseViewModel() {
                             name,
                             phone,
                             email,
-                            projectLiveData.value!!,
-                            testimonialLiveData.value!!,
+                            projectLiveData.value,
+                            testimonialLiveData.value,
                             isWorking
                         )
                     )
                 ).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe ({
-                        showForm = false
-                        notifyChange()
+                        if(state.isNullOrEmpty()) {
+                            showForm = false
+                            notifyChange()
+                        }
+                        else if(state == "add")
+                        {
+                            (view.context as Activity).onBackPressed()
+                        }
+
                     },{
 
                     })

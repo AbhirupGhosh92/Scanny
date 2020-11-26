@@ -19,6 +19,8 @@ import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import io.reactivex.rxjava3.core.BackpressureStrategy
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 
 object Repository {
@@ -48,14 +50,14 @@ object Repository {
         return  Gson().fromJson<List<String>>(remoteConfig?.getString("skills_list"),object : TypeToken<List<String>>(){}.type)
     }
 
-    private fun parseCcUser(map : MutableMap<String,Any>)  : CcUserModel
+    private fun parseCcUser(map : MutableMap<String?,Any?>?)  : CcUserModel
     {
         var temp = CcUserModel()
 
-        temp.uid = map["uid"] as String?
-        temp.recruiter =  map["recruiter"] as Boolean?
+        temp.uid = map?.get("uid") as String?
+        temp.recruiter =  map?.get("recruiter") as Boolean?
 
-        var detail = map["detailsModel"] as MutableMap<*, *>
+        var detail = map?.get("detailsModel") as MutableMap<*, *>
 
         temp.detailsModel = CcUserDetailsModel()
         temp.detailsModel?.email = detail["email"] as String?
@@ -85,30 +87,24 @@ object Repository {
         }
     }
 
-    fun checkAccessCc() : Observable<CcUserModel>
+    fun checkAccessCc() : Observable<List<CcUserModel>>
     {
-        return Observable.create {result ->
+        return Observable.create { result ->
+            var list = ArrayList<CcUserModel>()
             db.collection("cc_user_data")
-                .whereEqualTo("uid",mAuth.currentUser?.uid.toString())
-                .get().addOnCompleteListener {task  ->
-
-                    if (task.isSuccessful)
-                    {
-                        if(task.result != null && task.result.isEmpty.not()) {
-                            task.result?.forEach {
-                                result.onNext(
-                                   parseCcUser(it.data)
-                                )
+                .whereEqualTo("uid", mAuth.currentUser?.uid.toString())
+                .get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        if (task.result != null && task.result.isEmpty.not()) {
+                            task.result.documents.forEach {
+                                   list.add(parseCcUser(it.data))
                             }
+                            result.onNext(list)
+                        } else {
+                            result.onNext(list)
                         }
-                        else
-                        {
-                            result.onNext(CcUserModel())
-                        }
-                    }
-                    else
-                    {
-                        Log.e("Error",task.exception.toString())
+                    } else {
+                        Log.e("Error", task.exception.toString())
                         result.onNext(null)
                     }
                 }
