@@ -74,8 +74,7 @@ object Repository {
     {
         return Observable.create { result ->
             db.collection("cc_user_data")
-                .document(data.uid.toString())
-                .set(data)
+                .add(data)
                 .addOnCompleteListener {
                     if (it.isSuccessful) {
                         result.onNext("OK")

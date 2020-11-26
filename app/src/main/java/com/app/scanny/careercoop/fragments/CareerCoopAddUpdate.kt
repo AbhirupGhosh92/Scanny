@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.app.scanny.R
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.databinding.FragmentCareerCoopAddUpdateBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class CareerCoopAddUpdate : Fragment() {
 
@@ -32,6 +33,7 @@ class CareerCoopAddUpdate : Fragment() {
         super.onActivityCreated(savedInstanceState)
         payload = arguments?.getParcelable("payload")
         renderUi()
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.GONE
     }
 
     private fun renderUi()

@@ -24,6 +24,7 @@ import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.ads.MobileAds
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.firebase.auth.FirebaseAuth
 
@@ -64,6 +65,7 @@ class CareerCoopHome : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
         viewModel = ViewModelProvider(requireActivity())[BBSharedViewModel::class.java]
         dataBinding.ccHomeViewodel = viewModel
 
