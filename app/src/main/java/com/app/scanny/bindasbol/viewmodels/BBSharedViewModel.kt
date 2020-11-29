@@ -47,6 +47,7 @@ class BBSharedViewModel : BaseViewModel() {
     var testimonialLiveData = MutableLiveData<ArrayList<String>>()
     var projectLiveData = MutableLiveData<ArrayList<String>>()
     var isWorking = false
+    var id : String = ""
     lateinit var content : CcUserModel
     var state : String = ""
 
@@ -179,61 +180,117 @@ class BBSharedViewModel : BaseViewModel() {
         }
         else {
 
-            if (isRecruiter) {
-                Repository.addUserData(
-                    CcUserModel(
-                        Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
-                            skills.toArrayList(),
-                            cities.toArrayList(),
-                            name,
-                            phone,
-                            email
+            if (state != "update") {
+
+                if (isRecruiter) {
+                    Repository.addUserData(
+                        CcUserModel(
+                            Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                                skills.toArrayList(),
+                                cities.toArrayList(),
+                                name,
+                                phone,
+                                email
+                            )
                         )
-                    )
-                ).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe ({
-                        if(state.isNullOrEmpty()) {
-                            showForm = false
-                            notifyChange()
-                        }
-                        else if(state == "add")
-                        {
-                            (view.context as Activity).onBackPressed()
-                        }
-                    },{
+                    ).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            if (state.isNullOrEmpty()) {
+                                showForm = false
+                                notifyChange()
+                            } else if (state == "add" || state == "update") {
+                                (view.context as Activity).onBackPressed()
+                            }
+                        }, {
 
-                    })
-            } else {
+                        })
+                } else {
 
-                Repository.addUserData(
-                    CcUserModel(
-                        Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
-                            skills.toArrayList(),
-                            cities.toArrayList(),
-                            name,
-                            phone,
-                            email,
-                            projectLiveData.value,
-                            testimonialLiveData.value,
-                            isWorking
+                    Repository.addUserData(
+                        CcUserModel(
+                            Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                                skills.toArrayList(),
+                                cities.toArrayList(),
+                                name,
+                                phone,
+                                email,
+                                projectLiveData.value,
+                                testimonialLiveData.value,
+                                isWorking
+                            )
                         )
-                    )
-                ).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe ({
-                        if(state.isNullOrEmpty()) {
-                            showForm = false
-                            notifyChange()
-                        }
-                        else if(state == "add")
-                        {
-                            (view.context as Activity).onBackPressed()
-                        }
+                    ).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            if (state.isNullOrEmpty()) {
+                                showForm = false
+                                notifyChange()
+                            } else if (state == "add" || state == "update") {
+                                (view.context as Activity).onBackPressed()
+                            }
 
-                    },{
+                        }, {
 
-                    })
+                        })
+                }
+            }
+            else
+            {
+                if (isRecruiter) {
+                    Repository.updateUserData(
+                        id,
+                        CcUserModel(
+                            Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                                skills.toArrayList(),
+                                cities.toArrayList(),
+                                name,
+                                phone,
+                                email
+                            )
+                        )
+                    ).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            if (state.isNullOrEmpty()) {
+                                showForm = false
+                                notifyChange()
+                            } else if (state == "add" || state == "update") {
+                                (view.context as Activity).onBackPressed()
+                            }
+                        }, {
+
+                        })
+                } else {
+
+                    Repository.updateUserData(
+                        id,
+                        CcUserModel(
+                            Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                                skills.toArrayList(),
+                                cities.toArrayList(),
+                                name,
+                                phone,
+                                email,
+                                projectLiveData.value,
+                                testimonialLiveData.value,
+                                isWorking
+                            )
+                        )
+                    ).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            if (state.isNullOrEmpty()) {
+                                showForm = false
+                                notifyChange()
+                            } else if (state == "add" || state == "update") {
+                                (view.context as Activity).onBackPressed()
+                            }
+
+                        }, {
+
+                        })
+                }
             }
         }
     }

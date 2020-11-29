@@ -2,6 +2,7 @@ package com.app.scanny.careercoop.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -52,7 +53,15 @@ class CarrerCoopAdapter(var context : Context, var itemList : List<Pair<String,C
 
 
         holder.dataBinding.root.setOnClickListener {
-            (context as Activity).findNavController(R.id.nav_controller)
+
+            var bundle =  Bundle()
+            bundle.putParcelable("item",itemList[position].second)
+            bundle.putString("id",itemList[position].first)
+            bundle.putString("state","update")
+
+            (context as Activity).findNavController(R.id.nav_controller).navigate(R.id.action_careerCoopHome_to_careerCoopHome3,
+               bundle
+            )
         }
     }
 

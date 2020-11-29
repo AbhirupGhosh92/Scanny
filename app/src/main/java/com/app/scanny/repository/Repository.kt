@@ -87,6 +87,23 @@ object Repository {
         }
     }
 
+    fun updateUserData(id : String,data : CcUserModel) : Observable<String>
+    {
+        return Observable.create { result ->
+            db.collection("cc_user_data")
+                .document(id)
+                .set(data)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        result.onNext("OK")
+                    } else {
+                        it.exception?.printStackTrace()
+                    }
+                }
+        }
+    }
+
+
     fun checkAccessCc() : Observable<List<Pair<String,CcUserModel>>>
     {
         return Observable.create { result ->

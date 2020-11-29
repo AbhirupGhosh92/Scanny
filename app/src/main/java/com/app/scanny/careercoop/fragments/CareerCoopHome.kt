@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -152,8 +153,100 @@ class CareerCoopHome : Fragment() {
             viewModel.notifyChange()
 
         }
-        else
+        else if(arguments?.getString("state").equals("update"))
         {
+            var item : CcUserModel? = arguments?.getParcelable("item")
+            viewModel.id =  arguments?.getString("id").toString()
+            viewModel.state = "update"
+            activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.GONE
+            viewModel.showForm = true
+            viewModel.loaderVisibility = View.GONE
+            dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
+            dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
+            dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
+            dataBinding.spUser.isEnabled = false
+            dataBinding.spUser.isClickable = false
+            viewModel.phone = viewModel.content.detailsModel?.phone.toString()
+            viewModel.skills.clear()
+            item?.detailsModel?.skills?.let {
+                viewModel.skills.clear()
+                viewModel.skills.addAll(it)
+
+                for (ele in viewModel.skills)
+                {
+
+                    dataBinding.chipGroupSkills.addView(
+                        (requireActivity().layoutInflater.inflate(R.layout.siple_chip
+                            , dataBinding.chipGroupSkills, false) as Chip).apply {
+                            text = ele
+                            isCheckable = false
+                            setOnClickListener {view ->
+                                viewModel.skills.remove((view as Chip).text)
+                                dataBinding.chipGroupSkills.removeView(view)
+                            }
+                        }
+                    )
+                }
+            }
+            item?.detailsModel?.location?.let {
+                viewModel.cities.clear()
+                viewModel.cities.addAll(it)
+
+                for (ele in viewModel.cities)
+                {
+
+                    dataBinding.chipGroupCities.addView(
+                        (requireActivity().layoutInflater.inflate(R.layout.siple_chip
+                            , dataBinding.chipGroupCities, false) as Chip).apply {
+                            text = ele
+                            isCheckable = false
+                            setOnClickListener {view ->
+                                viewModel.cities.remove((view as Chip).text)
+                                dataBinding.chipGroupCities.removeView(view)
+                            }
+                        }
+                    )
+                }
+            }
+            item?.detailsModel?.projects?.let {
+                viewModel.projects.clear()
+                viewModel.projects.addAll(it)
+                proList.clear()
+                proList.addAll(it)
+                for(i in 0 until  proList.size)
+                {
+                    var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+                    view.findViewById<TextView>(R.id.tv_resp).text = proList[i]
+                    view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
+                        viewModel.deleteProject(i)
+                    }
+                    dataBinding.viewProjects.addView(view)
+                }
+            }
+
+            item?.detailsModel?.testionials?.let {
+                viewModel.testimmonials.clear()
+                viewModel.testimmonials.addAll(it)
+                testList.clear()
+                testList.addAll(it)
+                for(i  in 0 until testList.size)
+                {
+                    var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+                    view.findViewById<TextView>(R.id.tv_resp).text = testList[i]
+                    view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
+                        viewModel.deleteTestimonial(i)
+                    }
+                    dataBinding.viewTestimonials.addView(view)
+                }
+            }
+
+            item?.detailsModel?.working?.let {
+                viewModel.isWorking  = it
+            }
+
+
+            viewModel.notifyChange()
+
 
         }
 
@@ -225,6 +318,7 @@ class CareerCoopHome : Fragment() {
         viewModel.testimonialLiveData.observe(viewLifecycleOwner,Observer {
 
             testList.clear()
+            if(it!=null)
             testList.addAll(it)
             dataBinding.viewTestimonials.removeAllViews()
             for(i  in 0 until  testList.size)
@@ -240,6 +334,7 @@ class CareerCoopHome : Fragment() {
 
         viewModel.projectLiveData.observe(viewLifecycleOwner, Observer {
             proList.clear()
+            if(it!=null)
             proList.addAll(it)
 
             dataBinding.viewProjects.removeAllViews()
