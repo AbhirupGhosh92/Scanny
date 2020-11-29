@@ -50,7 +50,7 @@ object Repository {
         return  Gson().fromJson<List<String>>(remoteConfig?.getString("skills_list"),object : TypeToken<List<String>>(){}.type)
     }
 
-    private fun parseCcUser(map : MutableMap<String?,Any?>?)  : CcUserModel
+    private fun parseCcUser(id : String,map : MutableMap<String?,Any?>?)  : Pair<String,CcUserModel>
     {
         var temp = CcUserModel()
 
@@ -69,7 +69,7 @@ object Repository {
         temp.detailsModel?.projects = detail["projects"] as  ArrayList<String>?
         temp.detailsModel?.testionials = detail["testionials"] as  ArrayList<String>?
 
-        return temp
+        return Pair(id,temp)
     }
 
     fun addUserData(data : CcUserModel) : Observable<String>
@@ -87,17 +87,17 @@ object Repository {
         }
     }
 
-    fun checkAccessCc() : Observable<List<CcUserModel>>
+    fun checkAccessCc() : Observable<List<Pair<String,CcUserModel>>>
     {
         return Observable.create { result ->
-            var list = ArrayList<CcUserModel>()
+            var list = ArrayList<Pair<String,CcUserModel>>()
             db.collection("cc_user_data")
                 .whereEqualTo("uid", mAuth.currentUser?.uid.toString())
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         if (task.result != null && task.result.isEmpty.not()) {
                             task.result.documents.forEach {
-                                   list.add(parseCcUser(it.data))
+                                   list.add(parseCcUser(it.id,it.data))
                             }
                             result.onNext(list)
                         } else {
@@ -111,7 +111,7 @@ object Repository {
         }
     }
 
-    fun getMyCounts() : Observable<CcUserModel>
+    fun getMyCounts() : Observable<Pair<String,CcUserModel>>
     {
         return Observable.create {result ->
             db.collection("cc_user_data")
@@ -123,13 +123,13 @@ object Repository {
                         if(task.result != null && task.result.isEmpty.not()) {
                             task.result?.forEach {
                                 result.onNext(
-                                    parseCcUser(it.data)
+                                    parseCcUser(it.id,it.data)
                                 )
                             }
                         }
                         else
                         {
-                            result.onNext(CcUserModel())
+                            result.onNext(Pair("",CcUserModel()))
                         }
                     }
                     else

@@ -22,6 +22,6 @@
     <fragment
         android:id="@+id/ccUpdatesFragment"
         android:name="com.app.scanny.careercoop.fragments.CCUpdatesFragment"
-        android:label="Updates"
+        android:label="Messages"
         tools:layout="@layout/fragment_c_c_updates" />
 </navigation>

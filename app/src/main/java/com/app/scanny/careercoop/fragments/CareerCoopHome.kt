@@ -16,9 +16,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.app.scanny.BuildConfig
 import com.app.scanny.R
 import com.app.scanny.bindasbol.viewmodels.BBSharedViewModel
+import com.app.scanny.careercoop.adapters.CarrerCoopAdapter
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.databinding.FragmentCareerCoopHomeBinding
 import com.app.scanny.repository.Repository
@@ -44,6 +47,7 @@ class CareerCoopHome : Fragment() {
     private lateinit var simpleChip: Chip
     private  var proList = ArrayList<String>()
     private  var testList = ArrayList<String>()
+    private var itemList = ArrayList<Pair<String,CcUserModel>>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,17 +116,25 @@ class CareerCoopHome : Fragment() {
 
         }
 
+        dataBinding.rvSelects.adapter = CarrerCoopAdapter(requireContext(),itemList)
+        dataBinding.rvSelects.layoutManager = LinearLayoutManager(requireContext())
+        dataBinding.rvSelects.itemAnimator = DefaultItemAnimator()
+
         if(arguments?.getString("state").isNullOrEmpty()) {
             viewModel.state = ""
             activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
             viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
-                viewModel.showForm = it.firstOrNull()?.uid.isNullOrEmpty()
-                viewModel.isRecruiter = if(it.firstOrNull()?.recruiter == null) true else it.firstOrNull()?.recruiter!!
+                viewModel.showForm = it.firstOrNull()?.second?.uid.isNullOrEmpty()
+                viewModel.isRecruiter = if(it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
                 viewModel.loaderVisibility = View.GONE
                 viewModel.notifyChange()
-                viewModel.content = it.first()
+                viewModel.content = it.first().second
                 dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
                 dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
+                itemList.clear()
+                itemList.addAll(it)
+                dataBinding.rvSelects.adapter?.notifyDataSetChanged()
+
             })
         }
         else if(arguments?.getString("state").equals("add"))

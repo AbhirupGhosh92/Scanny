@@ -57,7 +57,7 @@ class BBSharedViewModel : BaseViewModel() {
          )
      }
 
-    fun checkCcAccess() : LiveData<List<CcUserModel>>
+    fun checkCcAccess() : LiveData<List<Pair<String,CcUserModel>>>
     {
 
         return Repository.checkAccessCc()
