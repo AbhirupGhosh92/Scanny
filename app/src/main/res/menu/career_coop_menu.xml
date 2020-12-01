@@ -9,6 +9,11 @@
     <!--        android:icon="@drawable/ic_baseline_search"-->
     <!--        android:title="" />-->
     <item
+        android:id="@+id/ccSearchFragment"
+        android:icon="@drawable/ic_baseline_search"
+        android:title=""
+        />
+    <item
         android:id="@+id/ccUpdatesFragment"
         android:icon="@drawable/ic_baseline_notifications"
         android:title="" />
@@ -16,4 +21,5 @@
     <!--        android:id="@+id/messagesFragment"-->
     <!--        android:icon="@drawable/ic_baseline_textsms"-->
     <!--        android:title="" />-->
+
 </menu>
