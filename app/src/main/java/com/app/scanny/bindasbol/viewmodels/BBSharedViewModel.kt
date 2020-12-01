@@ -4,10 +4,8 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.*
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -97,9 +95,14 @@ class BBSharedViewModel : BaseViewModel() {
 
         if(projectLiveData.value.isNullOrEmpty().not() &&  projectLiveData.value?.size!! < 1) {
             dialog.show()
+            dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+            var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+            temp?.doOnTextChanged { text, start, before, count ->
+                dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+            }
             dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
-                    projectLiveData.value?.add(dialog?.findViewById<EditText>(R.id.tv_resp).text.toString())
+                    projectLiveData.value?.add(temp?.text.toString())
                     projectLiveData.value = projectLiveData.value
                     dialog?.dismiss()
             }
@@ -107,10 +110,15 @@ class BBSharedViewModel : BaseViewModel() {
         else if(projectLiveData.value.isNullOrEmpty())
         {
             dialog.show()
+            dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+            var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+            temp?.doOnTextChanged { text, start, before, count ->
+                dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+            }
             dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
                     var item= ArrayList<String>()
-                    item.add(dialog?.findViewById<EditText>(R.id.tv_resp).text.toString())
+                    item.add(temp?.text.toString())
                     projectLiveData.value = item
                     dialog?.dismiss()
 
@@ -130,9 +138,14 @@ class BBSharedViewModel : BaseViewModel() {
 
         if(testimonialLiveData.value.isNullOrEmpty().not() &&  testimonialLiveData.value?.size!! < 1) {
             dialog.show()
+            dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+            var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+            temp?.doOnTextChanged { text, start, before, count ->
+                dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+            }
             dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
-                testimonialLiveData.value?.add(dialog?.findViewById<EditText>(R.id.tv_resp).text.toString())
+                testimonialLiveData.value?.add(temp?.text.toString())
                 testimonialLiveData.value = testimonialLiveData.value
                 dialog?.dismiss()
             }
@@ -140,10 +153,15 @@ class BBSharedViewModel : BaseViewModel() {
         else if(testimonialLiveData.value.isNullOrEmpty())
         {
             dialog.show()
+            dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+            var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+            temp?.doOnTextChanged { text, start, before, count ->
+                dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+            }
             dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
                 var item= ArrayList<String>()
-                item.add(dialog?.findViewById<EditText>(R.id.tv_resp).text.toString())
+                item.add(temp?.text.toString())
                 testimonialLiveData.value = item
                 dialog?.dismiss()
 
