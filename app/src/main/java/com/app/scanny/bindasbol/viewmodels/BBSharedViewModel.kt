@@ -49,6 +49,7 @@ class BBSharedViewModel : BaseViewModel() {
     var id : String = ""
     var content : CcUserModel?  = null
     var state : String = ""
+    var snippet  : (()-> Unit)? = null
 
     fun checkAccess() : LiveData<UserModel?>
      {
@@ -316,6 +317,8 @@ class BBSharedViewModel : BaseViewModel() {
                 }
             }
         }
+
+        snippet?.invoke()
     }
 
     private fun ArrayDeque<String>.toArrayList() : ArrayList<String>

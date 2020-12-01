@@ -96,6 +96,36 @@ class CareerCoopHome : Fragment() {
         }
     }
 
+    private fun addUser()
+    {
+        try {
+            viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
+
+                viewModel.showForm = it.firstOrNull()?.second?.uid.isNullOrEmpty()
+                viewModel.isRecruiter =
+                    if (it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
+                viewModel.loaderVisibility = View.GONE
+                viewModel.notifyChange()
+                viewModel.content = it.firstOrNull()?.second
+                dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
+                dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
+                itemList.clear()
+                itemList.addAll(it)
+                dataBinding.rvSelects.adapter?.notifyDataSetChanged()
+
+                if (viewModel.showForm) {
+                    viewModel.snippet = {
+                        addUser()
+                    }
+                }
+            })
+        }
+        catch (e : Exception)
+        {
+            e.printStackTrace()
+        }
+    }
+
     private fun renderUi()
     {
 
@@ -124,22 +154,7 @@ class CareerCoopHome : Fragment() {
         if(arguments?.getString("state").isNullOrEmpty()) {
             viewModel.state = ""
             activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
-            viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
-
-                    viewModel.showForm = it.firstOrNull()?.second?.uid.isNullOrEmpty()
-                    viewModel.isRecruiter =
-                        if (it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
-                    viewModel.loaderVisibility = View.GONE
-                    viewModel.notifyChange()
-                    viewModel.content = it.firstOrNull()?.second
-                    dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
-                    dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
-                    itemList.clear()
-                    itemList.addAll(it)
-                    dataBinding.rvSelects.adapter?.notifyDataSetChanged()
-
-
-            })
+            addUser()
         }
         else if(arguments?.getString("state").equals("add"))
         {
@@ -262,7 +277,7 @@ class CareerCoopHome : Fragment() {
         viewModel.skillSelectLiveData.observe(viewLifecycleOwner, Observer {
 
             dataBinding.chipGroupSkills.removeAllViews()
-            if(viewModel.skills.size == 1 && viewModel.skills.contains(it).not())
+            if(viewModel.skills.size == 3 && viewModel.skills.contains(it).not())
             {
                 viewModel.skills.removeFirst()
             }
@@ -294,7 +309,7 @@ class CareerCoopHome : Fragment() {
         viewModel.citySelecteLiveData.observe(viewLifecycleOwner, Observer {
 
             dataBinding.chipGroupCities.removeAllViews()
-            if(viewModel.cities.size == 1 && viewModel.cities.contains(it).not())
+            if(viewModel.cities.size == 3 && viewModel.cities.contains(it).not())
             {
                 viewModel.cities.removeFirst()
             }
