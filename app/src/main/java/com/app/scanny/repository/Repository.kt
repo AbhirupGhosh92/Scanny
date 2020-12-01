@@ -110,6 +110,7 @@ object Repository {
             var list = ArrayList<Pair<String,CcUserModel>>()
             db.collection("cc_user_data")
                 .whereEqualTo("uid", mAuth.currentUser?.uid.toString())
+                .orderBy("date",Query.Direction.DESCENDING)
                 .get().addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         if (task.result != null && task.result.isEmpty.not()) {
