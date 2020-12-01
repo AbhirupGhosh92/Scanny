@@ -18,6 +18,7 @@ import com.app.scanny.careercoop.models.CcUserDetailsModel
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.data.model.User
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseUser
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.BackpressureStrategy
@@ -48,7 +49,7 @@ class BBSharedViewModel : BaseViewModel() {
     var projectLiveData = MutableLiveData<ArrayList<String>>()
     var isWorking = false
     var id : String = ""
-    lateinit var content : CcUserModel
+    var content : CcUserModel?  = null
     var state : String = ""
 
     fun checkAccess() : LiveData<UserModel?>
@@ -94,7 +95,7 @@ class BBSharedViewModel : BaseViewModel() {
             .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
             .create()
 
-        if(projectLiveData.value.isNullOrEmpty().not() &&  projectLiveData.value?.size!! < 3) {
+        if(projectLiveData.value.isNullOrEmpty().not() &&  projectLiveData.value?.size!! < 1) {
             dialog.show()
             dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
@@ -127,7 +128,7 @@ class BBSharedViewModel : BaseViewModel() {
             .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
             .create()
 
-        if(testimonialLiveData.value.isNullOrEmpty().not() &&  testimonialLiveData.value?.size!! < 3) {
+        if(testimonialLiveData.value.isNullOrEmpty().not() &&  testimonialLiveData.value?.size!! < 1) {
             dialog.show()
             dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
@@ -185,6 +186,7 @@ class BBSharedViewModel : BaseViewModel() {
                 if (isRecruiter) {
                     Repository.addUserData(
                         CcUserModel(
+                            Timestamp.now(),
                             Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
                                 skills.toArrayList(),
                                 cities.toArrayList(),
@@ -209,6 +211,7 @@ class BBSharedViewModel : BaseViewModel() {
 
                     Repository.addUserData(
                         CcUserModel(
+                            Timestamp.now(),
                             Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
                                 skills.toArrayList(),
                                 cities.toArrayList(),
@@ -241,6 +244,7 @@ class BBSharedViewModel : BaseViewModel() {
                     Repository.updateUserData(
                         id,
                         CcUserModel(
+                            Timestamp.now(),
                             Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
                                 skills.toArrayList(),
                                 cities.toArrayList(),
@@ -266,6 +270,7 @@ class BBSharedViewModel : BaseViewModel() {
                     Repository.updateUserData(
                         id,
                         CcUserModel(
+                            Timestamp.now(),
                             Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
                                 skills.toArrayList(),
                                 cities.toArrayList(),

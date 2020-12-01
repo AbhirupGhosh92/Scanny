@@ -125,16 +125,19 @@ class CareerCoopHome : Fragment() {
             viewModel.state = ""
             activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
             viewModel.checkCcAccess().observe(viewLifecycleOwner, Observer {
-                viewModel.showForm = it.firstOrNull()?.second?.uid.isNullOrEmpty()
-                viewModel.isRecruiter = if(it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
-                viewModel.loaderVisibility = View.GONE
-                viewModel.notifyChange()
-                viewModel.content = it.first().second
-                dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
-                dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
-                itemList.clear()
-                itemList.addAll(it)
-                dataBinding.rvSelects.adapter?.notifyDataSetChanged()
+
+                    viewModel.showForm = it.firstOrNull()?.second?.uid.isNullOrEmpty()
+                    viewModel.isRecruiter =
+                        if (it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
+                    viewModel.loaderVisibility = View.GONE
+                    viewModel.notifyChange()
+                    viewModel.content = it.firstOrNull()?.second
+                    dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
+                    dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
+                    itemList.clear()
+                    itemList.addAll(it)
+                    dataBinding.rvSelects.adapter?.notifyDataSetChanged()
+
 
             })
         }
@@ -149,7 +152,7 @@ class CareerCoopHome : Fragment() {
             dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
             dataBinding.spUser.isEnabled = false
             dataBinding.spUser.isClickable = false
-            viewModel.phone = viewModel.content.detailsModel?.phone.toString()
+            viewModel.phone = viewModel.content?.detailsModel?.phone.toString()
             viewModel.notifyChange()
 
         }
@@ -166,7 +169,7 @@ class CareerCoopHome : Fragment() {
             dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
             dataBinding.spUser.isEnabled = false
             dataBinding.spUser.isClickable = false
-            viewModel.phone = viewModel.content.detailsModel?.phone.toString()
+            viewModel.phone = viewModel.content?.detailsModel?.phone.toString()
             viewModel.skills.clear()
             item?.detailsModel?.skills?.let {
                 viewModel.skills.clear()
@@ -259,7 +262,7 @@ class CareerCoopHome : Fragment() {
         viewModel.skillSelectLiveData.observe(viewLifecycleOwner, Observer {
 
             dataBinding.chipGroupSkills.removeAllViews()
-            if(viewModel.skills.size == 3 && viewModel.skills.contains(it).not())
+            if(viewModel.skills.size == 1 && viewModel.skills.contains(it).not())
             {
                 viewModel.skills.removeFirst()
             }
@@ -291,7 +294,7 @@ class CareerCoopHome : Fragment() {
         viewModel.citySelecteLiveData.observe(viewLifecycleOwner, Observer {
 
             dataBinding.chipGroupCities.removeAllViews()
-            if(viewModel.cities.size == 3 && viewModel.cities.contains(it).not())
+            if(viewModel.cities.size == 1 && viewModel.cities.contains(it).not())
             {
                 viewModel.cities.removeFirst()
             }
