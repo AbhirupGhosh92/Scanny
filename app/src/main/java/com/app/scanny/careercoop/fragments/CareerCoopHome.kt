@@ -104,6 +104,8 @@ class CareerCoopHome : Fragment() {
                 viewModel.showForm = it.firstOrNull()?.second?.uid.isNullOrEmpty()
                 viewModel.isRecruiter =
                     if (it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
+
+                Repository.recruiter =  if (it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
                 viewModel.loaderVisibility = View.GONE
                 viewModel.notifyChange()
                 viewModel.content = it.firstOrNull()?.second

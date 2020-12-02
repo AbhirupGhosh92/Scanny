@@ -332,4 +332,21 @@ class BBSharedViewModel : BaseViewModel() {
 
         return temp
     }
+
+    fun getData(skills : List<String>,location : List<String>) : LiveData<List<Pair<String,CcUserModel>>>
+    {
+        var liveData = MutableLiveData<List<Pair<String,CcUserModel>>>()
+
+          Repository.ccSearchItems(skills,location)
+              .subscribeOn(Schedulers.io())
+              .observeOn(AndroidSchedulers.mainThread())
+              .subscribe({
+                  liveData.value = it
+              },{
+                  it.printStackTrace()
+              })
+
+
+        return liveData
+    }
 }

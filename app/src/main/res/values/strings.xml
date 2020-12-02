@@ -37,6 +37,7 @@
     <string name="fill_skills">Please fill at least one skill and location</string>
     <string name="locations">Locations</string>
     <string name="no_data">No Data Available</string>
+    <string name="select_values">Please select at least one value</string>
     <array name="user_type">
         <item>Recruiter</item>
         <item>Candidate</item>

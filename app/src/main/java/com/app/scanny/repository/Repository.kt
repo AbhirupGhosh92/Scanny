@@ -26,6 +26,8 @@ import io.reactivex.rxjava3.core.Observable
 object Repository {
 
 
+    var recruiter = false
+
     val settings =  FirebaseFirestoreSettings.Builder()
         .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
         .setPersistenceEnabled(true)
@@ -82,6 +84,32 @@ object Repository {
                         result.onNext("OK")
                     } else {
                         it.exception?.printStackTrace()
+                    }
+                }
+        }
+    }
+
+    fun ccSearchItems(skills : List<String>, location : List<String>) : Observable<List<Pair<String,CcUserModel>>>
+    {
+        var list = ArrayList<Pair<String,CcUserModel>>()
+        return Observable.create { result ->
+            db.collection("cc_user_data")
+                .whereArrayContainsAny("location",location)
+                //.whereIn("skills",skills)
+                .get()
+                .addOnCompleteListener {task ->
+                    if (task.isSuccessful) {
+                        if (task.result != null && task.result.isEmpty.not()) {
+                            task.result.documents.forEach {
+                                list.add(parseCcUser(it.id,it.data))
+                            }
+                            result.onNext(list)
+                        } else {
+                            result.onNext(list)
+                        }
+                    } else {
+                        Log.e("Error", task.exception.toString())
+                        result.onNext(null)
                     }
                 }
         }
