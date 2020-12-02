@@ -21,4 +21,25 @@
     <string name="native_ad_unit_id_view_man">ca-app-pub-6848333716076512~9505929162</string>
     <string name="banner_ad_unit_id_view_man">ca-app-pub-6848333716076512~9505929162</string>
     <string name="banner_ad_temp">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="name">Name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="cities">Cities</string>
+    <string name="skills">Skills</string>
+    <string name="users">User Type</string>
+    <string name="projects">Projects</string>
+    <string name="testionials">Testimonials</string>
+    <string name="add">Add</string>
+    <string name="working">Working</string>
+    <string name="cannot_add_pro">Cannot add more than one project</string>
+    <string name="cannot_add_test">Cannot add more than one testimonial</string>
+    <string name="fill_data">Please add name, email and phone</string>
+    <string name="fill_skills">Please fill at least one skill and location</string>
+    <string name="locations">Locations</string>
+    <string name="no_data">No Data Available</string>
+    <array name="user_type">
+        <item>Recruiter</item>
+        <item>Candidate</item>
+    </array>
+
 </resources>

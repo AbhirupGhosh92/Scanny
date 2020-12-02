@@ -4,6 +4,8 @@ import android.util.Log
 import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
 import com.app.scanny.bindasbol.serializers.Serializer
+import com.app.scanny.careercoop.models.CcUserDetailsModel
+import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.utils.ApplicationUtils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.google.firebase.Timestamp
@@ -11,6 +13,14 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.Query
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.remoteconfig.FirebaseRemoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfig
+import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import io.reactivex.rxjava3.core.BackpressureStrategy
+import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 
 object Repository {
@@ -24,8 +34,130 @@ object Repository {
         firestoreSettings = settings
     }
 
+    var remoteConfig : FirebaseRemoteConfig? = null
+
+
     val mAuth = FirebaseAuth.getInstance()
     val objectMapper = ObjectMapper()
+
+     fun  getCityList() : List<String>
+    {
+       return Gson().fromJson<List<String>>(remoteConfig?.getString("city_list"),object : TypeToken<List<String>>(){}.type)
+    }
+
+    fun getSkillsList() : List<String>
+    {
+        return  Gson().fromJson<List<String>>(remoteConfig?.getString("skills_list"),object : TypeToken<List<String>>(){}.type)
+    }
+
+    private fun parseCcUser(id : String,map : MutableMap<String?,Any?>?)  : Pair<String,CcUserModel>
+    {
+        var temp = CcUserModel()
+
+        temp.uid = map?.get("uid") as String?
+        temp.recruiter =  map?.get("recruiter") as Boolean?
+
+        var detail = map?.get("detailsModel") as MutableMap<*, *>
+
+        temp.detailsModel = CcUserDetailsModel()
+        temp.detailsModel?.email = detail["email"] as String?
+        temp.detailsModel?.location = detail["location"] as ArrayList<String>?
+        temp.detailsModel?.skills = detail["skills"] as ArrayList<String>?
+        temp.detailsModel?.name = detail["name"] as String?
+        temp.detailsModel?.phone = detail["phone"] as String?
+        temp.detailsModel?.working = detail["working"] as Boolean?
+        temp.detailsModel?.projects = detail["projects"] as  ArrayList<String>?
+        temp.detailsModel?.testionials = detail["testionials"] as  ArrayList<String>?
+
+        return Pair(id,temp)
+    }
+
+    fun addUserData(data : CcUserModel) : Observable<String>
+    {
+        return Observable.create { result ->
+            db.collection("cc_user_data")
+                .add(data)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        result.onNext("OK")
+                    } else {
+                        it.exception?.printStackTrace()
+                    }
+                }
+        }
+    }
+
+    fun updateUserData(id : String,data : CcUserModel) : Observable<String>
+    {
+        return Observable.create { result ->
+            db.collection("cc_user_data")
+                .document(id)
+                .set(data)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        result.onNext("OK")
+                    } else {
+                        it.exception?.printStackTrace()
+                    }
+                }
+        }
+    }
+
+
+    fun checkAccessCc() : Observable<List<Pair<String,CcUserModel>>>
+    {
+        return Observable.create { result ->
+            var list = ArrayList<Pair<String,CcUserModel>>()
+            db.collection("cc_user_data")
+                .whereEqualTo("uid", mAuth.currentUser?.uid.toString())
+                .orderBy("date",Query.Direction.DESCENDING)
+                .get().addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        if (task.result != null && task.result.isEmpty.not()) {
+                            task.result.documents.forEach {
+                                   list.add(parseCcUser(it.id,it.data))
+                            }
+                            result.onNext(list)
+                        } else {
+                            result.onNext(list)
+                        }
+                    } else {
+                        Log.e("Error", task.exception.toString())
+                        result.onNext(null)
+                    }
+                }
+        }
+    }
+
+    fun getMyCounts() : Observable<Pair<String,CcUserModel>>
+    {
+        return Observable.create {result ->
+            db.collection("cc_user_data")
+                .whereEqualTo("uid",mAuth.currentUser?.uid.toString())
+                .get().addOnCompleteListener {task  ->
+
+                    if (task.isSuccessful)
+                    {
+                        if(task.result != null && task.result.isEmpty.not()) {
+                            task.result?.forEach {
+                                result.onNext(
+                                    parseCcUser(it.id,it.data)
+                                )
+                            }
+                        }
+                        else
+                        {
+                            result.onNext(Pair("",CcUserModel()))
+                        }
+                    }
+                    else
+                    {
+                        Log.e("Error",task.exception.toString())
+                        result.onNext(null)
+                    }
+                }
+        }
+    }
 
     fun checkAcces() : Observable<UserModel?> {
         return  Observable.create {result  ->
