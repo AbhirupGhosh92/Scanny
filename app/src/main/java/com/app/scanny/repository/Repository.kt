@@ -4,7 +4,6 @@ import android.util.Log
 import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
 import com.app.scanny.bindasbol.serializers.Serializer
-import com.app.scanny.careercoop.models.CcUserDetailsModel
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.utils.ApplicationUtils
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -13,14 +12,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.Query
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import io.reactivex.rxjava3.core.BackpressureStrategy
-import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 
 object Repository {
@@ -58,18 +52,14 @@ object Repository {
 
         temp.uid = map?.get("uid") as String?
         temp.recruiter =  map?.get("recruiter") as Boolean?
-
-        var detail = map?.get("detailsModel") as MutableMap<*, *>
-
-        temp.detailsModel = CcUserDetailsModel()
-        temp.detailsModel?.email = detail["email"] as String?
-        temp.detailsModel?.location = detail["location"] as ArrayList<String>?
-        temp.detailsModel?.skills = detail["skills"] as ArrayList<String>?
-        temp.detailsModel?.name = detail["name"] as String?
-        temp.detailsModel?.phone = detail["phone"] as String?
-        temp.detailsModel?.working = detail["working"] as Boolean?
-        temp.detailsModel?.projects = detail["projects"] as  ArrayList<String>?
-        temp.detailsModel?.testionials = detail["testionials"] as  ArrayList<String>?
+        temp.email = map?.get("email") as String?
+        temp.location = map?.get("location") as ArrayList<String>?
+        temp.skills = map?.get("skills") as ArrayList<String>?
+        temp.name = map?.get("name") as String?
+        temp.phone = map?.get("phone") as String?
+        temp.working = map?.get("working") as Boolean?
+        temp.projects = map?.get("projects") as  ArrayList<String>?
+        temp.testionials = map?.get("testionials") as  ArrayList<String>?
 
         return Pair(id,temp)
     }
@@ -95,7 +85,8 @@ object Repository {
         return Observable.create { result ->
             db.collection("cc_user_data")
                 .whereArrayContainsAny("location",location)
-                //.whereIn("skills",skills)
+                .whereEqualTo("recruiter", recruiter.not())
+                .whereArrayContainsAny("skills",skills)
                 .get()
                 .addOnCompleteListener {task ->
                     if (task.isSuccessful) {

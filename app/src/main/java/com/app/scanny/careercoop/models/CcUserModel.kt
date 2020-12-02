@@ -7,6 +7,13 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class CcUserModel(
                         var date : Timestamp? = null,
-                        var uid :  String?=null
-                       ,var recruiter : Boolean?=null
-                       ,var detailsModel: CcUserDetailsModel? = null) : Parcelable
+                        var uid :  String?=null,
+                        var recruiter : Boolean?=null,
+                        var skills : ArrayList<String>? = null,
+                        var location : ArrayList<String>? = null,
+                        var name : String? = null,
+                        var phone : String? = null,
+                        var email : String? = null,
+                        var projects : ArrayList<String>? = null,
+                        var testionials : ArrayList<String>? = null,
+                        var working : Boolean? = false) : Parcelable

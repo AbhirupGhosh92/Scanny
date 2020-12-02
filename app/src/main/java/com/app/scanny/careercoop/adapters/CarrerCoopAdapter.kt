@@ -26,7 +26,7 @@ class CarrerCoopAdapter(var context : Context, var itemList : List<Pair<String,C
 
             holder.dataBinding.cgSkills.removeAllViews()
             holder.dataBinding.cgLocation.removeAllViews()
-            for (item in itemList[position].second.detailsModel?.skills!!) {
+            for (item in itemList[position].second?.skills!!) {
                 holder.dataBinding.cgSkills.addView(
                     (LayoutInflater.from(context).inflate(R.layout.siple_chip, holder.dataBinding.cgSkills,false) as Chip)
                         .apply {
@@ -36,7 +36,7 @@ class CarrerCoopAdapter(var context : Context, var itemList : List<Pair<String,C
                 )
             }
 
-            for (item in itemList[position].second.detailsModel?.location!!) {
+            for (item in itemList[position].second?.location!!) {
                 holder.dataBinding.cgLocation.addView(
                     (LayoutInflater.from(context).inflate(R.layout.siple_chip, holder.dataBinding.cgLocation,false) as Chip)
                         .apply {

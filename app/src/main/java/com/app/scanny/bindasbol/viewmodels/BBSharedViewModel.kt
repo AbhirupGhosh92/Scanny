@@ -7,24 +7,14 @@ import android.view.View
 import android.widget.*
 import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.*
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.app.scanny.R
-import com.app.scanny.bindasbol.models.BolModel
 import com.app.scanny.bindasbol.models.UserModel
-import com.app.scanny.careercoop.models.CcUserDetailsModel
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.repository.Repository
-import com.firebase.ui.auth.data.model.User
 import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseUser
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.BackpressureStrategy
-import io.reactivex.rxjava3.core.Flowable
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import org.reactivestreams.Publisher
-import java.lang.reflect.Array
 
 class BBSharedViewModel : BaseViewModel() {
     // TODO: Implement the ViewModel
@@ -206,13 +196,13 @@ class BBSharedViewModel : BaseViewModel() {
                     Repository.addUserData(
                         CcUserModel(
                             Timestamp.now(),
-                            Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                            Repository.mAuth.uid, isRecruiter,
                                 skills.toArrayList(),
                                 cities.toArrayList(),
                                 name,
                                 phone,
                                 email
-                            )
+
                         )
                     ).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -231,7 +221,7 @@ class BBSharedViewModel : BaseViewModel() {
                     Repository.addUserData(
                         CcUserModel(
                             Timestamp.now(),
-                            Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                            Repository.mAuth.uid, isRecruiter,
                                 skills.toArrayList(),
                                 cities.toArrayList(),
                                 name,
@@ -240,7 +230,7 @@ class BBSharedViewModel : BaseViewModel() {
                                 projectLiveData.value,
                                 testimonialLiveData.value,
                                 isWorking
-                            )
+
                         )
                     ).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -264,13 +254,13 @@ class BBSharedViewModel : BaseViewModel() {
                         id,
                         CcUserModel(
                             Timestamp.now(),
-                            Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                            Repository.mAuth.uid, isRecruiter,
                                 skills.toArrayList(),
                                 cities.toArrayList(),
                                 name,
                                 phone,
                                 email
-                            )
+
                         )
                     ).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -290,7 +280,7 @@ class BBSharedViewModel : BaseViewModel() {
                         id,
                         CcUserModel(
                             Timestamp.now(),
-                            Repository.mAuth.uid, isRecruiter, CcUserDetailsModel(
+                            Repository.mAuth.uid, isRecruiter,
                                 skills.toArrayList(),
                                 cities.toArrayList(),
                                 name,
@@ -299,7 +289,7 @@ class BBSharedViewModel : BaseViewModel() {
                                 projectLiveData.value,
                                 testimonialLiveData.value,
                                 isWorking
-                            )
+
                         )
                     ).subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())

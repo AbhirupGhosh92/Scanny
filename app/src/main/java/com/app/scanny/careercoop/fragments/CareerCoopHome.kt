@@ -169,7 +169,7 @@ class CareerCoopHome : Fragment() {
             dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
             dataBinding.spUser.isEnabled = false
             dataBinding.spUser.isClickable = false
-            viewModel.phone = viewModel.content?.detailsModel?.phone.toString()
+            viewModel.phone = viewModel.content?.phone.toString()
             viewModel.notifyChange()
 
         }
@@ -186,9 +186,9 @@ class CareerCoopHome : Fragment() {
             dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
             dataBinding.spUser.isEnabled = false
             dataBinding.spUser.isClickable = false
-            viewModel.phone = viewModel.content?.detailsModel?.phone.toString()
+            viewModel.phone = viewModel.content?.phone.toString()
             viewModel.skills.clear()
-            item?.detailsModel?.skills?.let {
+            item?.skills?.let {
                 viewModel.skills.clear()
                 viewModel.skills.addAll(it)
 
@@ -208,7 +208,7 @@ class CareerCoopHome : Fragment() {
                     )
                 }
             }
-            item?.detailsModel?.location?.let {
+            item?.location?.let {
                 viewModel.cities.clear()
                 viewModel.cities.addAll(it)
 
@@ -228,7 +228,7 @@ class CareerCoopHome : Fragment() {
                     )
                 }
             }
-            item?.detailsModel?.projects?.let {
+            item?.projects?.let {
                 viewModel.projects.clear()
                 viewModel.projects.addAll(it)
                 proList.clear()
@@ -244,7 +244,7 @@ class CareerCoopHome : Fragment() {
                 }
             }
 
-            item?.detailsModel?.testionials?.let {
+            item?.testionials?.let {
                 viewModel.testimmonials.clear()
                 viewModel.testimmonials.addAll(it)
                 testList.clear()
@@ -260,7 +260,7 @@ class CareerCoopHome : Fragment() {
                 }
             }
 
-            item?.detailsModel?.working?.let {
+            item?.working?.let {
                 viewModel.isWorking  = it
             }
 
