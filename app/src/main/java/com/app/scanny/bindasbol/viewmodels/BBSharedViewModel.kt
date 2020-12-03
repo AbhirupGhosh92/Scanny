@@ -197,7 +197,7 @@ class BBSharedViewModel : BaseViewModel() {
                         CcUserModel(
                             Timestamp.now(),
                             Repository.mAuth.uid, isRecruiter,
-                                skills.toArrayList(),
+                                skills.toHashMap(),
                                 cities.toArrayList(),
                                 name,
                                 phone,
@@ -222,7 +222,7 @@ class BBSharedViewModel : BaseViewModel() {
                         CcUserModel(
                             Timestamp.now(),
                             Repository.mAuth.uid, isRecruiter,
-                                skills.toArrayList(),
+                                skills.toHashMap(),
                                 cities.toArrayList(),
                                 name,
                                 phone,
@@ -255,7 +255,7 @@ class BBSharedViewModel : BaseViewModel() {
                         CcUserModel(
                             Timestamp.now(),
                             Repository.mAuth.uid, isRecruiter,
-                                skills.toArrayList(),
+                                skills.toHashMap(),
                                 cities.toArrayList(),
                                 name,
                                 phone,
@@ -281,7 +281,7 @@ class BBSharedViewModel : BaseViewModel() {
                         CcUserModel(
                             Timestamp.now(),
                             Repository.mAuth.uid, isRecruiter,
-                                skills.toArrayList(),
+                                skills.toHashMap(),
                                 cities.toArrayList(),
                                 name,
                                 phone,
@@ -338,5 +338,16 @@ class BBSharedViewModel : BaseViewModel() {
 
 
         return liveData
+    }
+
+    private fun ArrayDeque<String>.toHashMap() : HashMap<String,Boolean>
+    {
+        var temp = HashMap<String,Boolean>()
+        for(item in this)
+        {
+            temp[item] = true
+        }
+
+        return temp
     }
 }

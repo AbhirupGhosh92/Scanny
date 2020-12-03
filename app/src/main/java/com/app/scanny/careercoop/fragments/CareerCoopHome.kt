@@ -190,7 +190,7 @@ class CareerCoopHome : Fragment() {
             viewModel.skills.clear()
             item?.skills?.let {
                 viewModel.skills.clear()
-                viewModel.skills.addAll(it)
+                viewModel.skills.addAll(it.keys)
 
                 for (ele in viewModel.skills)
                 {

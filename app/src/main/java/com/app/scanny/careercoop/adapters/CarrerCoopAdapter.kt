@@ -30,7 +30,7 @@ class CarrerCoopAdapter(var context : Context, var itemList : List<Pair<String,C
                 holder.dataBinding.cgSkills.addView(
                     (LayoutInflater.from(context).inflate(R.layout.siple_chip, holder.dataBinding.cgSkills,false) as Chip)
                         .apply {
-                            text = item
+                            text = item.key
                             isCheckable = false
                         }
                 )

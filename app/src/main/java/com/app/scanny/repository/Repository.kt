@@ -54,7 +54,7 @@ object Repository {
         temp.recruiter =  map?.get("recruiter") as Boolean?
         temp.email = map?.get("email") as String?
         temp.location = map?.get("location") as ArrayList<String>?
-        temp.skills = map?.get("skills") as ArrayList<String>?
+        temp.skills = map?.get("skills") as HashMap<String,Boolean>?
         temp.name = map?.get("name") as String?
         temp.phone = map?.get("phone") as String?
         temp.working = map?.get("working") as Boolean?
@@ -83,27 +83,57 @@ object Repository {
     {
         var list = ArrayList<Pair<String,CcUserModel>>()
         return Observable.create { result ->
-            db.collection("cc_user_data")
-                .whereArrayContainsAny("location",location)
-                .whereEqualTo("recruiter", recruiter.not())
-                .whereArrayContainsAny("skills",skills)
-                .get()
-                .addOnCompleteListener {task ->
-                    if (task.isSuccessful) {
-                        if (task.result != null && task.result.isEmpty.not()) {
-                            task.result.documents.forEach {
-                                list.add(parseCcUser(it.id,it.data))
+                queryCases(skills,location)
+                ?.get()
+                    ?.addOnCompleteListener {task ->
+                        if (task.isSuccessful) {
+                            if (task.result != null && task.result.isEmpty.not()) {
+                                task.result.documents.forEach {
+                                    list.add(parseCcUser(it.id,it.data))
+                                }
+                                result.onNext(list)
+                            } else {
+                                result.onNext(list)
                             }
-                            result.onNext(list)
                         } else {
-                            result.onNext(list)
+                            Log.e("Error", task.exception.toString())
+                            result.onNext(null)
                         }
-                    } else {
-                        Log.e("Error", task.exception.toString())
-                        result.onNext(null)
                     }
-                }
+
         }
+    }
+
+    private fun queryCases(skills : List<String>, location : List<String>) : Query?
+    {
+        var col : Query? = null
+
+        if(skills.size==1)
+        {
+            col =  db.collection("cc_user_data")
+                .whereEqualTo("recruiter", recruiter.not())
+                .whereEqualTo("skills.${skills[0]}", true)
+                .whereArrayContainsAny("location",location)
+        }
+        else if(skills.size==2)
+        {
+            col =  db.collection("cc_user_data")
+                .whereEqualTo("recruiter", recruiter.not())
+                .whereEqualTo("skills.${skills[0]}", true)
+                .whereEqualTo("skills.${skills[1]}", true)
+                .whereArrayContainsAny("location",location)
+        }
+
+        else if(skills.size==3)
+        {
+            col =  db.collection("cc_user_data")
+                .whereEqualTo("recruiter", recruiter.not())
+                .whereEqualTo("skills.${skills[0]}", true)
+                .whereEqualTo("skills.${skills[1]}", true)
+                .whereEqualTo("skills.${skills[2]}", true)
+                .whereArrayContainsAny("location",location)
+        }
+        return col
     }
 
     fun updateUserData(id : String,data : CcUserModel) : Observable<String>

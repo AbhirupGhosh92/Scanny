@@ -9,7 +9,7 @@ data class CcUserModel(
                         var date : Timestamp? = null,
                         var uid :  String?=null,
                         var recruiter : Boolean?=null,
-                        var skills : ArrayList<String>? = null,
+                        var skills : Map<String,Boolean>? = null,
                         var location : ArrayList<String>? = null,
                         var name : String? = null,
                         var phone : String? = null,
