@@ -23,6 +23,11 @@
         android:label="Home"
         tools:layout="@layout/fragment_career_coop_home"/>
     <fragment
+        android:id="@+id/careerCoopHome4"
+        android:name="com.app.scanny.careercoop.fragments.CareerCoopHome"
+        android:label="Home"
+        tools:layout="@layout/fragment_career_coop_home" />
+    <fragment
         android:id="@+id/careerCoopHome2"
         android:name="com.app.scanny.careercoop.fragments.CareerCoopHome"
         android:label="Home"
@@ -36,5 +41,9 @@
         android:id="@+id/ccSearchFragment"
         android:name="com.app.scanny.careercoop.fragments.CcSearchFragment"
         android:label="Search"
-        tools:layout="@layout/fragment_cc_search" />
+        tools:layout="@layout/fragment_cc_search" >
+        <action
+            android:id="@+id/action_ccSearchFragment_to_careerCoopHome4"
+            app:destination="@id/careerCoopHome4" />
+    </fragment>
 </navigation>

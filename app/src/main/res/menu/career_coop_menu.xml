@@ -13,10 +13,10 @@
         android:icon="@drawable/ic_baseline_search"
         android:title=""
         />
-    <item
-        android:id="@+id/ccUpdatesFragment"
-        android:icon="@drawable/ic_baseline_notifications"
-        android:title="" />
+<!--    <item-->
+<!--        android:id="@+id/ccUpdatesFragment"-->
+<!--        android:icon="@drawable/ic_baseline_notifications"-->
+<!--        android:title="" />-->
     <!--    <item-->
     <!--        android:id="@+id/messagesFragment"-->
     <!--        android:icon="@drawable/ic_baseline_textsms"-->

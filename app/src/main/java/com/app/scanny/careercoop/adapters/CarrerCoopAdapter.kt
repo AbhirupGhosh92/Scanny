@@ -26,7 +26,7 @@ import com.google.android.material.chip.Chip
 class CarrerCoopAdapter(
     var context: Context,
     var itemList: List<Pair<String, CcUserModel>>,
-    var search: Boolean = false
+    var search: Boolean = false,var snippet : ((item : CcUserModel) -> Unit)? = null
 ) : RecyclerView.Adapter<CarrerCoopAdapter.ViewHolder>()
 {
     data class ViewHolder(var dataBinding: RvUpdatesLayoutBinding)  : RecyclerView.ViewHolder(
@@ -115,12 +115,13 @@ class CarrerCoopAdapter(
 
         holder.dataBinding.root.setOnClickListener {
 
-            var bundle =  Bundle()
-            bundle.putParcelable("item", itemList[position].second)
-            bundle.putString("id", itemList[position].first)
-            bundle.putString("state", "update")
-
             if(search.not()) {
+
+                var bundle =  Bundle()
+                bundle.putParcelable("item", itemList[position].second)
+                bundle.putString("id", itemList[position].first)
+                bundle.putString("state", "update")
+
                 (context as Activity).findNavController(R.id.nav_controller).navigate(
                     R.id.action_careerCoopHome_to_careerCoopHome3,
                     bundle
@@ -128,30 +129,43 @@ class CarrerCoopAdapter(
             }
             else
             {
-                var dialog =  AlertDialog.Builder(context)
-                    .setView(
-                        LayoutInflater.from(context).inflate(
-                            R.layout.edt_testimonials,
-                            null,
-                            false
-                        )
-                    )
-                    .create()
+                var bundle =  Bundle()
+                bundle.putParcelable("item", itemList[position].second)
+                bundle.putString("id", itemList[position].first)
+                bundle.putString("state", "show")
 
-                dialog.show()
-                dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
-                var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
-                temp?.doOnTextChanged { text, start, before, count ->
-                    dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
-                }
-                dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
-                    dialog?.dismiss()
-                }
+                (context as Activity).findNavController(R.id.nav_controller).navigate(
+                    R.id.action_ccSearchFragment_to_careerCoopHome4,
+                    bundle
+                )
             }
         }
     }
 
     override fun getItemCount(): Int {
         return itemList.size
+    }
+
+    private fun showDialog()
+    {
+        var dialog =  AlertDialog.Builder(context)
+            .setView(
+                LayoutInflater.from(context).inflate(
+                    R.layout.edt_testimonials,
+                    null,
+                    false
+                )
+            )
+            .create()
+
+        dialog.show()
+        dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+        var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+        temp?.doOnTextChanged { text, start, before, count ->
+            dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+        }
+        dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+            dialog?.dismiss()
+        }
     }
 }

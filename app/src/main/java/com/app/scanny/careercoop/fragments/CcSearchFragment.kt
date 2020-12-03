@@ -19,6 +19,7 @@ import com.app.scanny.careercoop.adapters.CarrerCoopAdapter
 import com.app.scanny.careercoop.models.CcUserModel
 import com.app.scanny.databinding.FragmentCcSearchBinding
 import com.app.scanny.repository.Repository
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 
 class CcSearchFragment : Fragment() {
@@ -42,6 +43,8 @@ class CcSearchFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.VISIBLE
 
         viewModel = ViewModelProvider(this)[BBSharedViewModel::class.java]
         dataBinding.ccHomeViewodel =  viewModel

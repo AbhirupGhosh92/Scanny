@@ -173,6 +173,17 @@ class CareerCoopHome : Fragment() {
             viewModel.notifyChange()
 
         }
+
+        else if(arguments?.getString("state").equals("show"))
+        {
+            var item : CcUserModel? = arguments?.getParcelable("item")
+            viewModel.id =  arguments?.getString("id").toString()
+            viewModel.state = "update"
+            activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.GONE
+            viewModel.showForm = true
+            viewModel.loaderVisibility = View.GONE
+        }
+
         else if(arguments?.getString("state").equals("update"))
         {
             var item : CcUserModel? = arguments?.getParcelable("item")
