@@ -99,7 +99,7 @@ class CcSearchFragment : Fragment() {
 
         })
 
-        dataBinding.rvSearch.adapter  = CarrerCoopAdapter(requireContext(),list)
+        dataBinding.rvSearch.adapter  = CarrerCoopAdapter(requireContext(),list,true)
         dataBinding.rvSearch.itemAnimator = DefaultItemAnimator()
         dataBinding.rvSearch.layoutManager = LinearLayoutManager(requireContext())
 
