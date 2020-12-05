@@ -27,6 +27,7 @@ import com.app.scanny.databinding.FragmentCareerCoopHomeBinding
 import com.app.scanny.repository.Repository
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
@@ -134,6 +135,8 @@ class CareerCoopHome : Fragment() {
 
     private fun renderUi()
     {
+
+        dataBinding.adView.loadAd(AdRequest.Builder().build())
 
         viewModel.notifyChange()
         dataBinding.spUser.adapter = ArrayAdapter<String>(
