@@ -192,7 +192,7 @@ class CareerCoopHome : Fragment() {
         {
             var item : CcUserModel? = arguments?.getParcelable("item")
             viewModel.id =  arguments?.getString("id").toString()
-            viewModel.state = "update"
+            viewModel.state = "show"
             activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.GONE
             viewModel.showForm = true
             viewModel.loaderVisibility = View.GONE
@@ -206,11 +206,19 @@ class CareerCoopHome : Fragment() {
             dataBinding.edtEmailTxt.isEnabled = false
             dataBinding.edtNameTxt.isEnabled = false
             dataBinding.edtPhoneTxt.isEnabled = false
-
+            dataBinding.tvUser.visibility = View.GONE
+            dataBinding.spUser.visibility = View.GONE
+            viewModel.isRecruiter = item?.recruiter!!
             dataBinding.ivAddTestimonnials.visibility = View.GONE
             dataBinding.ivAddProjects.visibility = View.GONE
+
+            dataBinding.ivAddProjects.setOnClickListener(null)
+            dataBinding.ivAddTestimonnials.setOnClickListener(null)
+
+            viewModel.notifyChange()
             viewModel.phone = item?.phone.toString()
             viewModel.name = item?.name.toString()
+            dataBinding.swWorking.isEnabled = false
             viewModel.skills.clear()
             item?.skills?.let {
                 viewModel.skills.clear()

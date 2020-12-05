@@ -80,87 +80,100 @@ class BBSharedViewModel : BaseViewModel() {
 
     fun addProject(view : View)
     {
-        var dialog =  AlertDialog.Builder(view.context)
-            .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
-            .create()
+        if(state != "show") {
+            var dialog = AlertDialog.Builder(view.context)
+                .setView(
+                    LayoutInflater.from(view.context)
+                        .inflate(R.layout.edt_testimonials, null, false)
+                )
+                .create()
 
-        if(projectLiveData.value.isNullOrEmpty().not() &&  projectLiveData.value?.size!! < 1) {
-            dialog.show()
-            dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
-            var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
-            temp?.doOnTextChanged { text, start, before, count ->
-                dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
-            }
-            dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+            if (projectLiveData.value.isNullOrEmpty().not() && projectLiveData.value?.size!! < 1) {
+                dialog.show()
+                dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+                var temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+                temp?.doOnTextChanged { text, start, before, count ->
+                    dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+                }
+                dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
                     projectLiveData.value?.add(temp?.text.toString())
                     projectLiveData.value = projectLiveData.value
                     dialog?.dismiss()
-            }
-        }
-        else if(projectLiveData.value.isNullOrEmpty())
-        {
-            dialog.show()
-            dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
-            var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
-            temp?.doOnTextChanged { text, start, before, count ->
-                dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
-            }
-            dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+                }
+            } else if (projectLiveData.value.isNullOrEmpty()) {
+                dialog.show()
+                dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+                var temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+                temp?.doOnTextChanged { text, start, before, count ->
+                    dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+                }
+                dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
-                    var item= ArrayList<String>()
+                    var item = ArrayList<String>()
                     item.add(temp?.text.toString())
                     projectLiveData.value = item
                     dialog?.dismiss()
 
-            }
+                }
 
-        }else
-        {
-            Toast.makeText(view.context,view.context.resources.getString(R.string.cannot_add_pro),Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(
+                    view.context,
+                    view.context.resources.getString(R.string.cannot_add_pro),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
     fun addTestionial(view : View)
     {
-        var dialog =  AlertDialog.Builder(view.context)
-            .setView(LayoutInflater.from(view.context).inflate(R.layout.edt_testimonials,null,false))
-            .create()
+        if(state != "show") {
+            var dialog = AlertDialog.Builder(view.context)
+                .setView(
+                    LayoutInflater.from(view.context)
+                        .inflate(R.layout.edt_testimonials, null, false)
+                )
+                .create()
 
-        if(testimonialLiveData.value.isNullOrEmpty().not() &&  testimonialLiveData.value?.size!! < 1) {
-            dialog.show()
-            dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
-            var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
-            temp?.doOnTextChanged { text, start, before, count ->
-                dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
-            }
-            dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+            if (testimonialLiveData.value.isNullOrEmpty()
+                    .not() && testimonialLiveData.value?.size!! < 1
+            ) {
+                dialog.show()
+                dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+                var temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+                temp?.doOnTextChanged { text, start, before, count ->
+                    dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+                }
+                dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
-                testimonialLiveData.value?.add(temp?.text.toString())
-                testimonialLiveData.value = testimonialLiveData.value
-                dialog?.dismiss()
-            }
-        }
-        else if(testimonialLiveData.value.isNullOrEmpty())
-        {
-            dialog.show()
-            dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
-            var  temp = dialog?.findViewById<EditText>(R.id.tv_resp)
-            temp?.doOnTextChanged { text, start, before, count ->
-                dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
-            }
-            dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
+                    testimonialLiveData.value?.add(temp?.text.toString())
+                    testimonialLiveData.value = testimonialLiveData.value
+                    dialog?.dismiss()
+                }
+            } else if (testimonialLiveData.value.isNullOrEmpty()) {
+                dialog.show()
+                dialog.findViewById<TextView>(R.id.tv_count).text = "0/250"
+                var temp = dialog?.findViewById<EditText>(R.id.tv_resp)
+                temp?.doOnTextChanged { text, start, before, count ->
+                    dialog.findViewById<TextView>(R.id.tv_count).text = "${text?.length}/250"
+                }
+                dialog?.findViewById<Button>(R.id.add)?.setOnClickListener {
 
-                var item= ArrayList<String>()
-                item.add(temp?.text.toString())
-                testimonialLiveData.value = item
-                dialog?.dismiss()
+                    var item = ArrayList<String>()
+                    item.add(temp?.text.toString())
+                    testimonialLiveData.value = item
+                    dialog?.dismiss()
 
+                }
+            } else {
+                Toast.makeText(
+                    view.context,
+                    view.context.resources.getString(R.string.cannot_add_test),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
-        }
-        else
-        {
-            Toast.makeText(view.context,view.context.resources.getString(R.string.cannot_add_test),Toast.LENGTH_SHORT).show()
         }
 
     }
