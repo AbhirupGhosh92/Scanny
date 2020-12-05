@@ -54,10 +54,10 @@ class CareerCoopHome : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
-        if(BuildConfig.DEBUG)
-        {
-            providers.add(AuthUI.IdpConfig.EmailBuilder().build())
-        }
+//        if(BuildConfig.DEBUG)
+//        {
+//            providers.add(AuthUI.IdpConfig.EmailBuilder().build())
+//        }
     }
 
     override fun onCreateView(
