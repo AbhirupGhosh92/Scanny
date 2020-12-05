@@ -20,17 +20,17 @@
     <fragment
         android:id="@+id/careerCoopHome3"
         android:name="com.app.scanny.careercoop.fragments.CareerCoopHome"
-        android:label="Home"
+        android:label="Details"
         tools:layout="@layout/fragment_career_coop_home"/>
     <fragment
         android:id="@+id/careerCoopHome4"
         android:name="com.app.scanny.careercoop.fragments.CareerCoopHome"
-        android:label="Home"
+        android:label="Details"
         tools:layout="@layout/fragment_career_coop_home" />
     <fragment
         android:id="@+id/careerCoopHome2"
         android:name="com.app.scanny.careercoop.fragments.CareerCoopHome"
-        android:label="Home"
+        android:label="Details"
         tools:layout="@layout/fragment_career_coop_home" />
     <fragment
         android:id="@+id/ccUpdatesFragment"

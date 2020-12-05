@@ -2,10 +2,8 @@ package com.app.scanny.careercoop.fragments
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
-import android.os.Parcelable
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -48,7 +47,7 @@ class CareerCoopHome : Fragment() {
     private lateinit var simpleChip: Chip
     private  var proList = ArrayList<String>()
     private  var testList = ArrayList<String>()
-    private var itemList = ArrayList<Pair<String,CcUserModel>>()
+    private var itemList = ArrayList<Pair<String, CcUserModel>>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +64,12 @@ class CareerCoopHome : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        dataBinding  = DataBindingUtil.inflate(inflater,R.layout.fragment_career_coop_home,container,false)
+        dataBinding  = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_career_coop_home,
+            container,
+            false
+        )
         return dataBinding.root
     }
 
@@ -104,8 +108,8 @@ class CareerCoopHome : Fragment() {
                 viewModel.showForm = it.firstOrNull()?.second?.uid.isNullOrEmpty()
                 viewModel.isRecruiter =
                     if (it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
-
-                Repository.recruiter =  if (it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
+                Repository.recruiter =
+                    if (it.firstOrNull()?.second?.recruiter == null) true else it.firstOrNull()?.second?.recruiter!!
                 viewModel.loaderVisibility = View.GONE
                 viewModel.notifyChange()
                 viewModel.content = it.firstOrNull()?.second
@@ -122,7 +126,7 @@ class CareerCoopHome : Fragment() {
                 }
             })
         }
-        catch (e : Exception)
+        catch (e: Exception)
         {
             e.printStackTrace()
         }
@@ -132,9 +136,19 @@ class CareerCoopHome : Fragment() {
     {
 
         viewModel.notifyChange()
-        dataBinding.spUser.adapter = ArrayAdapter<String>(requireContext(),R.layout.spinner_text,userType)
+        dataBinding.spUser.adapter = ArrayAdapter<String>(
+            requireContext(),
+            R.layout.spinner_text,
+            userType
+        )
 
-        dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
+        if(arguments?.getString("state").equals("show").not()) {
+            dataBinding.spUser.setSelection(if (viewModel.isRecruiter) 0 else 1)
+        }
+        else
+        {
+            dataBinding.spUser.setSelection(if (viewModel.isRecruiter.not()) 0 else 1)
+        }
 
         dataBinding.spUser.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
@@ -149,7 +163,7 @@ class CareerCoopHome : Fragment() {
 
         }
 
-        dataBinding.rvSelects.adapter = CarrerCoopAdapter(requireContext(),itemList)
+        dataBinding.rvSelects.adapter = CarrerCoopAdapter(requireContext(), itemList)
         dataBinding.rvSelects.layoutManager = LinearLayoutManager(requireContext())
         dataBinding.rvSelects.itemAnimator = DefaultItemAnimator()
 
@@ -166,7 +180,7 @@ class CareerCoopHome : Fragment() {
             viewModel.loaderVisibility = View.GONE
             dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
             dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
-            dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
+            dataBinding.spUser.setSelection(if (viewModel.isRecruiter) 0 else 1)
             dataBinding.spUser.isEnabled = false
             dataBinding.spUser.isClickable = false
             viewModel.phone = viewModel.content?.phone.toString()
@@ -182,6 +196,100 @@ class CareerCoopHome : Fragment() {
             activity?.findViewById<BottomNavigationView>(R.id.bottom_nav)?.visibility = View.GONE
             viewModel.showForm = true
             viewModel.loaderVisibility = View.GONE
+            dataBinding.edtNameTxt.setText(item?.name.toString())
+            dataBinding.edtEmailTxt.setText(item?.email.toString())
+            dataBinding.edtPhoneTxt.setText(item?.phone.toString())
+            dataBinding.spUser.setSelection(if (viewModel.isRecruiter.not()) 0 else 1)
+            dataBinding.spUser.isEnabled = false
+            dataBinding.spUser.isClickable = false
+            dataBinding.btnSubmit.visibility = View.GONE
+            dataBinding.edtEmailTxt.isEnabled = false
+            dataBinding.edtNameTxt.isEnabled = false
+            dataBinding.edtPhoneTxt.isEnabled = false
+
+            dataBinding.ivAddTestimonnials.visibility = View.GONE
+            dataBinding.ivAddProjects.visibility = View.GONE
+            viewModel.phone = item?.phone.toString()
+            viewModel.name = item?.name.toString()
+            viewModel.skills.clear()
+            item?.skills?.let {
+                viewModel.skills.clear()
+                viewModel.skills.addAll(it.keys)
+
+                for (ele in viewModel.skills)
+                {
+
+                    dataBinding.chipGroupSkills.addView(
+                        (requireActivity().layoutInflater.inflate(
+                            R.layout.siple_chip, dataBinding.chipGroupSkills, false
+                        ) as Chip).apply {
+                            text = ele
+                            isCheckable = false
+                        }
+                    )
+                }
+            }
+            item?.location?.let {
+                viewModel.cities.clear()
+                viewModel.cities.addAll(it)
+
+                for (ele in viewModel.cities)
+                {
+
+                    dataBinding.chipGroupCities.addView(
+                        (requireActivity().layoutInflater.inflate(
+                            R.layout.siple_chip, dataBinding.chipGroupCities, false
+                        ) as Chip).apply {
+                            text = ele
+                            isCheckable = false
+                        }
+                    )
+                }
+            }
+            item?.projects?.let {
+                viewModel.projects.clear()
+                viewModel.projects.addAll(it)
+                proList.clear()
+                proList.addAll(it)
+                for(i in 0 until  proList.size)
+                {
+                    var view = LayoutInflater.from(requireContext()).inflate(
+                        R.layout.ll_view_projects,
+                        null,
+                        false
+                    )
+                    view.findViewById<TextView>(R.id.tv_resp).text = proList[i]
+                    view.findViewById<AppCompatImageView>(R.id.iv_del).visibility = View.GONE
+                    dataBinding.viewProjects.addView(view)
+                }
+            }
+
+            item?.testionials?.let {
+                viewModel.testimmonials.clear()
+                viewModel.testimmonials.addAll(it)
+                testList.clear()
+                testList.addAll(it)
+                for(i  in 0 until testList.size)
+                {
+                    var view = LayoutInflater.from(requireContext()).inflate(
+                        R.layout.ll_view_projects,
+                        null,
+                        false
+                    )
+                    view.findViewById<TextView>(R.id.tv_resp).text = testList[i]
+                    view.findViewById<AppCompatImageView>(R.id.iv_del).visibility = View.GONE
+                    dataBinding.viewTestimonials.addView(view)
+                }
+            }
+
+            item?.working?.let {
+                viewModel.isWorking  = it
+            }
+
+
+            viewModel.notifyChange()
+
+
         }
 
         else if(arguments?.getString("state").equals("update"))
@@ -194,7 +302,7 @@ class CareerCoopHome : Fragment() {
             viewModel.loaderVisibility = View.GONE
             dataBinding.edtNameTxt.setText(Repository.mAuth.currentUser?.displayName.toString())
             dataBinding.edtEmailTxt.setText(Repository.mAuth.currentUser?.email.toString())
-            dataBinding.spUser.setSelection(if(  viewModel.isRecruiter) 0 else 1)
+            dataBinding.spUser.setSelection(if (viewModel.isRecruiter) 0 else 1)
             dataBinding.spUser.isEnabled = false
             dataBinding.spUser.isClickable = false
             viewModel.phone = viewModel.content?.phone.toString()
@@ -207,11 +315,12 @@ class CareerCoopHome : Fragment() {
                 {
 
                     dataBinding.chipGroupSkills.addView(
-                        (requireActivity().layoutInflater.inflate(R.layout.siple_chip
-                            , dataBinding.chipGroupSkills, false) as Chip).apply {
+                        (requireActivity().layoutInflater.inflate(
+                            R.layout.siple_chip, dataBinding.chipGroupSkills, false
+                        ) as Chip).apply {
                             text = ele
                             isCheckable = false
-                            setOnClickListener {view ->
+                            setOnClickListener { view ->
                                 viewModel.skills.remove((view as Chip).text)
                                 dataBinding.chipGroupSkills.removeView(view)
                             }
@@ -227,11 +336,12 @@ class CareerCoopHome : Fragment() {
                 {
 
                     dataBinding.chipGroupCities.addView(
-                        (requireActivity().layoutInflater.inflate(R.layout.siple_chip
-                            , dataBinding.chipGroupCities, false) as Chip).apply {
+                        (requireActivity().layoutInflater.inflate(
+                            R.layout.siple_chip, dataBinding.chipGroupCities, false
+                        ) as Chip).apply {
                             text = ele
                             isCheckable = false
-                            setOnClickListener {view ->
+                            setOnClickListener { view ->
                                 viewModel.cities.remove((view as Chip).text)
                                 dataBinding.chipGroupCities.removeView(view)
                             }
@@ -246,7 +356,11 @@ class CareerCoopHome : Fragment() {
                 proList.addAll(it)
                 for(i in 0 until  proList.size)
                 {
-                    var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+                    var view = LayoutInflater.from(requireContext()).inflate(
+                        R.layout.ll_view_projects,
+                        null,
+                        false
+                    )
                     view.findViewById<TextView>(R.id.tv_resp).text = proList[i]
                     view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
                         viewModel.deleteProject(i)
@@ -262,7 +376,11 @@ class CareerCoopHome : Fragment() {
                 testList.addAll(it)
                 for(i  in 0 until testList.size)
                 {
-                    var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+                    var view = LayoutInflater.from(requireContext()).inflate(
+                        R.layout.ll_view_projects,
+                        null,
+                        false
+                    )
                     view.findViewById<TextView>(R.id.tv_resp).text = testList[i]
                     view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
                         viewModel.deleteTestimonial(i)
@@ -290,21 +408,20 @@ class CareerCoopHome : Fragment() {
         viewModel.skillSelectLiveData.observe(viewLifecycleOwner, Observer {
 
             dataBinding.chipGroupSkills.removeAllViews()
-            if(viewModel.skills.size == 3 && viewModel.skills.contains(it).not())
-            {
+            if (viewModel.skills.size == 3 && viewModel.skills.contains(it).not()) {
                 viewModel.skills.removeFirst()
             }
-            if(viewModel.skills.contains(it).not())
+            if (viewModel.skills.contains(it).not())
                 viewModel.skills.add(it)
-            for (item in viewModel.skills)
-            {
+            for (item in viewModel.skills) {
 
                 dataBinding.chipGroupSkills.addView(
-                    (requireActivity().layoutInflater.inflate(R.layout.siple_chip
-                        , dataBinding.chipGroupSkills, false) as Chip).apply {
+                    (requireActivity().layoutInflater.inflate(
+                        R.layout.siple_chip, dataBinding.chipGroupSkills, false
+                    ) as Chip).apply {
                         text = item
                         isCheckable = false
-                        setOnClickListener {view ->
+                        setOnClickListener { view ->
                             viewModel.skills.remove((view as Chip).text)
                             dataBinding.chipGroupSkills.removeView(view)
                         }
@@ -314,29 +431,30 @@ class CareerCoopHome : Fragment() {
         })
 
         dataBinding.floatingActionButton.setOnClickListener {
-            findNavController().navigate(R.id.action_careerCoopHome_to_careerCoopHome2,Bundle().apply {
-                putString("state","add")
-            })
+            findNavController().navigate(
+                R.id.action_careerCoopHome_to_careerCoopHome2,
+                Bundle().apply {
+                    putString("state", "add")
+                })
         }
 
         viewModel.citySelecteLiveData.observe(viewLifecycleOwner, Observer {
 
             dataBinding.chipGroupCities.removeAllViews()
-            if(viewModel.cities.size == 3 && viewModel.cities.contains(it).not())
-            {
+            if (viewModel.cities.size == 3 && viewModel.cities.contains(it).not()) {
                 viewModel.cities.removeFirst()
             }
-            if( viewModel.cities.contains(it).not())
+            if (viewModel.cities.contains(it).not())
                 viewModel.cities.add(it)
-            for (item in viewModel.cities)
-            {
+            for (item in viewModel.cities) {
 
                 dataBinding.chipGroupCities.addView(
-                    (requireActivity().layoutInflater.inflate(R.layout.siple_chip
-                        , dataBinding.chipGroupCities, false) as Chip).apply {
+                    (requireActivity().layoutInflater.inflate(
+                        R.layout.siple_chip, dataBinding.chipGroupCities, false
+                    ) as Chip).apply {
                         text = item
                         isCheckable = false
-                        setOnClickListener {view ->
+                        setOnClickListener { view ->
                             viewModel.cities.remove((view as Chip).text)
                             dataBinding.chipGroupCities.removeView(view)
                         }
@@ -346,15 +464,18 @@ class CareerCoopHome : Fragment() {
 
         })
 
-        viewModel.testimonialLiveData.observe(viewLifecycleOwner,Observer {
+        viewModel.testimonialLiveData.observe(viewLifecycleOwner, Observer {
 
             testList.clear()
-            if(it!=null)
-            testList.addAll(it)
+            if (it != null)
+                testList.addAll(it)
             dataBinding.viewTestimonials.removeAllViews()
-            for(i  in 0 until  testList.size)
-            {
-                var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+            for (i in 0 until testList.size) {
+                var view = LayoutInflater.from(requireContext()).inflate(
+                    R.layout.ll_view_projects,
+                    null,
+                    false
+                )
                 view.findViewById<TextView>(R.id.tv_resp).text = testList[i]
                 view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
                     viewModel.deleteTestimonial(i)
@@ -365,13 +486,16 @@ class CareerCoopHome : Fragment() {
 
         viewModel.projectLiveData.observe(viewLifecycleOwner, Observer {
             proList.clear()
-            if(it!=null)
-            proList.addAll(it)
+            if (it != null)
+                proList.addAll(it)
 
             dataBinding.viewProjects.removeAllViews()
-            for(i in 0 until  proList.size)
-            {
-                var view = LayoutInflater.from(requireContext()).inflate(R.layout.ll_view_projects,null,false)
+            for (i in 0 until proList.size) {
+                var view = LayoutInflater.from(requireContext()).inflate(
+                    R.layout.ll_view_projects,
+                    null,
+                    false
+                )
                 view.findViewById<TextView>(R.id.tv_resp).text = proList[i]
                 view.findViewById<AppCompatImageView>(R.id.iv_del).setOnClickListener {
                     viewModel.deleteProject(i)

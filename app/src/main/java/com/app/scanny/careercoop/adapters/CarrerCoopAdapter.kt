@@ -67,13 +67,15 @@ class CarrerCoopAdapter(
                     context.startActivity(intent)
                 }
                 holder.dataBinding.ivEmail.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_SENDTO)
-                    intent.data = Uri.parse("mailto:")
+                    val uriText = "mailto:${itemList[position].second.email}"
+                    val uri = Uri.parse(uriText)
 
-                    intent.putExtra(Intent.EXTRA_EMAIL, itemList[position].second.email)
-                    if (intent.resolveActivity(context.packageManager) != null) {
-                        context.startActivity(intent)
-                    }
+                    val emailIntent = Intent(Intent.ACTION_SENDTO, uri)
+
+                    val i = Intent.createChooser(emailIntent, "Send email")
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+                   context.startActivity(i)
                 }
             }
 
