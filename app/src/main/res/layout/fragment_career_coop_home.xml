@@ -146,7 +146,7 @@
                     <TextView
                         android:id="@+id/tv_cities"
                         style="@style/BolTextStyle"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="32dp"
@@ -156,8 +156,31 @@
                         android:textColor="@color/colourWhite"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/edt_email" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_skills"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        android:onClick="@{ccHomeViewodel::skillsClick}"
+                        app:layout_constraintStart_toEndOf="@+id/tv_skills"
+                        app:layout_constraintTop_toTopOf="@+id/tv_skills"
+                        app:srcCompat="@drawable/ic_baseline_arrow_drop_down" />
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintBottom_toBottomOf="@+id/tv_cities"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        android:onClick="@{ccHomeViewodel::citiesClick}"
+                        app:layout_constraintStart_toEndOf="@+id/tv_cities"
+                        app:layout_constraintTop_toTopOf="@+id/tv_cities"
+                        app:srcCompat="@drawable/ic_baseline_arrow_drop_down" />
 
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/chipGroup_cities"
@@ -176,7 +199,7 @@
 
                     <TextView
                         android:id="@+id/tv_skills"
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="32dp"
@@ -186,6 +209,7 @@
                         android:textColor="@color/colourWhite"
                         android:textSize="16sp"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/chipGroup_cities" />
 
